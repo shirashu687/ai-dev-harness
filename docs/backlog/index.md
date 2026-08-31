@@ -3,13 +3,10 @@
 <!-- okf:auto:start -->
 | state | 件数 |
 |---|---|
-| doing | 1 |
+| doing | 0 |
 | todo | 9 |
-| done | 0 |
+| done | 1 |
 | dropped | 0 |
-
-## doing
-* [仕様を0.2版へ改訂する](/backlog/T-0001-spec-revision.md) - `high` `M` - 設計詰めで決まった内容を HARNESS_SPEC.md に反映し、第0.2版とする。
 
 ## todo
 * [代表作業3件で実証する](/backlog/T-0006-representative-tasks.md) - `high` `L` - 代表作業3件をハーネス上で実施し、検証・報告・引継ぎが機能するか実測する。
@@ -21,4 +18,7 @@
 * [段階2: 製品間の確認](/backlog/T-0008-stage2-cross-product.md) - `low` `L` - Codex CLI と Copilot で同じ入口・手順・記録が成立するかを実機で確認し、対応表を埋める。
 * [段階3: 別プロジェクトへの配布](/backlog/T-0009-stage3-distribution.md) - `low` `XL` - コアを版付けで抽出し、ScheLiveApp へ導入して更新・巻戻し・撤去を演習する。
 * [段階4: 自動化の追加](/backlog/T-0010-stage4-automation.md) - `low` `M` - 第11節のトリガーを実測で満たした処理だけを自動化する。
+
+## done
+* [仕様を0.2版へ改訂する](/backlog/T-0001-spec-revision.md) - 2026-09-01 完了 - 設計詰めで決まった内容を HARNESS_SPEC.md に反映し、第0.2版とする。
 <!-- okf:auto:end -->

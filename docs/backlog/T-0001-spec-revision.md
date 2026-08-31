@@ -8,18 +8,18 @@ layer: shared
 generated:
   by: "process:okf-cli"
   at: "2026-08-31T15:13:56Z"
-state: doing
+state: done
 priority: high
 effort: M
 feasibility: B
 ai: assisted
 cost: false
 created: "2026-09-01"
-done_at: null
+done_at: "2026-09-01"
 accepts: []
 spec: ["§1.1", "§2", "§3", "§4", "§5.2", "§7", "§8.1", "§11", "§12"]
 target: harness
-evidence: []
+evidence: ["b9c68ca5d9365bf7d4f3c9c47d8103743f2ba9d6"]
 related: ["/backlog/T-0002-pre-start-checklist.md"]
 ---
 
@@ -84,21 +84,29 @@ related: ["/backlog/T-0002-pre-start-checklist.md"]
 
 - [x] `HARNESS_SPEC.md` の14点がすべて反映されている
 - [x] 改訂履歴に 0.2 版の行がある
-- [ ] `HARNESS_SPEC.html` を再生成し、同一 Artifact URL へ再公開した
+- [x] `HARNESS_SPEC.html` を再生成し、同一 Artifact URL へ再公開した
 - [x] バックログの `accepts` が参照する採番①〜⑳が SPEC.md 側と一致している
-- [ ] 必須検証を実行し、下の検証記録を4値で埋めた
-- [ ] `evidence` に成果物側のコミット SHA を記入した
-- [ ] 本ファイルの `state` を `done` にし `done_at` を記入した
+- [x] 必須検証を実行し、下の検証記録を4値で埋めた
+- [x] `evidence` に成果物側のコミット SHA を記入した
+- [x] 本ファイルの `state` を `done` にし `done_at` を記入した
 
 ## 検証記録
 
 | 識別子 | 結果 | 対象（コミット・版） | 証拠（要約・ログ所在） |
 |---|---|---|---|
 | spec-consistency | 成功 | HARNESS_SPEC.md 第0.2版 / HARNESS_SPEC.html | 14点の反映をそれぞれ grep で確認。HTML はタグ収支一致・ブラウザ描画確認済み |
-| artifact-publish | 未実行 | — | 再公開はユーザーの承認待ち |
+| artifact-publish | 成功 | HARNESS_SPEC.html 第0.2版 | 同一 URL(7da5b498…)へ再公開。公開前にライブ版と差分を取り、意図した14点のみであることを確認 |
 
 ※結果は **成功 / 失敗 / 未実行 / 実行不能** のいずれか。失敗・未実行を成功と書かない。
 
 ## 結果
 
-<完了時に記入する。実際に変更したファイル、想定と違った点、台帳に回した観測。>
+`HARNESS_SPEC.md` と `HARNESS_SPEC.html` の両方に14点を反映し、同一 Artifact URL へ再公開した。
+
+**想定と違った点:**
+
+- HTML スナップショットは **0.1版の構造のまま**で、第1.1節(文書の役割・編集規則)を持っていなかった。正本側の反映だけでは足りず、HTML 側に節を新設する必要があった。→ **HTML は「正本から機械的に再生成」ではなく「手で追随させている」のが実態**。版が上がるたびにこのずれを確認する必要がある。
+- Artifact の再公開は「ライブ版を読むまで拒否」される仕組みで、2回のやり直しが必要だった。結果としてライブ版との差分検証ができ、意図した14点のみであることを機械的に確認できた。
+- `.gitattributes` が無く、初回コミットで LF→CRLF 警告が20件出た。`okf-devkit` が同じ問題(`.okf/hooks/*.sh` が CRLF で checkout されると `bad interpreter`)を `.gitattributes` で解決済みだったので、同じ設定を移植して `git add --renormalize` した。
+
+**台帳へ回す観測:** 上の「決定と根拠」に置いた4件を、T-0004 で `harness/ledger.md` を作った時点で移す。
