@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>共通ハーネス構築仕様</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700;900&family=BIZ+UDPGothic:wght@400;700&family=BIZ+UDGothic:wght@400;700&display=swap">
+<style>
+:root {
+  --paper: #F8F9F6;
+  --paper-recess: #EDF0EA;
+  --ink: #20262B;
+  --ink-soft: #5D6A72;
+  --ink-faint: #86929A;
+  --rule: #C2CBC5;
+  --rule-soft: #DDE3DC;
+  --accent: #2E5266;
+  --accent-deep: #24425A;
+  --accent-wash: #E4EBEE;
+  --fixed: #2E5266;
+  --fill-in: #8A5A12;
+  --hold: #5D6A72;
+  --ok: #3F6142;
+  --code-bg: #EDF0EA;
+  --tpl-bg: #F1F3EE;
+  --mark-bg: #F4EFD6;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #16191C;
+    --paper-recess: #1E2327;
+    --ink: #DCE2E2;
+    --ink-soft: #99A6AC;
+    --ink-faint: #717D84;
+    --rule: #3E484E;
+    --rule-soft: #2B3237;
+    --accent: #7FA8C4;
+    --accent-deep: #94BAD3;
+    --accent-wash: #22303A;
+    --fixed: #7FA8C4;
+    --fill-in: #CFA14C;
+    --hold: #99A6AC;
+    --ok: #8FB791;
+    --code-bg: #1E2327;
+    --tpl-bg: #1B2024;
+    --mark-bg: #3A3520;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #16191C;
+  --paper-recess: #1E2327;
+  --ink: #DCE2E2;
+  --ink-soft: #99A6AC;
+  --ink-faint: #717D84;
+  --rule: #3E484E;
+  --rule-soft: #2B3237;
+  --accent: #7FA8C4;
+  --accent-deep: #94BAD3;
+  --accent-wash: #22303A;
+  --fixed: #7FA8C4;
+  --fill-in: #CFA14C;
+  --hold: #99A6AC;
+  --ok: #8FB791;
+  --code-bg: #1E2327;
+  --tpl-bg: #1B2024;
+  --mark-bg: #3A3520;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "BIZ UDPGothic", "Yu Gothic Medium", "Yu Gothic", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  font-size: 15.5px;
+  line-height: 1.95;
+}
+main { max-width: 47.5rem; margin: 0 auto; padding: 2.5rem 1.4rem 6rem; }
+h1, h2, h3, h4 {
+  font-family: "Zen Old Mincho", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-weight: 700; line-height: 1.5; text-wrap: balance; margin: 0;
+}
+a { color: var(--accent-deep); text-decoration: none; border-bottom: 1px solid var(--rule); }
+a:hover, a:focus-visible { border-bottom-color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+p { margin: 0 0 1em; }
+code, .path {
+  font-family: "Consolas", "BIZ UDGothic", "Courier New", monospace;
+  font-size: 0.88em; background: var(--code-bg); padding: 0.08em 0.35em; border-radius: 2px;
+}
+strong { font-weight: 700; }
+mark { background: var(--mark-bg); color: inherit; padding: 0 0.15em; }
+
+.masthead { border-top: 3px double var(--ink); padding-top: 0.9rem; }
+.doc-no {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+  font-size: 0.78rem; letter-spacing: 0.14em; color: var(--ink-soft); font-variant-numeric: tabular-nums;
+}
+.masthead h1 { font-size: 2.1rem; font-weight: 900; margin: 1.1rem 0 0.4rem; letter-spacing: 0.04em; }
+.masthead .subtitle { color: var(--ink-soft); margin-bottom: 1.6rem; }
+.headmeta {
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  display: grid; grid-template-columns: 8.5em 1fr; font-size: 0.92rem;
+}
+.headmeta > div { padding: 0.5rem 0.2rem; border-bottom: 1px solid var(--rule-soft); }
+.headmeta > div:nth-last-child(-n+2) { border-bottom: none; }
+.headmeta .k { color: var(--ink-soft); letter-spacing: 0.08em; }
+.verdict-stamp {
+  margin: 1.7rem 0 0.4rem; border: 2px solid var(--accent); color: var(--accent-deep);
+  padding: 0.9rem 1.2rem; display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap;
+}
+.verdict-stamp .stamp-word {
+  font-family: "Zen Old Mincho", serif; font-weight: 900; font-size: 1.35rem;
+  letter-spacing: 0.18em; white-space: nowrap;
+}
+.verdict-stamp .stamp-note { color: var(--ink); font-size: 0.92rem; line-height: 1.75; }
+
+nav.toc { margin: 2.6rem 0 0; font-size: 0.94rem; }
+nav.toc h2 { font-size: 1rem; letter-spacing: 0.3em; color: var(--ink-soft); font-weight: 700; margin-bottom: 0.6rem; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; }
+@media (min-width: 640px) { nav.toc ol { columns: 2; column-gap: 3rem; } }
+nav.toc li { break-inside: avoid; display: flex; align-items: baseline; gap: 0.6em; padding: 0.18rem 0; }
+nav.toc .n { font-variant-numeric: tabular-nums; color: var(--accent); min-width: 1.6em; }
+nav.toc a { border-bottom: none; }
+nav.toc a:hover { border-bottom: 1px solid var(--accent); }
+
+section { margin-top: 3.4rem; }
+.sec-head { display: flex; align-items: baseline; gap: 0.8rem; border-bottom: 1px solid var(--ink); padding-bottom: 0.45rem; margin-bottom: 1.3rem; }
+.sec-head .sec-no {
+  font-family: "Zen Old Mincho", serif; font-weight: 700; color: var(--accent);
+  font-size: 1.15rem; font-variant-numeric: tabular-nums; letter-spacing: 0.05em;
+}
+.sec-head h2 { font-size: 1.35rem; letter-spacing: 0.06em; }
+h3 { font-size: 1.06rem; margin: 1.9rem 0 0.7rem; letter-spacing: 0.05em; }
+h3 .lead-mark { color: var(--accent); margin-right: 0.4em; font-weight: 700; }
+
+.tablewrap { overflow-x: auto; margin: 1rem 0 1.4rem; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; line-height: 1.7; }
+caption { text-align: left; font-size: 0.82rem; color: var(--ink-soft); padding-bottom: 0.4rem; letter-spacing: 0.06em; }
+th {
+  text-align: left; font-weight: 700; font-size: 0.82rem; letter-spacing: 0.1em; color: var(--ink-soft);
+  border-top: 1.5px solid var(--ink); border-bottom: 1px solid var(--ink);
+  padding: 0.45rem 0.7rem 0.45rem 0.1rem; white-space: nowrap;
+}
+td { border-bottom: 1px solid var(--rule-soft); padding: 0.5rem 0.7rem 0.5rem 0.1rem; vertical-align: top; }
+tr:last-child td { border-bottom: 1.5px solid var(--ink); }
+td.nowrap { white-space: nowrap; }
+
+.status { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; white-space: nowrap; }
+.status.fixed { color: var(--fixed); }
+.status.fill { color: var(--fill-in); }
+.status.hold { color: var(--hold); }
+
+.tpl { border: 1px solid var(--rule); margin: 1.2rem 0 1.8rem; }
+.tplhead {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap;
+  padding: 0.45rem 0.9rem; background: var(--paper-recess); border-bottom: 1px solid var(--rule);
+  font-size: 0.8rem;
+}
+.tplhead .file { font-family: "Consolas", "BIZ UDGothic", monospace; font-weight: 700; color: var(--accent-deep); }
+.tplhead .own { color: var(--ink-soft); letter-spacing: 0.08em; }
+.tpl pre {
+  margin: 0; padding: 0.9rem 1rem; overflow-x: auto;
+  font-family: "Consolas", "BIZ UDGothic", "Courier New", monospace;
+  font-size: 0.82rem; line-height: 1.75; background: var(--tpl-bg); color: var(--ink);
+}
+pre.tree {
+  border: 1px solid var(--rule); background: var(--tpl-bg);
+  margin: 1.2rem 0 0.6rem; padding: 0.9rem 1rem; overflow-x: auto;
+  font-family: "Consolas", "BIZ UDGothic", monospace; font-size: 0.82rem; line-height: 1.8;
+}
+pre.tree .own { color: var(--ink-soft); }
+pre.tree .c { color: var(--accent-deep); font-weight: 700; }
+
+.note {
+  background: var(--paper-recess); border: 1px solid var(--rule-soft);
+  padding: 0.8rem 1rem; font-size: 0.9rem; margin: 1.2rem 0; line-height: 1.85;
+}
+.note .note-label { font-weight: 700; letter-spacing: 0.15em; color: var(--ink-soft); font-size: 0.78rem; display: block; margin-bottom: 0.3rem; }
+blockquote { margin: 1rem 0; padding: 0.2rem 0 0.2rem 1rem; border-left: 2px solid var(--rule); color: var(--ink-soft); font-size: 0.93rem; }
+ul, ol { padding-left: 1.5em; margin: 0.2rem 0 1.1rem; }
+li { margin: 0.25rem 0; }
+li::marker { color: var(--accent); }
+ol.steps > li { margin: 0.55rem 0; }
+
+.stage {
+  border: 1px solid var(--rule); margin: 1.3rem 0; break-inside: avoid;
+}
+.stage-head {
+  display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;
+  padding: 0.6rem 0.9rem; background: var(--paper-recess); border-bottom: 1px solid var(--rule);
+}
+.stage-no {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2em; height: 2em; border: 1.5px solid var(--accent); color: var(--accent-deep);
+  font-family: "Zen Old Mincho", serif; font-weight: 700; flex: none;
+}
+.stage-head .ttl { font-weight: 700; flex: 1 1 12em; }
+.stage-head .when { font-size: 0.8rem; color: var(--ink-soft); }
+.stage-body { padding: 0.8rem 0.9rem 0.3rem; font-size: 0.94rem; }
+.stage-body dl { display: grid; grid-template-columns: 7em 1fr; margin: 0 0 0.6rem; row-gap: 0.3rem; }
+.stage-body dt { color: var(--ink-soft); font-size: 0.85rem; letter-spacing: 0.06em; padding-top: 0.1rem; }
+.stage-body dd { margin: 0; }
+@media (max-width: 540px) {
+  .stage-body dl { grid-template-columns: 1fr; }
+  .stage-body dt { border-top: 1px dotted var(--rule-soft); padding-top: 0.4rem; margin-top: 0.3rem; }
+  .stage-body dt:first-child { border-top: none; margin-top: 0; }
+}
+
+footer.colophon {
+  margin-top: 4.5rem; border-top: 3px double var(--ink); padding-top: 1rem;
+  font-size: 0.82rem; color: var(--ink-soft); line-height: 1.9;
+}
+@media print {
+  body { font-size: 10.5pt; }
+  .tpl, .tablewrap, .note, .stage { break-inside: avoid; }
+  nav.toc { display: none; }
+}
+</style>
+
+<main>
+
+<header class="masthead">
+  <div class="doc-no"><span>整理番号 HSP-2026-0830</span><span>第0.2版・2026年9月1日</span></div>
+  <h1>共通ハーネス構築仕様</h1>
+  <p class="subtitle">HARNESS_DESIGN.md の設計方針と審査記録(HRV-2026-0830)の指摘を反映した、実際に構築するハーネスの実装仕様</p>
+  <div class="headmeta">
+    <div class="k">依拠文書</div><div>HARNESS_DESIGN.md(設計方針)/ HARNESS_REVIEW.html(審査記録。指摘 R1〜R10・仮説 H1〜H6・確認事実 V1〜V12 を本仕様から参照する)</div>
+    <div class="k">対象製品</div><div>Claude Code(段階1)→ Codex CLI・GitHub Copilot(段階2)。対象OSは Windows を含み、特権・シンボリックリンクを前提にしない。</div>
+    <div class="k">記載の状態</div><div><span class="status fixed">【確定】</span>=本仕様で固定 <span class="status fill">【着手時に記入】</span>=実証開始時に第2節で確定 <span class="status hold">【保留】</span>=決めずに実証へ進んでよい</div>
+    <div class="k">正本</div><div>この文書の正本は <code>HARNESS_SPEC.md</code>(2026年8月31日に正本化)。本HTMLは閲覧用スナップショットであり、手編集せず、版の節目に正本から再生成する。</div>
+  </div>
+  <div class="verdict-stamp">
+    <span class="stamp-word">実証用 第0.2版</span>
+    <span class="stamp-note">段階1でやるのは、対象プロジェクトが<strong>仕様の求める役割を満たしているかの確認と、欠けている役割の補完</strong>である。何もない状態から始める場合の既定は<strong>8ファイル</strong>(入口2枚+コア4枚+プロジェクト2枚)と、<code>.claude/settings.json</code> への追記1件であり、ツール・スクリプト・フックは作らない。この仕様の第11節「作らないもの」が、第1節の作るものと同格の規定である。</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <h2>目次</h2>
+  <ol>
+    <li><span class="n">1</span><a href="#s1">位置づけと設計原則</a></li>
+    <li><span class="n">2</span><a href="#s2">着手前チェックリスト</a></li>
+    <li><span class="n">3</span><a href="#s3">段階計画と受け入れ条件</a></li>
+    <li><span class="n">4</span><a href="#s4">リポジトリ構成(段階1)</a></li>
+    <li><span class="n">5</span><a href="#s5">ファイル仕様とテンプレート</a></li>
+    <li><span class="n">6</span><a href="#s6">運用フロー</a></li>
+    <li><span class="n">7</span><a href="#s7">必須制約と強制点</a></li>
+    <li><span class="n">8</span><a href="#s8">製品接続</a></li>
+    <li><span class="n">9</span><a href="#s9">配布・更新・撤去(段階3)</a></li>
+    <li><span class="n">10</span><a href="#s10">評価の最小実装</a></li>
+    <li><span class="n">11</span><a href="#s11">作らないもの</a></li>
+    <li><span class="n">12</span><a href="#s12">保留事項</a></li>
+  </ol>
+</nav>
+
+<!-- ================================================================ -->
+<section id="s1">
+  <div class="sec-head"><span class="sec-no">1</span><h2>位置づけと設計原則</h2></div>
+  <p>本仕様は HARNESS_DESIGN.md を置き換えるものではない。設計方針書は「なぜそうするか」の根拠集として凍結し、本仕様が「いま何を作るか」を定める。実装時に迷ったら、本仕様→審査記録→設計方針書の順に参照する。</p>
+  <h3>文書の役割と編集規則<span class="status fixed">【確定】</span></h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>文書</th><th>役割</th><th>扱い</th></tr></thead>
+    <tbody>
+      <tr><td>HARNESS_DESIGN.md</td><td>「なぜ」の根拠集</td><td>凍結。以後編集しない</td></tr>
+      <tr><td>HARNESS_REVIEW.html</td><td>審査の記録</td><td>凍結。完了した時点記録</td></tr>
+      <tr><td><strong>HARNESS_SPEC.md</strong></td><td>「何を作るか」の正本</td><td>生きた文書。変更はここにだけ反映する</td></tr>
+      <tr><td>HARNESS_SPEC.html(本書)</td><td>閲覧用スナップショット</td><td>手編集禁止。版が上がる節目に正本から再生成し、同じ Artifact URL へ再公開する</td></tr>
+      <tr><td><code>docs/backlog/T-NNNN-*.md</code></td><td>作業単位と順序</td><td>本書第3節から起こした。1タスク1ファイル。OKF バンドルとして <code>okf</code> CLI で管理する</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>同じ内容を二箇所に書かない。仕様書内のテンプレート(第5節)は、段階1で対象プロジェクトに実体化した時点でそちらを正本とし、本書は参照に切り替える。</p>
+
+  <h3>決定の振り分け<span class="status fixed">【確定】</span></h3>
+  <p>作業中に決まったことは、次の3つのうち<strong>1箇所にだけ</strong>書き、他所からは参照する。書き留めるときは末尾に行き先を記す(<code>→ SPEC §x.y</code> / <code>→ T-000N</code> / <code>→ K-00N</code>)。</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>決めたこと</th><th>行き先</th><th>見分け方</th></tr></thead>
+    <tbody>
+      <tr><td>他のタスクでも、別のプロジェクトでも成り立つ規定</td><td>本書</td><td>固有名詞が要らない</td></tr>
+      <tr><td>そのタスクを終わらせるためだけの情報</td><td>バックログのタスクファイル</td><td>プロジェクト名・パス・既存の事情が入る</td></tr>
+      <tr><td>仕様の欠陥かもしれないが、まだ1回しか起きていない観測</td><td>改善台帳(第5.5節)</td><td>変えたいが根拠が1件しかない</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>審査記録の反映</h3>
+  <p>審査記録の指摘は次のとおり反映した。</p>
+  <ul>
+    <li><strong>R1</strong>: 受け入れ条件を第3節で段階ごとに割り当てた。段階1の合格基準は8項目に絞られる。</li>
+    <li><strong>R2</strong>: 補助機構の「作らない既定」を第11節に、再導入トリガーとともに明文化した。</li>
+    <li><strong>R3</strong>: 必須制約に「強制点」の欄を設け(第7節)、強制点が運用のみの項目は運用ルールへ降格表示する。</li>
+    <li><strong>R4</strong>: 配置と所有区分を第4節で確定した(ディレクトリ境界=所有区分)。</li>
+    <li><strong>R5</strong>: 宣言付き上書きを第9節で定義した。</li>
+    <li><strong>R6</strong>: 完了条件の保護水準を第7節で明示した(deny ルール+独立再検証。CI があれば強制点に昇格)。</li>
+    <li><strong>R7</strong>: 入口への自動追記は持たない。接続行は人が追加する(第9節)。</li>
+    <li><strong>R8</strong>: 入口はルートの AGENTS.md 1枚のみとする(第8節)。</li>
+    <li><strong>R9</strong>: 記録の上限に既定値を置いた(第5節・第6節)。</li>
+    <li><strong>R10</strong>: 報告・引継ぎ・作業記録を1テンプレートに統合した(第5節)。</li>
+  </ul>
+  <h3>三つの原則<span class="status fixed">【確定】</span></h3>
+  <ol>
+    <li><strong>ファイルだけで始める。</strong>段階1〜2の実体はプレーンな Markdown とディレクトリ構成のみ。ツールは、実測された摩擦を根拠にしてからしか作らない。</li>
+    <li><strong>指示は文脈、強制は仕組み。</strong>守らせたいことは製品設定・実行環境・CI のいずれかに置き、置けないものを「必須」と呼ばない(V10: CLAUDE.md は公式に「強制ではなく文脈」)。</li>
+    <li><strong>足すときに、外し方を書く。</strong>手順・スキル・ルールを1つ足すたびに、台帳へ分類(能力補助/方針/環境差/安全)と見直し契機を1行書く。書けないものは足さない。</li>
+  </ol>
+</section>
+
+<!-- ================================================================ -->
+<section id="s2">
+  <div class="sec-head"><span class="sec-no">2</span><h2>着手前チェックリスト</h2></div>
+  <p>段階1の開始時にここを埋める。埋めるまで実装を始めない(R4)。推奨値は審査記録第5節による。</p>
+  <p><strong>本仕様・バックログを置くリポジトリ自身は、ハーネスの適用対象ではない</strong><span class="status fixed">【確定】</span>。したがって第8.1節(R8: 入口は1枚)と第11節(作らないもの)は、そのリポジトリには適用しない——ツールが生成する入口やフックの雛形をそのまま使ってよい。適用対象は下表の「対象プロジェクト」だけである。</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>項目</th><th>状態</th><th>記入欄・推奨</th></tr></thead>
+    <tbody>
+      <tr><td>対象プロジェクト</td><td class="nowrap"><span class="status fixed">【確定】</span></td><td><code>okf-devkit</code>(段階1)。段階3の配布先は <code>ScheLiveApp</code>。ハーネス自身は対象にしない</td></tr>
+      <tr><td>改善したい摩擦・上位3件</td><td class="nowrap"><span class="status fill">【着手時に記入】</span></td><td>1. ＿＿ / 2. ＿＿ / 3. ＿＿(実際に起きた手戻りから選ぶ。台帳の最初の3行になる)</td></tr>
+      <tr><td>最初の製品</td><td class="nowrap"><span class="status fixed">【確定】</span></td><td>Claude Code(現在の主環境。強制点が最も揃う)</td></tr>
+      <tr><td>対象OS・ランタイム</td><td class="nowrap"><span class="status fixed">【確定】</span></td><td>Windows 11 / Python 3.14.3(ローカル)。CI は ubuntu・windows × Python 3.11・3.13。特権・シンボリックリンク不使用</td></tr>
+      <tr><td>必須検証のコマンド</td><td class="nowrap"><span class="status fixed">【確定】</span></td><td>ビルド <code>python -m pip install -e .</code> / テスト <code>python tests/run_all.py</code> / 静的解析 なし(未導入。新設しない)</td></tr>
+      <tr><td>代表作業(評価用)3件</td><td class="nowrap"><span class="status fill">【着手時に記入】</span></td><td>小さな不具合修正 ＿＿ / 既存構成に沿う機能追加 ＿＿ / セッションをまたぐ再開 ＿＿</td></tr>
+      <tr><td>許容できない悪化</td><td class="nowrap"><span class="status fill">【着手時に記入】</span></td><td>例: 小修正の所要が現状の1.5倍を超える/必須検証の虚偽報告が1件でも出る</td></tr>
+      <tr><td>初期の共通手順</td><td class="nowrap"><span class="status fixed">【確定】</span></td><td>「検証と報告」「中断と引継ぎ」の2本のみ。計画手順は大きな作業が実際に来たときに追加</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="s3">
+  <div class="sec-head"><span class="sec-no">3</span><h2>段階計画と受け入れ条件</h2></div>
+  <p>設計方針書第15.2節の順序に、第16章の受け入れ条件16項目を割り当てて統合した(R1)。<strong>段階配分にあたり16項目を20項目へ分割・具体化しており、以下の採番①〜⑳を正とする</strong>(バックログの <code>accepts</code> はこの番号を参照する)。各段階は「出口の確認」を満たすまで次へ進まない。一つの製品で動いただけでは複数製品対応と呼ばない。</p>
+
+  <div class="stage">
+    <div class="stage-head"><span class="stage-no">1</span><span class="ttl">単一プロジェクトでの実証</span><span class="when">Claude Code/目安2〜4週の実作業</span></div>
+    <div class="stage-body"><dl>
+      <dt>作るもの</dt><dd>第4節の写像表で<strong>欠けている役割</strong>にあたるファイル。何もない状態から始めるなら8ファイルと <code>.claude/settings.json</code> への追記1件。スキル・フック・スクリプトは作らない。</dd>
+      <dt>やること</dt><dd>実際の作業に統合テンプレートと2手順を使い、台帳へ摩擦を記録する。コア昇格級の変更はまだ発生させない。</dd>
+      <dt>受け入れ条件</dt><dd>①入口から必要な手順へ到達できる ②個人のグローバル設定(<code>~/.claude</code> 等)に必須要件が隠れていない ③特権なしで導入できている ④検証の失敗・未実行が失敗・未実行のまま報告される ⑤引継ぎからの再開が1回成功する(H5) ⑥現状比較の記録が残る(第10節の軽量評価) ⑦手順が不要な小作業に重い工程を強いていない ⑧手順を外した試行(部品なし比較)が可能である</dd>
+      <dt>出口の確認</dt><dd>受け入れ①〜⑧と、仮説 H2(カナリア記録率)・H3(転記精度)・H5(再開)の初回計測が済んでいる。</dd>
+    </dl></div>
+  </div>
+
+  <div class="stage">
+    <div class="stage-head"><span class="stage-no">2</span><span class="ttl">製品間の確認</span><span class="when">Codex CLI → Copilot(VS Code エージェントモード)</span></div>
+    <div class="stage-body"><dl>
+      <dt>作るもの</dt><dd>対応表(第8節の様式)1枚。必要ならスキル化の試行(H1 の検証リポジトリ)。</dd>
+      <dt>やること</dt><dd>同じ入口・同じ手順・同じ作業記録で代表作業を各製品1〜2件実施し、対応表を実測で埋める。H1(スキル重複挙動)を検証リポジトリで確認する。</dd>
+      <dt>受け入れ条件</dt><dd>⑨各製品の対象利用形態で、入口から手順に到達し同じ成果物・検証記録を残せる(基本モード成立。カナリアで測る) ⑩スキルを使う場合、対象外の作業で誤発動しない ⑪同名スキルの重複発見が起きない配置が確認できている(H1) ⑫強制手段のない製品・利用形態について、制限事項が対応表に明記されている(R3)</dd>
+      <dt>出口の確認</dt><dd>対応表のすべての行に検証日が入り、「文書上の対応」と「実機で確認した対応」が区別されている。</dd>
+    </dl></div>
+  </div>
+
+  <div class="stage">
+    <div class="stage-head"><span class="stage-no">3</span><span class="ttl">別プロジェクトへの配布</span><span class="when">配布先: <code>ScheLiveApp</code></span></div>
+    <div class="stage-body"><dl>
+      <dt>作るもの</dt><dd><code>harness-core</code> リポジトリ(コアの抽出)、<code>install.json</code>(第9節)、導入・更新の手順書。スクリプト化は任意。</dd>
+      <dt>やること</dt><dd>コアを版付けして抽出し、<code>ScheLiveApp</code> へ版固定で導入する。更新・巻戻し・撤去を1回ずつ演習する。<strong>配布先には既に OKF バンドル・CI・独自の入口構成・フックがあり、第4節の写像表と衝突処理がそのまま試験になる。</strong></dd>
+      <dt>受け入れ条件</dt><dd>⑬どの版とどの部品を導入しているか確認できる ⑭更新前に変更・削除・競合が一覧で分かる ⑮更新は1コミットで適用され、途中失敗が残らない ⑯プロジェクト固有の設定・利用者の編集が更新で失われない ⑰同じ導入を再実行しても重複が増えない ⑱共通化した改善の取り込み後、不要になったローカルの重複・暫定修正を外せる ⑲ロールバック・撤去の後もプロジェクト本来の開発・検証ができる</dd>
+      <dt>出口の確認</dt><dd>更新・巻戻し・撤去の演習記録が作業記録として残っている。</dd>
+    </dl></div>
+  </div>
+
+  <div class="stage">
+    <div class="stage-head"><span class="stage-no">4</span><span class="ttl">自動化の追加</span><span class="when">実測された摩擦があるものだけ</span></div>
+    <div class="stage-body"><dl>
+      <dt>作るもの</dt><dd>実測で有効だった手順のフック化・検査スクリプト・導入補助など、第11節のトリガーを満たしたものだけ。</dd>
+      <dt>受け入れ条件</dt><dd>⑳自動化した処理に上限(範囲・回数・時間)と停止条件があり、必須処理の失敗が隠れない(設計方針書第14.3節)。自動化自体の保守負担が、置き換えた手作業より小さいことを台帳で確認する。</dd>
+    </dl></div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="s4">
+  <div class="sec-head"><span class="sec-no">4</span><h2>リポジトリ構成(段階1)<span class="status fixed">【確定】</span></h2></div>
+  <p>ディレクトリ境界そのものを所有区分の表示とする(R4)。マーカー・追跡台帳・生成物は持たない。</p>
+  <p><strong>まず役割の充足を確認する</strong><span class="status fixed">【確定】</span>。導入先が既に別の形で同じ役割を満たしていることがある。その場合は同じ役割の器を二重に作らず、<strong>下の写像表を1枚書いて実配置を指す</strong>。二重に持てば必ず片方が腐る(第1.1節)。</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>役割</th><th>何をするものか</th><th>既定の配置</th><th>実配置(導入先ごとに記入)</th></tr></thead>
+    <tbody>
+      <tr><td>入口</td><td>短い1枚。ここから必要な参照先へ到達する</td><td><code>AGENTS.md</code></td><td></td></tr>
+      <tr><td>製品接続</td><td>入口を各製品に読ませる差分</td><td><code>CLAUDE.md</code></td><td></td></tr>
+      <tr><td>手順(検証と報告)</td><td>検証結果を4値で記す手続き</td><td><code>harness/core/procedures/verify-report.md</code></td><td></td></tr>
+      <tr><td>手順(中断と引継ぎ)</td><td>中断・再開の手続き</td><td><code>harness/core/procedures/handover.md</code></td><td></td></tr>
+      <tr><td>作業記録</td><td>報告・引継ぎを兼ねる1作業1ファイル</td><td><code>harness/state/journal/</code> + <code>core/templates/worklog.md</code></td><td></td></tr>
+      <tr><td>必須制約</td><td>強制点つきの守るべき条件</td><td><code>harness/core/policy/requirements.md</code></td><td></td></tr>
+      <tr><td>プロジェクト設定</td><td>コマンド・必須検証・対象範囲・例外</td><td><code>harness/project/config.md</code></td><td></td></tr>
+      <tr><td>改善台帳</td><td>摩擦の観測→候補→試行の器</td><td><code>harness/ledger.md</code></td><td></td></tr>
+      <tr><td>強制点</td><td>製品設定・CI による強制</td><td><code>.claude/settings.json</code> の deny / 既存 CI</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>役割が欠けている場合の<strong>既定の配置</strong>は次の通り。何もない状態から始めるなら、この形をそのまま作る。</p>
+
+<pre class="tree"><span class="c">&lt;プロジェクト&gt;/</span>
+├─ AGENTS.md                    <span class="own">← 入口の正本(プロジェクト所有・1枚のみ)</span>
+├─ CLAUDE.md                    <span class="own">← @AGENTS.md 取込+Claude固有差分(プロジェクト所有)</span>
+└─ harness/
+   ├─ core/                     <span class="own">← 将来の共通化候補。汎用の書き方のみ。段階3で配布側所有になる</span>
+   │  ├─ procedures/
+   │  │  ├─ verify-report.md    <span class="own">← 手順: 検証と報告</span>
+   │  │  └─ handover.md         <span class="own">← 手順: 中断と引継ぎ</span>
+   │  ├─ templates/
+   │  │  └─ worklog.md          <span class="own">← 作業記録の統合テンプレート</span>
+   │  └─ policy/
+   │     └─ requirements.md     <span class="own">← 必須制約(利用者のみ編集。denyで保護)</span>
+   ├─ project/                  <span class="own">← プロジェクト所有。共通更新で触らない領域</span>
+   │  ├─ config.md              <span class="own">← コマンド・対象範囲・必須検証・例外</span>
+   │  └─ extensions/            <span class="own">← 独自手順・独自スキルの置き場(最初は空)</span>
+   ├─ state/                    <span class="own">← 作業記録。配布対象外。コミットして引継ぎに使う</span>
+   │  ├─ journal/               <span class="own">← 1作業1ファイル(YYYY-MM-DD-題名.md)</span>
+   │  └─ archive/               <span class="own">← 完了後90日で移動(R9の既定値)</span>
+   └─ ledger.md                 <span class="own">← 改善台帳(プロジェクト所有)</span></pre>
+
+  <ul>
+    <li><strong>core/ に置いてよいのは、別のプロジェクトへそのままコピーしても嘘にならない文章だけ。</strong>プロジェクト名・コマンド・パス・内部事情が混ざるものはすべて <code>project/</code> へ。この規律が段階3の抽出コストを決める。</li>
+    <li><code>state/journal/</code> はコミットする(マシンをまたぐ引継ぎに使うため)。大きなログ・生成物は <code>.gitignore</code> し、記録には所在だけ書く。機密・認証情報はどこにも書かない。</li>
+    <li>ファイル数を増やす変更(手順の追加、スキル化)は、台帳の候補として記録してから行う(第1節・原則3)。</li>
+  </ul>
+</section>
+
+<!-- ================================================================ -->
+<section id="s5">
+  <div class="sec-head"><span class="sec-no">5</span><h2>ファイル仕様とテンプレート</h2></div>
+  <p>以下は雛形であり、そのままコピーして使える。〈 〉の箇所を書き換える。文体・項目名は運用しながら変えてよいが、<mark>検証結果の4値(成功/失敗/未実行/実行不能)と、作業記録の節構成は共通契約として維持する</mark>(これが段階3以降にプロジェクト間で揃っている必要のある部分)。</p>
+
+  <h3><span class="lead-mark">5.1</span>入口の正本<span class="status fixed">【確定】</span></h3>
+  <div class="tpl">
+    <div class="tplhead"><span class="file">AGENTS.md</span><span class="own">プロジェクト所有/60行以内・Codex の合計32KiB上限に留意(V5)</span></div>
+<pre># 〈プロジェクト名〉 — エージェント向け入口
+
+このリポジトリの入口はこのファイル1枚のみ。サブディレクトリに入口を置かない。
+ここにない詳細は、作業に応じて下記の参照先を読む(最初から全部は読まない)。
+
+## プロジェクトの要点
+- 概要: 〈1〜2行〉
+- コマンド・対象範囲・例外: harness/project/config.md
+- 必須制約: harness/core/policy/requirements.md(弱めない。衝突したら作業を止めて報告)
+
+## 作業の進め方(規模で選ぶ)
+| 作業 | 進め方 |
+| --- | --- |
+| 小さく影響が限定された変更 | 変更 → 必須検証 → 記録(handover不要。計画書も不要) |
+| 通常の機能追加・不具合修正 | 作業記録を作り完了条件を書く → 実装 → 必須検証 → 記録 |
+| 影響が大きい・不確実な変更 | 作業記録に計画(目的・対象外・完了条件・変更範囲)を書き、判断が必要な点を先に報告する |
+| セッションをまたぐ作業 | 中断前に harness/core/procedures/handover.md に従う |
+
+## 作業記録(報告・引継ぎを兼ねる)
+- 場所: harness/state/journal/YYYY-MM-DD-〈題名〉.md(1作業1ファイル)
+- 様式: harness/core/templates/worklog.md をコピーする
+- 報告は記録の「報告(要約)」節で行う。別の報告文書を作らない
+
+## 検証
+- harness/core/procedures/verify-report.md に従う
+- 結果は必ず 成功/失敗/未実行/実行不能 のいずれかで記す。失敗・未実行を成功と書かない</pre>
+  </div>
+
+  <div class="tpl">
+    <div class="tplhead"><span class="file">CLAUDE.md</span><span class="own">プロジェクト所有/取込は起動時に展開される(V2)ため、ここにも長文を置かない</span></div>
+<pre>@AGENTS.md
+
+## Claude Code 固有
+(Claude Code だけに必要な差分が実際に出るまで空にしておく)</pre>
+  </div>
+
+  <h3><span class="lead-mark">5.2</span>プロジェクト設定</h3>
+  <div class="tpl">
+    <div class="tplhead"><span class="file">harness/project/config.md</span><span class="own">プロジェクト所有</span></div>
+<pre># プロジェクト設定
+
+## コマンド
+| 用途 | コマンド | 作業ディレクトリ | 備考 |
+| --- | --- | --- | --- |
+| ビルド | 〈例: npm run build〉 | ルート | |
+| テスト | 〈例: npm test〉 | ルート | |
+| 静的解析 | 〈例: npm run lint〉 | ルート | |
+
+## 必須検証(この表が完了条件の機械判定部分)
+| 識別子 | 対象層 | 確認する条件 | コマンド | 実行上の制約 |
+| --- | --- | --- | --- | --- |
+| build | 全体 | ビルドが通る | 上記 | 外部通信なし |
+| test  | 全体 | テストが通る | 上記 | |
+※<strong>触った層と docs の行は必須。他の層の行は「未実行」と明記する</strong>——小さな変更に全層の検証を強いないため(第6.1節)。
+※ローカルで実行できない行は「実行不能」とし、CI の結果で埋める。
+※この表の削除・緩和は通常の実装修正と区別する(requirements.md REQ-2)。
+
+## 対象範囲
+- 対象: 〈…〉
+- 対象外(このハーネスでは扱わない作業): 〈…〉
+
+## 採用している共通手順
+- verify-report / handover
+
+## 承認済みの例外
+| 日付 | 内容 | 理由 | 見直し契機 |
+| --- | --- | --- | --- |</pre>
+  </div>
+
+  <h3><span class="lead-mark">5.3</span>作業記録(報告・引継ぎ統合テンプレート)<span class="status fixed">【確定】</span></h3>
+  <p>設計方針書 7.2/7.3/8.2 の項目を1枚に統合した(R10)。報告=「報告(要約)」節、引継ぎ=状態を「中断」にした記録の全体、と定義する。</p>
+  <div class="tpl">
+    <div class="tplhead"><span class="file">harness/core/templates/worklog.md</span><span class="own">コア(共通化候補)</span></div>
+<pre># 作業記録: 〈題名〉
+
+- 日付: 2026-MM-DD / 製品: 〈Claude Code 等〉 / モデル: 〈確認できた場合のみ実IDを記す。不明なら「不明」〉
+- 状態: 進行中 | 中断(引継ぎ可) | 完了
+
+## 目的と完了条件
+- 目的:
+- 完了条件: 必須検証〈識別子…〉+〈この作業固有の条件〉
+- 対象外:
+
+## 範囲と変更箇所
+-
+
+## 判断と理由
+-(確定した判断・却下した選択肢・完了条件やテストを変更した場合はその前後と理由)
+
+## 検証記録
+| 識別子 | 結果 | 対象(コミット・版) | 証拠(要約・ログ所在) |
+| --- | --- | --- | --- |
+※結果は 成功/失敗/未実行/実行不能 のみ。
+
+## 残作業と次の一手
+- 残:
+- 次:
+- 妨げ:
+- 前提(ブランチ・環境・未コミットの有無):
+
+## 報告(要約)
+- 達成:
+- 確認済み:
+- 未確認:
+- 判断が必要: </pre>
+  </div>
+
+  <h3><span class="lead-mark">5.4</span>共通手順(2本)<span class="status fixed">【確定】</span></h3>
+  <p>末尾の確認符号は仮説 H2(手順が実際に読まれているか)の計測装置であり、段階2の完了後に外してよい。</p>
+  <div class="tpl">
+    <div class="tplhead"><span class="file">harness/core/procedures/verify-report.md</span><span class="own">コア(共通化候補)</span></div>
+<pre># 手順: 検証と報告
+
+1. harness/project/config.md の「必須検証」表のコマンドを順に実行する。
+2. 各結果を作業記録の検証記録表へ記す。
+   - 失敗: 失敗のまま記す。修正は別の変更として扱い、修正後に再実行する。
+   - 未実行: 理由を添えて未実行と記す。
+   - 実行不能(環境上の理由): 理由と、代わりに確認できた範囲を記す。
+3. 完了条件・テスト自体を変更した場合は、変更前後の期待動作と理由を
+   「判断と理由」に書く。同じ変更で失敗を成功に読み替えていないか見直す。
+4. 「報告(要約)」の4項目(達成/確認済み/未確認/判断が必要)を埋める。
+5. この手順を使ったら、報告末尾に確認符号〔VR〕を記す。</pre>
+  </div>
+  <div class="tpl">
+    <div class="tplhead"><span class="file">harness/core/procedures/handover.md</span><span class="own">コア(共通化候補)</span></div>
+<pre># 手順: 中断と引継ぎ
+
+中断するとき:
+1. 作業記録の状態を「中断(引継ぎ可)」にする。
+2. 残作業と次の一手・妨げ・前提を埋める(推測で埋めない。不明は不明と書く)。
+3. 検証記録を最新化する(未実行は未実行のまま)。
+
+再開するとき:
+4. 記録を読み、現在のファイル・ブランチ・検証結果と照合してから続ける。
+   古い記録の「完了」だけを根拠に完了扱いにしない。
+5. この手順で再開したら、記録に確認符号〔HO〕を記す。</pre>
+  </div>
+
+  <h3><span class="lead-mark">5.5</span>改善台帳<span class="status fixed">【確定】</span></h3>
+  <p>設計方針書 10.3(記録項目)・10.4(状態)・10.6(見直し契機)を1ファイルに統合。上限の既定値は R9 による(数字は運用で変えてよいが、既定を消さない)。</p>
+  <div class="tpl">
+    <div class="tplhead"><span class="file">harness/ledger.md</span><span class="own">プロジェクト所有</span></div>
+<pre># 改善台帳
+
+運用規則:
+- 状態は 観測 → 候補 → 試行 → 採用 | 却下 | 廃止 の順に進める。
+- 有効な行(観測〜試行)は10件まで。超えたら統合するか却下する。
+- 同じ症状は新しい行にせず「回数」を加算する。
+- 振り返りから直接ルール・手順を書き換えない。必ず台帳を経由する。
+- 一度の失敗で恒久ルールを作らない。ただし安全上の欠陥は回数を待たず対処する。
+- 採用したら「反映先」を書き、反映先のファイルにも台帳IDを書く(例: K-003)。
+- 棚卸し: モデル・製品の変更時は必ず全行を見る(分類「能力補助」は削除候補)。
+  それ以外は四半期に一度。
+- 分類: 能力補助 | 方針 | 環境差 | 安全
+
+| ID | 状態 | 初回 | 回数 | 分類 | 症状(1行) | 対処案と適用範囲 | 確認方法 | 結果・反映先 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| K-001 | 観測 | | 1 | | | | | |</pre>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="s6">
+  <div class="sec-head"><span class="sec-no">6</span><h2>運用フロー</h2></div>
+
+  <h3><span class="lead-mark">6.1</span>日々の作業</h3>
+  <ol class="steps">
+    <li>作業の規模を AGENTS.md の表で選ぶ。<strong>小さな変更に計画書・独立レビュー・新規テストの一律追加を求めない</strong>(設計方針書 7.1・9.3)。</li>
+    <li>通常以上の作業では <code>journal/</code> に記録を1枚作り、完了条件を先に書く。</li>
+    <li>実装後、「検証と報告」手順を実行する。報告は記録の要約節で完結させる。HTML等の別形式は、説明が複雑なときだけの選択肢とする。</li>
+    <li>摩擦(繰り返した探索、誤った検証、不要な質問、誤発動)を感じたら台帳へ1行。<strong>その場でルールを増やさない。</strong></li>
+    <li>影響の大きい変更では、独立した確認を挟む。現環境では Codex CLI への依頼が「実行製品を差し替えられるレビュー役」(設計方針書 7.4)の最も安価な実装になる。使用した実モデルが確認できない場合は不明と記録する。</li>
+  </ol>
+
+  <h3><span class="lead-mark">6.2</span>変更の二層方針<span class="status fixed">【確定】</span></h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>層</th><th>対象</th><th>要求される手続き</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="nowrap">軽量</td>
+        <td>プロジェクト局所で可逆な変更(config の追記、手順の文言調整、extensions への追加)</td>
+        <td>台帳に1行書いて、実作業でそのまま試す。比較実験は不要。効かなければ戻して結果を記す</td>
+      </tr>
+      <tr>
+        <td class="nowrap">厳格</td>
+        <td>コアへの昇格、必須制約・権限・完了条件に触れる変更、スキルの新設</td>
+        <td>第10節の比較(現行/候補/可能なら部品なし)を経てから採用。振り返りからの自動反映は行わない</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p>この二層により、利用者が既に許可している通常作業を止めずに(設計方針書 10.4)、危険な変更だけに評価の関門を置く。</p>
+
+  <h3><span class="lead-mark">6.3</span>記録の寿命<span class="status fixed">【確定】</span></h3>
+  <ul>
+    <li>完了した作業記録は90日で <code>archive/</code> へ移す。台帳の採用・却下済みの行は年1回まとめて末尾の「済」節へ畳む。</li>
+    <li>繰り返す症状は台帳の回数加算で表現し、長文を毎回書かない。</li>
+    <li>実行ログ・スクリーンショット等の重い証拠はコミットせず、記録には所在と要約だけ書く。</li>
+  </ul>
+</section>
+
+<!-- ================================================================ -->
+<section id="s7">
+  <div class="sec-head"><span class="sec-no">7</span><h2>必須制約と強制点</h2></div>
+  <p>各制約に<strong>強制点</strong>を必ず記す(R3)。強制点は「製品設定/実行環境/CI/運用」の4値。<mark>「運用」しか書けない行は必須制約ではなく運用ルールであり、表中で◇印を付けて区別する</mark>——書いた気になって守られない事態を、表の上で見えるようにするためである。</p>
+  <div class="tpl">
+    <div class="tplhead"><span class="file">harness/core/policy/requirements.md</span><span class="own">コア/利用者のみ編集(下記 deny で保護)</span></div>
+<pre># 必須制約
+
+このファイルの変更は通常の実装修正と区別し、利用者が行う。
+強制点が「運用」のみの項目(◇)は運用ルールであり、破られる前提で監視する。
+
+| ID | 制約 | 強制点 | 強制の設定・確認方法 | 既知の限界 |
+| --- | --- | --- | --- | --- |
+| REQ-1 | 必須検証の失敗・未実行を成功として報告しない | CI(無ければ運用◇+独立再検証) | CI で必須検証を実行する。CI が無い場合のみ、採用判断・マージ前に別セッションで再実行 | CI に無い検証は運用頼み。再検証を省くと無力 |
+| REQ-2 | このファイルと config.md の必須検証表を、エージェントが書き換えない | 製品設定 | Claude Code: settings.json の deny(下記)。他製品: 差分レビュー(運用◇) | denyは任意のサブプロセス経由の書込に及ばない(V10) |
+| REQ-3 | 許可されていない外部送信・権限拡大をしない | 製品設定/実行環境 | 各製品の権限設定・サンドボックスの有効化を確認 | 製品ごとに段階2で実機確認 |
+| REQ-4 | 記録・配布物に認証情報・機密・無関係な個人情報を入れない | 運用◇ | 共有・配布前の目視。台帳・記録のテンプレートに書かない欄を設けない | 運用ルール扱い |
+
+Claude Code の保護設定(プロジェクトの .claude/settings.json に追記):
+  "permissions": { "deny": [ "Edit(./harness/core/policy/**)" ] }
+※ deny は deny→ask→allow の順で最初に評価される(V10)。段階1の対象 okf-devkit は
+  CI(ubuntu・windows × Python 3.11・3.13)を持つため、REQ-1 の強制点は当初から「CI」。</pre>
+  </div>
+  <p>ホスティングのアカウント開設や共同開発体制の構築はハーネスの対象外のままとするが、<strong>既に存在する CI・ブランチ保護を強制点として使うことは対象内</strong>とする(R6)。CI が無い間の REQ-1 の水準は「deny による定義ファイル保護+独立セッションでの再検証」である、と明示しておく。</p>
+</section>
+
+<!-- ================================================================ -->
+<section id="s8">
+  <div class="sec-head"><span class="sec-no">8</span><h2>製品接続</h2></div>
+
+  <h3><span class="lead-mark">8.1</span>入口の配線<span class="status fixed">【確定】</span></h3>
+  <p>正本はルートの AGENTS.md 1枚。<strong>ただしツールが生成するネストした入口(例: <code>okf init</code> が作る <code>docs/AGENTS.md</code>)は R8 の対象外とする</strong><span class="status fixed">【確定】</span>——人が入口を分割したものではなく、そのディレクトリの書式規約への案内であり、撤去してもツールの再実行で復活するため。対応表(第8.3節)の「既知の制限」に有無を記す。人が置くネストした入口は段階2の検証完了まで置かない(R8——ネスト時の意味論は Codex=連結・近い方優先、Copilot=最近傍のみ、と製品間で異なることが文書上確認済み。V3・V5)。</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>製品</th><th>接続方法</th><th>根拠(確認日 2026-08-30)</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap">Codex</td><td>AGENTS.md を直接読む。追加ファイル不要</td><td>V5[S07]。合計32KiB上限に留意</td></tr>
+      <tr><td class="nowrap">Claude Code</td><td><code>CLAUDE.md</code> に <code>@AGENTS.md</code> の取込を書く(2〜3行)。Windows のためシンボリックリンクは使わない</td><td>V1[S10]。公式推奨の方式</td></tr>
+      <tr><td class="nowrap">Copilot</td><td>AGENTS.md をネイティブに読む(文書上)。追加ファイル不要。<code>copilot-instructions.md</code> は当面作らない</td><td>V3[S12]。実機確認は段階2</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3><span class="lead-mark">8.2</span>スキルの方針<span class="status fixed">【確定】</span></h3>
+  <ul>
+    <li><strong>段階1はスキルを作らない。</strong>手順は入口からの明示参照(基本モード)で読む。スキル化は「入口の表では発見されない・呼び出しの摩擦が実測された」ときの台帳候補とする([S02]の教訓: 雑なスキルは無い方が悪い。V12)。</li>
+    <li>スキル化するときは Agent Skills 仕様の範囲のフィールドのみ使う(name・description・license・compatibility・metadata。V9)。Claude Code 固有フィールド(<code>context</code> 等)を共有スキルに入れない。</li>
+    <li>性質タグは frontmatter の <code>metadata</code> に置く: <code>metadata: { kind: "capability-support" | "policy" | "env-adapter" | "safety", ledger: "K-00N" }</code>。モデル更新時に <code>capability-support</code> を機械的に列挙して棚卸しする。</li>
+    <li>配置の正本は当面 <code>.claude/skills/</code> のみ。<code>.agents/skills</code>・<code>.github/skills</code> への展開は H1(重複挙動の実機確認)の結果で決める——3製品共通の探索場所は存在せず(V4・V6・V7)、Codex は同名をマージせず両方表示し(V6)、Copilot の重複時挙動は未文書化(V4)のため。</li>
+  </ul>
+
+  <h3><span class="lead-mark">8.3</span>対応表の様式(段階2で記入)</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>製品/利用形態</th><th>版</th><th>検証日</th><th>入口読込</th><th>手順追読(カナリア)</th><th>成果物書込</th><th>コマンド実行</th><th>強制点</th><th>既知の制限</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap">Claude Code/CLI</td><td>＿</td><td>＿</td><td>＿</td><td>＿/10</td><td>＿</td><td>＿</td><td>deny・フック・サンドボックス(V10)</td><td>＿</td></tr>
+      <tr><td class="nowrap">Codex/CLI</td><td>＿</td><td>＿</td><td>＿</td><td>＿/10</td><td>＿</td><td>＿</td><td>実装時に公式資料を再確認</td><td>＿</td></tr>
+      <tr><td class="nowrap">Copilot/VS Code agent</td><td>＿</td><td>＿</td><td>＿</td><td>＿/10</td><td>＿</td><td>＿</td><td>同上。無ければ「運用」と明記(R3)</td><td>＿</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>「文書上の対応」と「実機で確認した対応」を列で区別すること。基本モードの成立条件は<strong>能力の4点</strong>で判定する——入口を読む・参照先を必要時に読む・作業記録を書ける・必須検証コマンドを実行できる。これを満たさない利用形態(例: コード補完、レビュー専用画面)は基本モードの対象外として対応表に明記する。</p>
+</section>
+
+<!-- ================================================================ -->
+<section id="s9">
+  <div class="sec-head"><span class="sec-no">9</span><h2>配布・更新・撤去(段階3)</h2></div>
+  <p>本節は段階3で実装する設計であり、段階1〜2では読むだけでよい。専用の配布CLI・トランザクション機構は作らず、<strong>git のコミット単位を配布の原子性として使う</strong>(審査記録第4節丙)。</p>
+
+  <h3><span class="lead-mark">9.1</span>形態</h3>
+  <ul>
+    <li>コアを <code>harness-core</code> リポジトリへ抽出し、タグで版付けする。版名は日付+連番(例: <code>2026.09.0</code>)<span class="status fixed">【確定】</span>。同じ識別子から常に同じ内容が取得できることを最優先とする。</li>
+    <li>導入は「タグの内容を <code>harness/core/</code> へコピーし、<code>harness/install.json</code> を書き、<strong>1コミット</strong>で入れる」。更新・巻戻しも同様に1コミット(巻戻しは <code>git revert</code> か旧タグの再導入)。</li>
+    <li>入口(AGENTS.md 等)への接続行は<strong>人が追加する</strong>。ツールを作る場合も検査(あるべき行の有無の報告)まで(R7)。</li>
+  </ul>
+
+  <div class="tpl">
+    <div class="tplhead"><span class="file">harness/install.json</span><span class="own">導入記録(最小形。ハッシュ等は必要が実測されてから追加)</span></div>
+<pre>{
+  "source": "〈harness-core リポジトリの場所〉",
+  "version": "2026.09.0",
+  "commit": "〈タグの指すSHA〉",
+  "installed_at": "2026-09-15",
+  "managed": ["harness/core/"],
+  "overrides": [
+    {
+      "path": "harness/core/procedures/verify-report.md",
+      "base_version": "2026.09.0",
+      "reason": "〈上流反映待ちの修正内容〉",
+      "ledger": "K-007",
+      "review_at": "次回更新時"
+    }
+  ]
+}</pre>
+  </div>
+  <p><code>overrides</code> が<strong>宣言付き上書き</strong>(R5)である。宣言のある管理対象ファイルの改変は正当な上書きとして扱い、宣言のない改変だけを更新時の競合とする。台帳IDを書くことで、共通側に同じ修正が入った版へ更新するとき「この上書きは不要になった可能性」を機械的に列挙できる(共通側の変更履歴にも対応する台帳IDを1行書く)。</p>
+
+  <h3><span class="lead-mark">9.2</span>更新の手順</h3>
+  <ol class="steps">
+    <li>新しいタグの内容を取得し、現在の <code>harness/core/</code> との差分を確認する(導入時タグとの三者比較。git のツリー比較で足りる)。</li>
+    <li>宣言のない改変が見つかったら競合として止め、<strong>三つの出口</strong>から選ぶ——(a) 上流を採用して改変を捨てる、(b) 改変を <code>overrides</code> に宣言して保持する、(c) 手動でマージする。</li>
+    <li>差分(追加・変更・削除・上書きとの重なり)を確認してから、コピーと <code>install.json</code> の更新を<strong>1コミット</strong>で入れる。</li>
+    <li>代表作業を1件流し、入口からの到達と必須検証を確認する。スキルの発動条件・出力形式が変わる版では、文章だけの変更でも動作を確認する。</li>
+    <li>問題があれば <code>git revert</code>。<code>state/</code>・<code>project/</code> は管理対象外なので巻戻しの影響を受けない。</li>
+  </ol>
+
+  <h3><span class="lead-mark">9.3</span>撤去の手順</h3>
+  <ol class="steps">
+    <li>削除候補は「<code>install.json</code> の管理対象であり、かつ宣言なしで改変されていないもの」だけ。改変されたものと <code>overrides</code> は一覧にして利用者の判断へ回す。</li>
+    <li><code>project/</code>・<code>state/</code>・台帳・入口ファイルは残す。入口の接続行の削除は人が行う。</li>
+    <li>撤去後にプロジェクト本来のビルド・テストが通ることを確認して完了とする。</li>
+  </ol>
+
+  <h3><span class="lead-mark">9.4</span>シナリオとの対応</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>状況(設計方針書・依頼の想定)</th><th>本仕様での受け止め</th></tr></thead>
+    <tbody>
+      <tr><td>管理対象を直接編集した後に更新する</td><td>9.2 手順2で検出し、三つの出口(採用/宣言化/マージ)へ振り分ける</td></tr>
+      <tr><td>共通版とローカル拡張が同じ問題を解決して両方残る</td><td>台帳IDの相互参照(9.1)で更新時に候補を列挙し、13.3 の重複除去を実行する</td></tr>
+      <tr><td>二つの製品が同じスキルを複数の場所から見つける</td><td>正本1箇所の原則(8.2)+H1 の実機確認まで展開しない</td></tr>
+      <tr><td>フックが利用できない</td><td>手順は手動呼出(基本モード)。安全系は強制点の表で「運用」に降格したことが見える(第7節)</td></tr>
+      <tr><td>更新が途中で止まる/旧版へ戻したい</td><td>1コミット原則により中途状態が残らない。巻戻しは revert。状態は分離済みで無傷</td></tr>
+      <tr><td>モデル更新後、部品なしの方が速い</td><td>台帳の「能力補助」行とスキルの metadata タグを列挙し、部品なし比較(第10節)→廃止</td></tr>
+      <tr><td>振り返りが増え続ける/完了条件が書き換えられる</td><td>台帳の上限・加算規則(5.5)と、REQ-2 の deny 保護+独立再検証(第7節)</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="s10">
+  <div class="sec-head"><span class="sec-no">10</span><h2>評価の最小実装</h2></div>
+  <p>評価は厳格層の変更(6.2)にだけ適用する。専用基盤は作らず、記録は台帳と作業記録で足りる。</p>
+  <h3>比較の条件</h3>
+  <ul>
+    <li>比較対象: 現行版/候補版。廃止判断のときは「対象部品なし」を加える。初回導入時のみ「ハーネスなし」も1回測って基準線を残す。</li>
+    <li>そろえるもの: 依頼文・開始時のリポジトリ状態(同一コミットから開始)・製品とモデル・利用可能なツール。片方の回答を他方に見せない。</li>
+    <li>安全条件(必須検証・権限)は「なし」側でも外さない。</li>
+    <li>ばらつきが疑わしい重要な判断だけ複数回流す。全比較の複数回実施は要求しない(H4 で実コストを測って調整)。</li>
+  </ul>
+  <h3>記録の様式(台帳の試行行に添える)</h3>
+  <div class="tpl">
+    <div class="tplhead"><span class="file">比較記録(台帳 K-00N の試行に添付)</span><span class="own">様式</span></div>
+<pre>| 条件 | 入力 | 製品・モデル(実ID/不明) | 完了条件適合 | 人の手戻り(回数・分) | 所要 | トークン(不明可) | 備考 |
+| 現行 | 〈代表作業◯〉 | | | | | | |
+| 候補 | 同上 | | | | | | |
+判断: 品質が同等なら負担の少ない方。悪化が「許容できない悪化」(第2節)に触れたら不採用。
+取得できない数値は「不明」と書く。ゼロとして集計しない。AIの自己採点を品質の根拠にしない。</pre>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="s11">
+  <div class="sec-head"><span class="sec-no">11</span><h2>作らないもの<span class="status fixed">【確定】</span></h2></div>
+  <p>以下は「まだ作らない」の規定であり、禁止ではない。<strong>トリガーが実測されるまでは着手しない</strong>(R2)。トリガーが起きたら台帳に候補として記録し、厳格層の手続きで導入する。</p>
+  <p><strong>本節は新規作成の抑制であり、導入先に既にある自動化の撤去を求めるものではない</strong><span class="status fixed">【確定】</span>。既存のフック・スクリプトはそのまま使い、保守負担が疑わしいものだけを台帳の観測に入れる。</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>作らないもの</th><th>いまの代替</th><th>再検討のトリガー</th></tr></thead>
+    <tbody>
+      <tr><td>設定の組み立て・生成レイヤー、設定スキーマと競合検証ツール</td><td>プレーンなファイルと目視</td><td>層が2つ以上になり、実際の競合を2回経験した</td></tr>
+      <tr><td>検証のラッパースクリプト</td><td>コマンド手動実行+4値の転記</td><td>転記の誤りが観測された(H3)</td></tr>
+      <tr><td>スキル(SKILL.md)</td><td>入口からの明示参照</td><td>発見・呼出の摩擦が台帳に記録された</td></tr>
+      <tr><td>フック・自動実行制御・継続実行ループ</td><td>手順の手動呼出</td><td>同じ抜けが繰り返し観測された(台帳の回数≧3目安)</td></tr>
+      <tr><td>入口ファイルへの自動追記</td><td>人が1〜3行を追加。ツールは存在検査まで</td><td>導入先が増え、手作業の負担が実測された</td></tr>
+      <tr><td>ハッシュ・互換条件付きの拡張マニフェスト</td><td>install.json の最小形(9.1)</td><td>段階3で改変検出の誤り・すり抜けが起きた</td></tr>
+      <tr><td>専用の配布CLI・プラグイン包装</td><td>コピー+1コミット</td><td>導入先が3以上になり手順の負担が実測された</td></tr>
+      <tr><td>評価の自動実行基盤・記録データベース</td><td>台帳+比較記録の様式</td><td>厳格層の比較が月2回を超えて発生した</td></tr>
+      <tr><td>組織共通層</td><td>コアとプロジェクト層の2層</td><td>共有する相手(人・チーム)が実際に現れた</td></tr>
+      <tr><td>常時稼働の複数エージェント構成</td><td>必要時の独立セッション(Codex CLI 等)</td><td>長時間・並列の実需要が生じた</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="s12">
+  <div class="sec-head"><span class="sec-no">12</span><h2>保留事項<span class="status hold">【保留】</span></h2></div>
+  <p>以下は決めずに実証へ進んでよい。それぞれ決定のトリガーを添える。</p>
+  <ul>
+    <li><strong>スキルの同時配置の最終形</strong> — H1 の実機結果で決める(段階2)。</li>
+    <li><strong>Codex・Copilot の権限・サンドボックスの扱い</strong> — 段階2のアダプター確認時に公式資料を再確認して対応表へ記す。</li>
+    <li><strong>評価の数値閾値(件数・回数・許容悪化の具体値)</strong> — 第2節の記入と H4 の実測で決める。</li>
+    <li><strong>版命名の高度化(semver 等)</strong> — 互換性で困る事態が起きたら。日付+連番で開始する。</li>
+    <li><s><strong>CI の導入・強制点の昇格</strong></s> — <strong>決着済み(第0.2版)</strong>。段階1の対象 <code>okf-devkit</code> に CI があるため、REQ-1 の強制点は当初から「CI」。</li>
+    <li><strong>組織共通層の責務分割</strong> — 共有相手の出現まで白紙のままとする。</li>
+  </ul>
+</section>
+
+<footer class="colophon">
+  <p>共通ハーネス構築仕様(整理番号 HSP-2026-0830・第0.2版)。依拠: HARNESS_DESIGN.md(2026年8月30日版)および審査記録 HRV-2026-0830。本仕様中の製品仕様への言及(V1〜V12)はいずれも2026年8月30日の文書上の確認であり、実機検証は段階1〜2で行う。第2節の記入をもって実証を開始し、段階1の完了時に本仕様を第0.3版へ改訂する。2026年8月31日、正本を HARNESS_SPEC.md へ移行した。以後の変更は正本にのみ加え、本HTMLは版の節目に再生成する。2026年9月1日、第0.2版へ改訂——段階1の対象を okf-devkit に確定し、段階1の定義を「役割の充足確認と補完」へ変更(第4節に写像表を追加)。必須検証を層別化し REQ-1 の強制点を CI へ昇格。決定の振り分け規則(第1.1節)を追加。誤記2点(コア枚数・受け入れ条件の採番)を訂正。</p>
+</footer>
+
+</main>
+
+</body>
+</html>

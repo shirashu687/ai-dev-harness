@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>ハーネス設計審査記録</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700;900&family=BIZ+UDPGothic:wght@400;700&family=BIZ+UDGothic:wght@400;700&display=swap">
+<style>
+:root {
+  --paper: #FBFAF7;
+  --paper-recess: #F3F1EB;
+  --ink: #262219;
+  --ink-soft: #6B6357;
+  --ink-faint: #8F887A;
+  --rule: #CFC9BD;
+  --rule-soft: #E4E0D6;
+  --accent: #A5321F;
+  --accent-deep: #7E2718;
+  --accent-wash: #F5E9E5;
+  --sev-high: #A5321F;
+  --sev-mid: #8A5A12;
+  --sev-low: #6B6357;
+  --ok: #3F6142;
+  --code-bg: #F1EEE7;
+  --mark-bg: #FBF3D8;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1B1915;
+    --paper-recess: #232019;
+    --ink: #E6E1D5;
+    --ink-soft: #A69E8E;
+    --ink-faint: #7E776A;
+    --rule: #47423A;
+    --rule-soft: #322E27;
+    --accent: #E0755D;
+    --accent-deep: #EA8A74;
+    --accent-wash: #322119;
+    --sev-high: #E0755D;
+    --sev-mid: #CFA14C;
+    --sev-low: #A69E8E;
+    --ok: #8FB791;
+    --code-bg: #232019;
+    --mark-bg: #3A3220;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1B1915;
+  --paper-recess: #232019;
+  --ink: #E6E1D5;
+  --ink-soft: #A69E8E;
+  --ink-faint: #7E776A;
+  --rule: #47423A;
+  --rule-soft: #322E27;
+  --accent: #E0755D;
+  --accent-deep: #EA8A74;
+  --accent-wash: #322119;
+  --sev-high: #E0755D;
+  --sev-mid: #CFA14C;
+  --sev-low: #A69E8E;
+  --ok: #8FB791;
+  --code-bg: #232019;
+  --mark-bg: #3A3220;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "BIZ UDPGothic", "Yu Gothic Medium", "Yu Gothic", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  font-size: 15.5px;
+  line-height: 1.95;
+  text-align: left;
+  font-feature-settings: "palt" 0;
+}
+main {
+  max-width: 47.5rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.4rem 6rem;
+}
+h1, h2, h3, h4 {
+  font-family: "Zen Old Mincho", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-weight: 700;
+  line-height: 1.5;
+  text-wrap: balance;
+  margin: 0;
+}
+a { color: var(--accent-deep); text-decoration: none; border-bottom: 1px solid var(--rule); }
+a:hover, a:focus-visible { border-bottom-color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+p { margin: 0 0 1em; }
+code, .path {
+  font-family: "Consolas", "BIZ UDGothic", "Courier New", monospace;
+  font-size: 0.88em;
+  background: var(--code-bg);
+  padding: 0.08em 0.35em;
+  border-radius: 2px;
+}
+strong { font-weight: 700; }
+
+/* ---- 表紙・頭書 ---- */
+.masthead { border-top: 3px double var(--ink); padding-top: 0.9rem; }
+.doc-no {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+  font-size: 0.78rem; letter-spacing: 0.14em; color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+.masthead h1 { font-size: 2.1rem; font-weight: 900; margin: 1.1rem 0 0.4rem; letter-spacing: 0.04em; }
+.masthead .subtitle { color: var(--ink-soft); margin-bottom: 1.6rem; }
+.headmeta {
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  display: grid; grid-template-columns: 8.5em 1fr; font-size: 0.92rem;
+}
+.headmeta > div { padding: 0.5rem 0.2rem; border-bottom: 1px solid var(--rule-soft); }
+.headmeta > div:nth-last-child(-n+2) { border-bottom: none; }
+.headmeta .k { color: var(--ink-soft); letter-spacing: 0.08em; }
+.verdict-stamp {
+  margin: 1.7rem 0 0.4rem;
+  border: 2px solid var(--accent);
+  color: var(--accent-deep);
+  padding: 0.9rem 1.2rem;
+  display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap;
+}
+.verdict-stamp .stamp-word {
+  font-family: "Zen Old Mincho", "Yu Mincho", serif;
+  font-weight: 900; font-size: 1.35rem; letter-spacing: 0.18em; white-space: nowrap;
+}
+.verdict-stamp .stamp-note { color: var(--ink); font-size: 0.92rem; line-height: 1.75; }
+
+/* ---- 目次 ---- */
+nav.toc { margin: 2.6rem 0 0; font-size: 0.94rem; }
+nav.toc h2 { font-size: 1rem; letter-spacing: 0.3em; color: var(--ink-soft); font-weight: 700; margin-bottom: 0.6rem; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; column-gap: 3rem; }
+@media (min-width: 640px) { nav.toc ol { columns: 2; } }
+nav.toc li { break-inside: avoid; display: flex; align-items: baseline; gap: 0.6em; padding: 0.18rem 0; }
+nav.toc .n { font-variant-numeric: tabular-nums; color: var(--accent); min-width: 1.4em; }
+nav.toc a { border-bottom: none; }
+nav.toc a:hover { border-bottom: 1px solid var(--accent); }
+
+/* ---- 節 ---- */
+section { margin-top: 3.4rem; }
+.sec-head { display: flex; align-items: baseline; gap: 0.8rem; border-bottom: 1px solid var(--ink); padding-bottom: 0.45rem; margin-bottom: 1.3rem; }
+.sec-head .sec-no {
+  font-family: "Zen Old Mincho", serif; font-weight: 700; color: var(--accent);
+  font-size: 1.15rem; font-variant-numeric: tabular-nums; letter-spacing: 0.05em;
+}
+.sec-head h2 { font-size: 1.35rem; letter-spacing: 0.06em; }
+h3 { font-size: 1.06rem; margin: 1.8rem 0 0.7rem; letter-spacing: 0.05em; }
+h3 .lead-mark { color: var(--accent); margin-right: 0.4em; font-weight: 700; }
+
+/* ---- 表 ---- */
+.tablewrap { overflow-x: auto; margin: 1rem 0 1.4rem; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; line-height: 1.7; }
+caption { text-align: left; font-size: 0.82rem; color: var(--ink-soft); padding-bottom: 0.4rem; letter-spacing: 0.06em; }
+th {
+  text-align: left; font-weight: 700; font-size: 0.82rem; letter-spacing: 0.1em; color: var(--ink-soft);
+  border-top: 1.5px solid var(--ink); border-bottom: 1px solid var(--ink);
+  padding: 0.45rem 0.7rem 0.45rem 0.1rem; white-space: nowrap;
+}
+td { border-bottom: 1px solid var(--rule-soft); padding: 0.5rem 0.7rem 0.5rem 0.1rem; vertical-align: top; }
+tr:last-child td { border-bottom: 1.5px solid var(--ink); }
+td.num, th.num { font-variant-numeric: tabular-nums; }
+td.nowrap { white-space: nowrap; }
+
+/* ---- 指摘票 ---- */
+.finding {
+  border: 1px solid var(--rule);
+  margin: 1.4rem 0;
+  break-inside: avoid;
+}
+.finding-head {
+  display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-recess);
+}
+.fid {
+  font-family: "Consolas", "BIZ UDGothic", monospace; font-weight: 700; font-size: 0.95rem;
+  color: var(--accent-deep); letter-spacing: 0.04em;
+}
+.finding-head .ttl { font-weight: 700; flex: 1 1 14em; }
+.sev {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2em; height: 2em; border: 1.5px solid currentColor;
+  font-family: "Zen Old Mincho", serif; font-weight: 700; font-size: 0.85rem;
+  flex: none;
+}
+.sev.high { color: var(--sev-high); }
+.sev.mid  { color: var(--sev-mid); }
+.sev.low  { color: var(--sev-low); }
+.kind { font-size: 0.8rem; color: var(--ink-soft); letter-spacing: 0.05em; white-space: nowrap; }
+.finding-body { padding: 0.9rem 0.9rem 0.4rem; }
+.finding-body dl { display: grid; grid-template-columns: 6.5em 1fr; margin: 0; row-gap: 0.35rem; }
+.finding-body dt { color: var(--ink-soft); font-size: 0.85rem; letter-spacing: 0.08em; padding-top: 0.1rem; }
+.finding-body dd { margin: 0; font-size: 0.95rem; }
+.finding-body dd p { margin-bottom: 0.5em; }
+@media (max-width: 540px) {
+  .finding-body dl { grid-template-columns: 1fr; row-gap: 0.1rem; }
+  .finding-body dt { border-top: 1px dotted var(--rule-soft); padding-top: 0.4rem; margin-top: 0.3rem; }
+  .finding-body dt:first-child { border-top: none; margin-top: 0; }
+}
+
+/* ---- 判定ラベル・引用ほか ---- */
+.holds { color: var(--ok); font-weight: 700; }
+.gap { color: var(--sev-high); font-weight: 700; }
+.gap-mid { color: var(--sev-mid); font-weight: 700; }
+blockquote {
+  margin: 1rem 0; padding: 0.2rem 0 0.2rem 1rem;
+  border-left: 2px solid var(--rule); color: var(--ink-soft); font-size: 0.93rem;
+}
+ul, ol { padding-left: 1.5em; margin: 0.2rem 0 1.1rem; }
+li { margin: 0.25rem 0; }
+li::marker { color: var(--accent); }
+.note {
+  background: var(--paper-recess); border: 1px solid var(--rule-soft);
+  padding: 0.8rem 1rem; font-size: 0.9rem; margin: 1.2rem 0; line-height: 1.85;
+}
+.note .note-label { font-weight: 700; letter-spacing: 0.15em; color: var(--ink-soft); font-size: 0.78rem; display: block; margin-bottom: 0.3rem; }
+mark { background: var(--mark-bg); color: inherit; padding: 0 0.15em; }
+
+/* ---- 奥付 ---- */
+footer.colophon {
+  margin-top: 4.5rem; border-top: 3px double var(--ink); padding-top: 1rem;
+  font-size: 0.82rem; color: var(--ink-soft); line-height: 1.9;
+}
+@media print {
+  body { font-size: 10.5pt; }
+  .finding, .tablewrap, .note { break-inside: avoid; }
+  nav.toc { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+
+<main>
+
+<header class="masthead">
+  <div class="doc-no"><span>整理番号 HRV-2026-0830</span><span>2026年8月30日</span></div>
+  <h1>ハーネス設計審査記録</h1>
+  <p class="subtitle">HARNESS_DESIGN.md(AIエージェント共通ハーネスの設計方針)に対する、実装前の独立設計レビュー</p>
+  <div class="headmeta">
+    <div class="k">対象文書</div><div>HARNESS_DESIGN.md(全19章・2026年8月30日版)。あわせて HARNESS_REVIEW_PROMPT.md の出力要件に準拠した。</div>
+    <div class="k">実施環境</div><div>Claude Code 上の Claude Fable 5(実行環境の申告による)。Web照会により製品公式資料を確認。実機での動作検証は未実施。</div>
+    <div class="k">確認範囲</div><div>設計文書は全文を読了。製品仕様は第8節に示す一次資料を2026年8月30日に取得して照合した。[S03]〜[S06]、[S14]〜[S16]は今回再確認していない。</div>
+  </div>
+  <div class="verdict-stamp">
+    <span class="stamp-word">条件付き承認</span>
+    <span class="stamp-note">重要な修正(指摘 R1〜R4)を反映することを条件に、小規模実証へ進めてよい。方向性と原則は妥当であり、必要な修正はいずれも節単位の追記・割当てで済む。構成の再検討は要しない。</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <h2>目次</h2>
+  <ol>
+    <li><span class="n">1</span><a href="#sec1">総合判断</a></li>
+    <li><span class="n">2</span><a href="#sec2">優先度順の指摘</a></li>
+    <li><span class="n">3</span><a href="#sec3">シナリオ別の耐性確認</a></li>
+    <li><span class="n">4</span><a href="#sec4">簡素化の提案</a></li>
+    <li><span class="n">5</span><a href="#sec5">決める必要があること</a></li>
+    <li><span class="n">6</span><a href="#sec6">最小の検証計画</a></li>
+    <li><span class="n">7</span><a href="#sec7">維持したい設計判断</a></li>
+    <li><span class="n">8</span><a href="#sec8">製品仕様の確認結果</a></li>
+    <li><span class="n">9</span><a href="#sec9">レビュー観点への対応表</a></li>
+  </ol>
+</nav>
+
+<!-- ================================================================ -->
+<section id="sec1">
+  <div class="sec-head"><span class="sec-no">1</span><h2>総合判断</h2></div>
+
+  <p><strong>判定は「重要な修正を条件に、小規模実証へ進める」である。</strong>設計の骨格——小さな共通コアと薄い製品別アダプター、版固定による導入、指示と権限の区別、能力補助と運用方針の区別、部品を外した比較——は、公開事例および今回確認した各製品の公式仕様と整合しており、維持すべきものが多い。特に、参考事例[S02]の実測(第8節 V12)は本設計の第10.5節・第11章の方針を強く裏付けている。</p>
+
+  <p>一方で、実証前に直すべき問題は「書いてある機構が誤っている」ことではなく、<strong>「どの段階で何を作るかの割当てが文書構造から読み取れない」</strong>ことに集中している。本文書は各所で「初期には作らない」「未決定」とヘッジしているが、受け入れ条件(第16章)は段階に割り当てられておらず、組み立て・生成・検証ツール群は既定で作るのか作らないのかが読み手に委ねられている。このままでは、実装時に第17章が自ら警告する「ハーネス自体が大きな製品になる」失敗を、この文書自身が誘発しうる。また、強制手段を持たない製品での必須制約の扱いには定義の循環があり(R3)、これは安全性に関わるため実証前の修正を要する。</p>
+
+  <p>製品仕様の確認では、設計文書の記述の誤りは見つからなかった。むしろ、文書が「要確認」としていた点のうち、<mark>GitHub Copilot が AGENTS.md をネイティブ読込すること</mark>が公式資料で確認でき(V3)、入口ファイルの設計を当初想定より簡素化できる。逆に、<mark>3製品すべてが共通に読むスキル配置場所は存在しない</mark>こと(V4・V6・V7)、<mark>Codex は同名スキルをマージせず両方表示する</mark>こと(V6)も確認でき、第6.4節の慎重姿勢(機械的な複製をしない・基本モードへ退避)が正当であることの裏が取れた。</p>
+
+  <p>指摘の内訳は、根拠のある欠陥が6件(R1・R2・R3・R5・R6・R8)、実証前に決定が必要な事項が2件(R4、および R7 の採否)、既定値・統合の提案が2件(R9・R10)である。検証すべき仮説は第6節に H1〜H6 として分離した。指摘の件数を揃えるための水増しは行っていない。</p>
+</section>
+
+<!-- ================================================================ -->
+<section id="sec2">
+  <div class="sec-head"><span class="sec-no">2</span><h2>優先度順の指摘</h2></div>
+
+  <p>優先度は依頼の定義に従う(高=データ保護・必須制約・更新の安全性・設計の中心目的に関わり実証前に修正、中=実証や配布を広げる前に解決、低=説明の改善や任意の選択肢)。区分は「根拠のある欠陥/決定が必要/追補/選択肢」を分けて記す。</p>
+
+  <div class="tablewrap">
+  <table>
+    <caption>指摘一覧</caption>
+    <thead><tr><th>ID</th><th>優先度</th><th>該当節</th><th>要旨</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap"><a href="#r1">R1</a></td><td>高</td><td class="nowrap">16章・15.2</td><td>受け入れ条件16項目が導入段階に割り当てられておらず、実証段階の完了基準として誤読される</td></tr>
+      <tr><td class="nowrap"><a href="#r2">R2</a></td><td>高</td><td class="nowrap">4.1・5.2・5.3・12.4</td><td>組み立て・生成・検証ツール群の「作らない既定」が明文化されておらず、初期実装が膨張しうる</td></tr>
+      <tr><td class="nowrap"><a href="#r3">R3</a></td><td>高</td><td class="nowrap">6.3・14.1</td><td>強制手段のない製品で必須制約を守らせる主体が未定義で、定義が循環している</td></tr>
+      <tr><td class="nowrap"><a href="#r4">R4</a></td><td>高</td><td class="nowrap">15章・18.1</td><td>段階1でコアをどこに置き、所有区分をどう表示するかが、着手を阻む未決定として隠れている</td></tr>
+      <tr><td class="nowrap"><a href="#r5">R5</a></td><td>中</td><td class="nowrap">5.2・12.3・13.1</td><td>共通部品を正当に上書きする経路が未定義で、競合検出と暫定修正の規定が衝突する</td></tr>
+      <tr><td class="nowrap"><a href="#r6">R6</a></td><td>中</td><td class="nowrap">9.3・1.3</td><td>完了条件の改変防止に使える現実的な強制点(既存CI)が、対象外宣言と緊張関係にある</td></tr>
+      <tr><td class="nowrap"><a href="#r7">R7</a></td><td>中</td><td class="nowrap">12.3・12.5</td><td>利用者所有ファイルへの「管理された追記」は最も壊れやすい機構であり、初期は持たない選択ができる</td></tr>
+      <tr><td class="nowrap"><a href="#r8">R8</a></td><td>中</td><td class="nowrap">6.2・6.4</td><td>入口・スキルのネスト時挙動が製品間で異なる事実が反映されておらず、配置原則が定まらない</td></tr>
+      <tr><td class="nowrap"><a href="#r9">R9</a></td><td>低</td><td class="nowrap">8.3・10.3</td><td>記録の上限が「環境に合わせて設定」のままで、既定値がないと先送りされる</td></tr>
+      <tr><td class="nowrap"><a href="#r10">R10</a></td><td>低</td><td class="nowrap">7.2・7.3・8.2・10.3</td><td>報告・引継ぎ・作業記録・台帳の項目定義が4箇所に分散し、統合できる</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- R1 -->
+  <article class="finding" id="r1">
+    <div class="finding-head"><span class="sev high">高</span><span class="fid">R1</span><span class="ttl">受け入れ条件が段階に割り当てられていない</span><span class="kind">根拠のある欠陥</span></div>
+    <div class="finding-body"><dl>
+      <dt>該当節</dt><dd>第16章(実証時の受け入れ条件)、第15.2節(導入順序)</dd>
+      <dt>条件</dt><dd>第16章を「段階1の実証で満たすべき合格基準」として読んで実装に着手した場合。</dd>
+      <dt>影響</dt><dd><p>16項目のうち少なくとも10項目(版・部品の確認、更新前差分、途中失敗からの回復、再実行の冪等性、重複解消、ロールバック後の開発可能性など)は、配布が始まる段階3以降でしか検証できず、満たそうとすれば段階1で配布基盤を作り込むことになる。これは第17章の失敗パターン「ハーネス自体が大きな製品になる」を文書自身が誘発する構造であり、中心目的(負債を増やさない)に直接反する。</p></dd>
+      <dt>最小の修正</dt><dd><p>各条件に対応段階(1〜4)を1列追加するだけでよい。試みに割り当てると、段階1=入口到達・グローバル設定非依存・誤発動なし・特権不要・検証の誠実報告・引継ぎ再開・軽量比較・部品なし比較の8項目、段階2=製品間の到達と強制手段の制限1〜2項目、段階3=残りの配布・更新・撤去系すべて、となる。第15.2節の表と統合すれば1つの「段階×確認事項」表になる(R10・第4節参照)。</p></dd>
+      <dt>根拠</dt><dd>文書内の構造分析による。第16章冒頭の「将来の実証で確認する項目」という但し書きは段階の割当てを代替しない。</dd>
+    </dl></div>
+  </article>
+
+  <!-- R2 -->
+  <article class="finding" id="r2">
+    <div class="finding-head"><span class="sev high">高</span><span class="fid">R2</span><span class="ttl">補助機構群の「作らない既定」が明文化されていない</span><span class="kind">根拠のある欠陥</span></div>
+    <div class="finding-body"><dl>
+      <dt>該当節</dt><dd>第4.1節(組み立て・競合検出)、第5.2節(設定の検出・検証)、第5.3節(参照または生成)、第12.4節(ハッシュ等の導入記録)</dd>
+      <dt>条件</dt><dd>単一プロジェクト・単一運用者の段階1で、これらの節に書かれた責務を「実装すべき機能」として読んだ場合。層が1つしかない段階では検出すべき競合も、生成すべき複製も、照合すべきハッシュも存在しない。</dd>
+      <dt>影響</dt><dd><p>第5.2節の要求(項目ごとの上書き可否、未知項目の非無視、由来の表示)を機械化するには設定スキーマと検証器が必要であり、第5.3節の「生成」には変換処理と生成記録が必要になる。観測された問題がゼロの時点でスキーマ設計・生成パイプライン・照合ツールの保守が始まり、負債削減という目的と逆行する。各節には個別のヘッジ(「初期段階では〜で十分かを先に検証する」等)があるが、<strong>既定でどちらに倒すか</strong>が書かれていないため、読み手の裁量で膨らむ。</p></dd>
+      <dt>最小の修正</dt><dd><p>第15.1節に一文を加える——「段階1〜2の既定は、プレーンなMarkdownファイルと手動の目視確認のみとし、第4.1節の組み立て、第5.2節の機械検証、第5.3節の生成、第12.4節のハッシュ照合は作らない」。あわせて各機構に導入トリガーを1行ずつ紐づける(例: 5.2の検証器=層が2つ以上になり実際の競合を2回経験したら。5.3の生成=参照1行で賄えない製品差分が実測されたら。12.4のハッシュ=段階3の配布開始時)。</p></dd>
+      <dt>根拠</dt><dd>文書内の構造分析による。参考事例[S01]の運用も生成・検証ツールなしのプレーンファイル構成で成立している(V11)。</dd>
+    </dl></div>
+  </article>
+
+  <!-- R3 -->
+  <article class="finding" id="r3">
+    <div class="finding-head"><span class="sev high">高</span><span class="fid">R3</span><span class="ttl">強制手段のない製品での必須制約の帰着先が循環している</span><span class="kind">根拠のある欠陥</span></div>
+    <div class="finding-body"><dl>
+      <dt>該当節</dt><dd>第6.3節(必須制約の強制)、第14.1節(指示と権限の混同禁止)。第9.3節にも波及。</dd>
+      <dt>条件</dt><dd>フック・権限制御・サンドボックスに相当する仕組みを持たない利用形態(今回確認した範囲では、GitHub Copilot の複数の利用形態がローカルの同等物を持つと確認できなかった)で、第6.3節の「同等の強制手段がなければ、その制約を必要とする操作は実行しない」を適用しようとした場合。</dd>
+      <dt>影響</dt><dd><p>「実行しない」を保証する主体が定義されていないため、実装すると結局「エージェントに『やるな』と指示する」ことになり、第14.1節が明確に禁じた「指示に書くことと権限で制限することの混同」へ回帰する。必須制約が気づかれないまま単なる作文へ降格し、しかも対応表の上では「制約あり」に見えるという、安全性として最悪の形になる。</p></dd>
+      <dt>最小の修正</dt><dd><p>制約×製品(利用形態)ごとに<strong>強制点</strong>を4値のいずれかで記録することを第6.3節に定める——「製品設定(例: Claude Code の permissions deny)/実行環境(サンドボックス・コンテナ)/CI(プッシュ後の必須チェック)/人の運用(その製品にその作業を割り当てない)」。そして「人の運用」しか選べない制約は、その製品の対応表で<strong>必須制約ではなく運用ルールと表示する</strong>。これは新しい機構ではなく、既に予定されている対応表(第6.4節末尾)への1列追加であり、増える保守負担は表の1列分に留まる。</p><p>なお Claude Code には <code>Edit(パス)</code>・<code>Read(パス)</code> の deny ルールとフック、サンドボックスが実在し(V10)、公式文書には「deny ルールは組み込みツールと認識可能なファイルコマンドに適用され、任意のサブプロセスには適用されない」という限界も明記されている。強制点の記録にはこの種の限界の欄も設けるとよい。</p></dd>
+      <dt>根拠</dt><dd>文書内の論理と、Claude Code permissions 文書(2026年8月30日確認、V10)。Copilot・Codex の強制手段の実態は未確認であり、段階2の検証項目(H1・第6節)に含めた。</dd>
+    </dl></div>
+  </article>
+
+  <!-- R4 -->
+  <article class="finding" id="r4">
+    <div class="finding-head"><span class="sev high">高</span><span class="fid">R4</span><span class="ttl">段階1の配置と所有区分の表示方法が、着手を阻む未決定として隠れている</span><span class="kind">決定が必要</span></div>
+    <div class="finding-body"><dl>
+      <dt>該当節</dt><dd>第15章(最初に作る範囲)、第18.1節(実証前に必要な判断)</dd>
+      <dt>条件</dt><dd>実証を開始しようとした時点。第18.1節の判断リストには「どのプロジェクトで・どの製品で・何を共通化するか」はあるが、「作るファイルをリポジトリのどこに置き、将来の共通候補とプロジェクト固有物をどう区別して見せるか」がない。</dd>
+      <dt>影響</dt><dd><p>未決定のままでは初日に書くファイルの置き場所が決まらず着手できない。場当たりに置くと、共通候補と固有情報が混ざり、段階3で第13.2節が要求する「固有の情報や暗黙の環境依存を分離できる」を後付けで満たすことになり、分離コストが跳ね上がる。これは「実装がまだない」ことではなく、<strong>この段階で決めなければ他の決定が進まない</strong>種類の未決定である。</p></dd>
+      <dt>最小の修正</dt><dd><p>第18.1節に1項目追加する——「リポジトリ内の配置と所有区分の表示方法」。推奨案: プロジェクト直下に <code>harness/</code> を置き、<code>core/</code>(将来の共通化候補。汎用の書き方のみ)、<code>project/</code>(固有設定と拡張)、<code>state/</code>(作業記録。配布対象外)に分け、入口(AGENTS.md 等)はプロジェクト所有とする。ディレクトリ境界そのものを所有区分の表示とすれば、マーカーや台帳は不要になる。</p></dd>
+      <dt>根拠</dt><dd>文書内の依存関係分析による。配置の具体案自体は選択肢であり、別添の構築仕様で詳細化した。</dd>
+    </dl></div>
+  </article>
+
+  <!-- R5 -->
+  <article class="finding" id="r5">
+    <div class="finding-head"><span class="sev mid">中</span><span class="fid">R5</span><span class="ttl">共通部品を正当に上書きする経路が未定義</span><span class="kind">根拠のある欠陥</span></div>
+    <div class="finding-body"><dl>
+      <dt>該当節</dt><dd>第5.2節(同名スキルへの異なる内容の割当ては検出対象)、第12.3節(一時的な例外)、第13.1節(既存共通部品への暫定対処)</dd>
+      <dt>条件</dt><dd>共通スキルや共通手順の不具合を、上流反映を待たずプロジェクト側で先に直したい場合(第13.1節が明示的に想定する状況)。段階3以降で必ず起こる。</dd>
+      <dt>影響</dt><dd><p>第5.2節は「同じスキル名に異なる内容を割り当てる設定は検出する」と定めるが、暫定修正はまさにそれをやる行為である。正当な経路がないと、(a)検出が正しい作業を妨げる、(b)検出を黙って迂回する運用が生まれ由来が追えなくなる、のいずれかになり、第13.3節の「共通化後に重複・暫定修正を解消する」も追跡不能になる。</p></dd>
+      <dt>最小の修正</dt><dd><p>「宣言付きの上書き」を定義する——上書き対象・基準版・理由・見直し契機を導入記録(または台帳)に1行残したものは<strong>管理された上書き</strong>として扱い、宣言のない同名衝突だけを競合として検出する。第12.3節の「変更理由と基準版を記録し、更新時に再確認する」とほぼ同文なので、第5.2節側から相互参照を張り、両者が同じ仕組みであると明示すれば足りる。</p><p>なお Claude Code は同名スキルを「より近い層が勝つ」規則で解決する(プロジェクト>個人。V7)。ただし配布コアがプロジェクト内に導入される本設計では上書きも同一階層に置かれるため、製品機能では代替できず、この規約が必要になる。</p></dd>
+      <dt>根拠</dt><dd>文書内の節間衝突。Claude Code の優先規則は公式文書で確認(2026年8月30日、V7)。</dd>
+    </dl></div>
+  </article>
+
+  <!-- R6 -->
+  <article class="finding" id="r6">
+    <div class="finding-head"><span class="sev mid">中</span><span class="fid">R6</span><span class="ttl">完了条件の改変防止に使える現実的な強制点が、対象外宣言と緊張関係にある</span><span class="kind">根拠のある欠陥</span></div>
+    <div class="finding-body"><dl>
+      <dt>該当節</dt><dd>第9.3節(実装担当から変更できない実行設定・独立した検証)、第1.3節(リポジトリホスティングの運用は対象外)</dd>
+      <dt>条件</dt><dd>個人運用で「実装担当(エージェント)から変更できない設定」を実際に用意しようとした場合。ローカル完結の構成では、エージェントが編集できるファイルしか存在しない。Claude Code の deny ルールで設定ファイル自体を保護する方法はあるが(V10)、サブプロセス経由の書込には及ばないと公式に明記されており、単独では第9.3節の水準に届かない。</dd>
+      <dt>影響</dt><dd><p>個人運用における最も現実的で強い改変防止は「ホスティング側のCI+ブランチ保護で必須チェックを走らせる」ことだが、第1.3節の対象外宣言がこれを排除しているように読める。結果として第9.3節の保護が「独立したセッションでの再確認」だけに痩せ、文書が自認するとおり(「Markdownの指示…だけで、条件の改変防止まで保証できるとは考えない」)、保証手段が宙に浮く。</p></dd>
+      <dt>最小の修正</dt><dd><p>第1.3節の宣言を一語だけ精密化する——対象外は「ホスティングアカウントの<strong>開設・認証・共同開発体制の構築</strong>」であり、<strong>既存のCI・ブランチ保護を強制点として利用することは対象内</strong>と明記する。CIが無いプロジェクトでは、段階1の保護水準は「(a)完了条件・必須検証の定義ファイルを deny ルールで保護し、(b)採用判断の前に独立セッションで必須検証を再実行する」の2点である、と水準を明示する。</p></dd>
+      <dt>根拠</dt><dd>文書内の緊張関係と、Claude Code permissions 文書の限界記述(2026年8月30日確認、V10)。</dd>
+    </dl></div>
+  </article>
+
+  <!-- R7 -->
+  <article class="finding" id="r7">
+    <div class="finding-head"><span class="sev mid">中</span><span class="fid">R7</span><span class="ttl">利用者所有ファイルへの「管理された追記」は初期には持たない選択ができる</span><span class="kind">選択肢(強い推奨)</span></div>
+    <div class="finding-body"><dl>
+      <dt>該当節</dt><dd>第12.3節(既存ファイルへの接続箇所)、第12.5節(再適用の冪等性)</dd>
+      <dt>条件</dt><dd>配布ツールが既存の AGENTS.md 等へマーカー付きの追記を行い、更新・再適用・撤去のたびにそれを認識・維持しようとした場合。利用者が接続箇所の内側を編集した時点で、マーカー管理は必ず衝突する。</dd>
+      <dt>影響</dt><dd>この種のツールで歴史的に最も壊れやすいのが「管理ブロックの自動編集」であり、冪等な再適用(第12.5節)・撤去時の復元(第12.7節)の実装コストの大半がここに集中する。接続箇所は高々数行なのに、機構の複雑さが釣り合わない。</dd>
+      <dt>最小の修正</dt><dd><p>段階1〜3では「接続の1〜3行は<strong>人が</strong>追加し、ツールは<strong>存在の検査のみ</strong>行う(なければ追加すべき行を提示する)」に置き換える。自動追記は段階4の自動化候補へ送り、実測された摩擦(導入回数が増えて手作業が負担になった等)を根拠に採否を決める。単純な代替で同じ問題(接続の確実性)を解決でき、増える保守負担は検査スクリプト1本分に縮む。</p></dd>
+      <dt>根拠</dt><dd>一般的な保守経験に基づく選択肢であり、欠陥の指摘ではない。ただし採用すれば第12.5節・第12.7節の実装量が大きく減るため、強く推奨する。</dd>
+    </dl></div>
+  </article>
+
+  <!-- R8 -->
+  <article class="finding" id="r8">
+    <div class="finding-head"><span class="sev mid">中</span><span class="fid">R8</span><span class="ttl">入口・スキルのネスト時挙動の製品差が反映されておらず、配置原則が定まらない</span><span class="kind">追補(確認済み事実の反映)</span></div>
+    <div class="finding-body"><dl>
+      <dt>該当節</dt><dd>第6.2節(公式資料で確認した入口)、第6.4節(配置と読込で確認すること)</dd>
+      <dt>条件</dt><dd>サブディレクトリにも AGENTS.md やスキルを置く構成(モノレポや、機能別ディレクトリでの運用)へ進んだ場合。</dd>
+      <dt>影響</dt><dd><p>今回の確認で、同じ AGENTS.md でもネスト時の意味論が製品間で異なることが判明した——Codex は「ルートから現在位置まで連結し、近い方が後置されて優先」(V5)、Copilot は「最も近い1つが優先」(V3)、Claude Code は取込を書いた分だけ読む(V1)。スキルも Codex は親ディレクトリまで走査する(V6)。第6.2節の表(ルート入口の場所)は正確だが、この差を知らずにネスト配置へ進むと「同じファイル構成なのに読まれる内容が製品ごとに違う」という、第6.1節が警戒するまさにその状況に入る。</p></dd>
+      <dt>最小の修正</dt><dd><p>第6.4節の確認項目に「ネスト配置の意味論差」を加えたうえで、実証期間の配置原則を1行で固定する——<strong>「入口はリポジトリルートの AGENTS.md 1枚のみ。ネストした入口・スキルは段階2の検証が済むまで置かない」</strong>。また第6.2節の Copilot 行は、AGENTS.md ネイティブ対応が公式資料で確認できたため(V3)、「利用機能を確認する」から「文書上は対応、実機未確認」へ更新できる。</p></dd>
+      <dt>根拠</dt><dd>各製品公式資料(2026年8月30日確認、V1・V3・V5・V6)。実機検証は未実施のため「文書上の確認」に区分される。</dd>
+    </dl></div>
+  </article>
+
+  <!-- R9 -->
+  <article class="finding" id="r9">
+    <div class="finding-head"><span class="sev low">低</span><span class="fid">R9</span><span class="ttl">記録の上限に既定値がない</span><span class="kind">選択肢(既定値の提案)</span></div>
+    <div class="finding-body"><dl>
+      <dt>該当節</dt><dd>第8.3節(保存期間・件数・容量の上限は利用環境に合わせて設定する)、第10.3節・第10.6節(棚卸しの頻度は未決定)</dd>
+      <dt>条件</dt><dd>運用が始まり、上限の設定自体が「いつかやること」として先送りされた場合。参考事例[S01]の著者は振り返り台帳の肥大化を「良い解決策を探している」未解決問題として明言しており(V11)、これは理論上の懸念ではない。</dd>
+      <dt>影響</dt><dd>上限のない台帳は必ず育つ。上限を「環境に合わせて」決める作業は誰の作業予定にも載らないため、実質的に上限なしと同じになる。</dd>
+      <dt>最小の修正</dt><dd>任意の数字でよいので既定値を文書に置く。例: 台帳の有効な候補は10件まで(超えたら統合か却下)、同一症状は新規行ではなく回数の加算、作業記録は完了後90日でアーカイブ、棚卸しはモデル・製品の変更時に必ず+四半期に一度。数字の妥当性より「既定が存在すること」が効く。</dd>
+      <dt>根拠</dt><dd>参考事例[S01]の実例(2026年8月30日確認、V11)。数字自体は好みの範囲。</dd>
+    </dl></div>
+  </article>
+
+  <!-- R10 -->
+  <article class="finding" id="r10">
+    <div class="finding-head"><span class="sev low">低</span><span class="fid">R10</span><span class="ttl">報告・引継ぎ・作業記録・台帳の項目定義が4箇所に分散している</span><span class="kind">統合の提案</span></div>
+    <div class="finding-body"><dl>
+      <dt>該当節</dt><dd>第7.2節(手順の入出力)、第7.3節(報告の基本項目)、第8.2節(引継ぎの最小項目)、第10.3節(改善候補の最小記録)</dd>
+      <dt>条件</dt><dd>これらを別々のテンプレートとして実装した場合。</dd>
+      <dt>影響</dt><dd>4つの様式は項目の過半が重なっており(達成内容・検証・未完了・判断)、別々に作ると同じ情報の転記が発生し、第8.3節自身が戒める記録の増殖につながる。</dd>
+      <dt>最小の修正</dt><dd>作業記録1テンプレート(目的と完了条件/範囲と変更箇所/判断と理由/検証記録/残作業と次の一手)に統合し、報告=その要約、引継ぎ=その最新状態、と定義する。台帳は別に1ファイル残す(寿命が作業単位でないため)。第15.1節の「一つの作業記録の形式」への一本化で、文書上も整合する。</dd>
+      <dt>根拠</dt><dd>文書内の項目対照による。統合形は別添の構築仕様に示した。</dd>
+    </dl></div>
+  </article>
+</section>
+
+<!-- ================================================================ -->
+<section id="sec3">
+  <div class="sec-head"><span class="sec-no">3</span><h2>シナリオ別の耐性確認</h2></div>
+  <p>依頼で指定された7つの具体的状況に対し、現設計がどこまで持ちこたえるかを確認した。</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>状況</th><th>判定</th><th>確認結果</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>共通の管理対象を直接編集した後に更新する</td>
+        <td><span class="gap-mid">穴あり(小)</span></td>
+        <td>第12.5節手順3で「競合として扱う」まではあるが、<strong>検出後の分岐が未定義</strong>。「上流を採る/宣言付き上書きへ変換して保持/手動マージ」の3出口を定めれば閉じる(R5と同じ仕組みで解決)。更新を1コミットで適用する方式なら復旧経路も自動的に得られる(第4節)。</td>
+      </tr>
+      <tr>
+        <td>新しい共通版とローカル拡張が同じ問題を解決し、両方残る</td>
+        <td><span class="gap-mid">穴あり(小)</span></td>
+        <td>第13.3節は「確認する」と定めるが、照合の手掛かりがなく人間の記憶頼みになる。<strong>台帳の候補IDを共通側の変更履歴に記載する</strong>規約(1行の追記)で、更新差分の提示時に「この項目はローカルの候補◯◯を置換する可能性」と機械的に列挙できる。増える負担は変更履歴1行のみ。</td>
+      </tr>
+      <tr>
+        <td>二つの製品が同じスキルを複数の場所から見つける</td>
+        <td><span class="holds">持ちこたえる</span></td>
+        <td>懸念は実在する——共通探索場所は3製品間になく(V4・V6・V7)、Codex は同名をマージせず両方表示し(V6)、Copilot は3箇所を読み重複時挙動が未文書化(V4)。第6.4節の「機械的複製をしない・検証まで基本モード」で正しく防御されている。確定は H1 で行う。</td>
+      </tr>
+      <tr>
+        <td>フックが利用できず、必要な処理が自動では実行されない</td>
+        <td><span class="gap">穴あり(中)</span></td>
+        <td>整形系を手動呼出へ切り替える設計(第6.3節)は妥当。ただし安全系の帰着先が循環しており(R3)、「実行しない」の主体を強制点の4分類で定義するまで、この状況では必須制約が作文に降格する。</td>
+      </tr>
+      <tr>
+        <td>更新が途中で止まる/設定形式の変更後に旧版へ戻したい</td>
+        <td><span class="holds">持ちこたえる</span></td>
+        <td>方針(第12.5〜12.7節)は揃っている。ただし専用機構を自作する必要はなく、対象プロジェクトが git 管理下なら「1回の更新=1コミット」で中断・巻戻しが既製で手に入る(第4節)。状態は配布物から分離済み(第12.1節)のため形式変更の影響も限定される。</td>
+      </tr>
+      <tr>
+        <td>モデル更新後、スキルなしの方が同じ品質で速い</td>
+        <td><span class="holds">持ちこたえる</span></td>
+        <td>第10.5節の分類と第11.1節の「部品なし比較」で正しく処理できる。参考事例[S02]の実測(スキルありで全タスクの消費が悪化、V12)はこの設計の必要性を実証している。<strong>作成時に性質タグを付ける</strong>(スキルの frontmatter <code>metadata</code> に1鍵。仕様上許容、V9)ことで、モデル更新時の棚卸し対象を機械的に列挙でき、負担はほぼ増えない。</td>
+      </tr>
+      <tr>
+        <td>振り返りが増え続ける/実装担当が完了条件を変えて成功扱いにする</td>
+        <td><span class="gap-mid">条件付き</span></td>
+        <td>集約規則(第8.3節)と変更の分離(第9.3節)は方針として妥当。前者は既定値がなく(R9)、後者は強制点が宙に浮いている(R6)。両指摘を反映すれば運用可能になる。</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="sec4">
+  <div class="sec-head"><span class="sec-no">4</span><h2>簡素化の提案</h2></div>
+
+  <h3><span class="lead-mark">甲</span>初期構成から外すもの(導入トリガーを添えて)</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>外すもの</th><th>該当節</th><th>再導入のトリガー</th></tr></thead>
+    <tbody>
+      <tr><td>組み立て・生成レイヤー(参照1行で代替)</td><td class="nowrap">4.1・5.3</td><td>参照では吸収できない製品差分が実測されたとき</td></tr>
+      <tr><td>設定スキーマと競合検証ツール</td><td class="nowrap">5.2</td><td>層が2つ以上になり、実際の競合を2回経験したとき</td></tr>
+      <tr><td>ハッシュ・互換条件付きの拡張マニフェスト</td><td class="nowrap">12.4</td><td>段階3の配布開始時(それまでは版と一覧のみ)</td></tr>
+      <tr><td>スキルの複数製品向け同時配置</td><td class="nowrap">6.4</td><td>H1(重複挙動の実機確認)の完了後</td></tr>
+      <tr><td>入口ファイルへの自動追記(人の1行追加+検査へ)</td><td class="nowrap">12.3</td><td>導入先が増え、手作業の負担が実測されたとき(R7)</td></tr>
+      <tr><td>フック・自動実行制御</td><td class="nowrap">6.3・14.3</td><td>手動運用で同じ抜けが繰り返し観測されたとき(第10.2節の順序どおり)</td></tr>
+      <tr><td>複数回実行・三条件を常とする評価プロトコル</td><td class="nowrap">11.1・11.4</td><td>コア昇格・必須制約・権限に関わる変更のときだけ厳格に(下記「乙」参照)</td></tr>
+      <tr><td>組織共通層</td><td class="nowrap">4.2</td><td>共有相手が実際に現れたとき(文書の現行方針を維持)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3><span class="lead-mark">乙</span>統合するもの</h3>
+  <ul>
+    <li><strong>作業記録への一本化</strong>(R10): 報告(7.3)・引継ぎ(8.2)・手順の出力(7.2)を1テンプレートの節に畳む。</li>
+    <li><strong>台帳仕様の一本化</strong>: 改善候補の記録項目(10.3)・状態遷移(10.4)・見直し契機(10.6)を1つの台帳ファイル仕様にまとめる。</li>
+    <li><strong>段階表の一本化</strong>(R1): 導入順序(15.2)と受け入れ条件(16)を「段階×作るもの×確認事項」の1表にする。</li>
+    <li><strong>評価の二層化</strong>: プロジェクト局所で可逆な変更=実作業で試して台帳に1行(比較なし)。コア昇格・必須制約・権限・完了条件に触れる変更=第11章の比較を適用。第10.4節の「通常作業に毎回承認を求めない」方針とも整合する。</li>
+    <li><strong>原則の統合</strong>: 「参考情報を指示として扱わない」(5.1)と「取り込んだ文章を新しいシステム指示として実行しない」(14.2)は同一原則の二態なので、相互参照で1つに束ねる。</li>
+  </ul>
+
+  <h3><span class="lead-mark">丙</span>実現手段を既製に置き換えるもの</h3>
+  <p>第12.5節の6手順(差分提示・一致確認・途中失敗からの回復・巻戻し情報)は、配布側を「タグ付きの git リポジトリ」、適用を「コピー+<strong>1コミット</strong>」とすれば、大半が git の既製機能(差分表示・revert・作業ツリーの検査)で満たせる。専用の配布CLIやトランザクション機構を作らないという第12.2節・第15.1節の方向を、より明確に「git のコミット単位を配布の原子性として使う」と書き切ることを推奨する。第12.4節のハッシュ照合も、必要になる段階まで manifest の項目追加だけで賄える。</p>
+</section>
+
+<!-- ================================================================ -->
+<section id="sec5">
+  <div class="sec-head"><span class="sec-no">5</span><h2>決める必要があること</h2></div>
+  <p>いずれも現時点の推奨を添える。推奨はレビューアの選択肢の提示であり、確定は利用者が行う。</p>
+
+  <h3>実証前に決めること</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>事項</th><th>推奨</th><th>条件・理由</th></tr></thead>
+    <tbody>
+      <tr><td>対象プロジェクトと摩擦上位3件</td><td>直近で最も作業しているリポジトリを選ぶ。ハーネス自身を最初の対象にしない</td><td>摩擦が実在することが第10.1節の前提。自己適用は摩擦が人工的になり評価を歪める</td></tr>
+      <tr><td>最初の製品</td><td>Claude Code</td><td>現在の主環境であり、必須制約の強制点(deny・フック・サンドボックス)が最も揃う(V10)</td></tr>
+      <tr><td>配置と所有区分(R4)</td><td><code>harness/</code> 下に core / project / state を分離</td><td>ディレクトリ境界=所有区分の表示。段階3の抽出コストを最小化</td></tr>
+      <tr><td>検証契約の担体</td><td>設定ファイルの表+作業記録の結果欄(スクリプトなし)</td><td>第10.2節の順序に従い、転記ミスが観測されてから機械化(H3)</td></tr>
+      <tr><td>作業記録の形式</td><td>1作業1ファイル、統合テンプレート(R10)</td><td>報告・引継ぎを同ファイルの節として賄う</td></tr>
+      <tr><td>初期の手順(2本)</td><td>「検証と報告」「引継ぎ」。計画は大きな作業のときだけ、振り返りは台帳1行から</td><td>第18.1節の「二〜三個」の枠内。摩擦が確認されてから追加</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>別製品での確認(段階2)前に決めること</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>事項</th><th>推奨</th><th>条件・理由</th></tr></thead>
+    <tbody>
+      <tr><td>Codex・Copilot の利用形態</td><td>Codex CLI、および VS Code の Copilot(エージェントモード)から</td><td>いずれも AGENTS.md を読む形態であり(V3・V5)、入口が共通化できる</td></tr>
+      <tr><td>入口の構成</td><td>ルートの AGENTS.md を正本に1枚、CLAUDE.md は <code>@AGENTS.md</code> 取込の薄い入口(2〜3行)</td><td>Copilot のネイティブ対応(V3)と Claude Code の取込方式(V1)で3製品を賄える。ネスト配置は段階2完了まで禁止(R8)</td></tr>
+      <tr><td>スキルの配置方式</td><td>共有スキルの正本は当面 <code>.claude/skills</code> のみ。他製品向け配置は H1 の結果で確定</td><td>Copilot の重複時挙動が未文書化(V4)、Codex は同名を両方表示(V6)のため</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>複数プロジェクトへの配布(段階3)前に決めること</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>事項</th><th>推奨</th><th>条件・理由</th></tr></thead>
+    <tbody>
+      <tr><td>配布方式</td><td>タグ付きリポジトリからのコピー+最小 manifest+1コミット適用</td><td>第12.2節第一候補の具体化。git を原子性と復旧に流用(第4節丙)</td></tr>
+      <tr><td>版の命名</td><td>日付+連番(例: 2026.09.0)</td><td>個人運用では互換性の意味論より「同じ識別子=同じ内容」(第12.6節)が重要</td></tr>
+      <tr><td>manifest の項目</td><td>版・取得元・管理ファイル一覧・宣言付き上書き(R5)の4種から開始</td><td>ハッシュ等は必要が観測されてから(R2)</td></tr>
+      <tr><td>組織共通層</td><td>作らない(個人運用の間)</td><td>文書の現行方針の確認。共有相手の出現がトリガー</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="sec6">
+  <div class="sec-head"><span class="sec-no">6</span><h2>最小の検証計画</h2></div>
+  <p>実証で確かめるべき仮説を、設計上の依存先とともに示す。大きな評価基盤は前提にせず、いずれも既存リポジトリと手動記録で実施できる。</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>ID</th><th>仮説(確かめること)</th><th>方法</th><th>成功・失敗の見方</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="nowrap">H1</td>
+        <td>スキルの同時配置は重複発見・誤発動を起こすか(第6.4節の未決定の解消)</td>
+        <td>検証用リポジトリに同名スキルを <code>.claude/skills</code> と <code>.agents/skills</code> に置き、Claude Code・Codex CLI・Copilot それぞれで一覧と発動を観察する</td>
+        <td>Copilot が重複を示す/どれか1つを黙って選ぶ/エラーになる、のいずれかを記録できれば成功。結果に応じて配置方式(第5節)を確定する</td>
+      </tr>
+      <tr>
+        <td class="nowrap">H2</td>
+        <td>基本モード(入口からの明示参照)で、手順ファイルは実際に読まれるか——特に Copilot</td>
+        <td>手順ファイル末尾に「作業記録に確認符号◯◯を記す」というカナリア行を仕込み、代表作業10件での記録率を製品別に数える</td>
+        <td>主製品で9/10以上なら基本モード成立。下回る製品は入口の書き方を変えるか、対応水準を下げて対応表に明記する</td>
+      </tr>
+      <tr>
+        <td class="nowrap">H3</td>
+        <td>検証契約はスクリプトなしの転記で正確に運用できるか(第9.2節)</td>
+        <td>必須検証の結果(成功/失敗/未実行/実行不能)を作業記録へ手動転記させ、実際のコマンド出力と突き合わせる</td>
+        <td>転記の不一致が観測されたらラッパースクリプト1本を導入(第10.2節の順序5に相当)。観測されなければ導入しない</td>
+      </tr>
+      <tr>
+        <td class="nowrap">H4</td>
+        <td>二層評価(第4節乙)は個人で回るか。厳格比較のコストは妥当か</td>
+        <td>コア昇格級の変更1件で「現行版/候補版/部品なし」比較を1巡し、所要時間を記録する</td>
+        <td>1巡が概ね1時間以内なら維持。超えるなら代表作業を3件へ縮小するか、比較条件を2つ(現行/候補)へ落とす</td>
+      </tr>
+      <tr>
+        <td class="nowrap">H5</td>
+        <td>統合テンプレート1枚の作業記録で、セッション再開が実際に成立するか(第8.2節)</td>
+        <td>意図的にセッションを切り、記録だけを頼りに再開する試行を2回行う</td>
+        <td>最初からやり直した箇所・記録に不足した項目を列挙し、テンプレートへ追記する。やり直しゼロなら成立</td>
+      </tr>
+      <tr>
+        <td class="nowrap">H6</td>
+        <td>トークン消費・費用は製品ごとに取得できるか(第11.3節)</td>
+        <td>各製品の使用量表示・ログの取得手段を1作業分ずつ確認する</td>
+        <td>取得できない製品は「不明」と記録する運用が実際に維持できるかまで確認する(ゼロ集計の混入がないこと)</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="sec7">
+  <div class="sec-head"><span class="sec-no">7</span><h2>維持したい設計判断</h2></div>
+  <p>以下は、指摘の修正過程で誤って弱めるべきでない判断である。いずれも根拠が確認できた。</p>
+  <ul>
+    <li><strong>版固定の導入と、最新追従の禁止</strong>(12.1・12.6)——動作の再現性の基盤。配布の簡素化(第4節丙)の後も維持する。</li>
+    <li><strong>指示と権限を混同しない</strong>(14.1)——今回の確認でも、CLAUDE.md は「強制ではなく文脈」と公式に明言されている(V10注)。R3 の修正はこの原則の徹底であって変更ではない。</li>
+    <li><strong>機械で判定できる条件を文章に任せない</strong>(9.1)と<strong>完了条件の変更を実装修正から分離する</strong>(9.3)。</li>
+    <li><strong>三分類(変更可能な既定値/必須の制約/参考情報)</strong>(5.1)——強制点の記録(R3)を足すことで実効性を持つ。</li>
+    <li><strong>能力補助と運用方針の区別</strong>(10.5)——参考事例[S02]の実測結果および同著者の分類提案と一致する(V12)。</li>
+    <li><strong>対処順序「まず減らす・直す、スキルは限定、フックは最後」</strong>(10.2)。</li>
+    <li><strong>部品なし・ハーネスなしとの比較、および安全条件を外さない比較</strong>(11.1)と<strong>評価の衛生</strong>(11.4。自己採点への非依存、「不明」の扱い)。</li>
+    <li><strong>撤去時に利用者の資産を守る基準</strong>(12.7)——「管理対象かつ未改変のみ削除候補」は正確で、git 化しても維持すべき規則。</li>
+    <li><strong>「同じファイル名が使えることと同じ意味で動くことは別」という警戒</strong>(6.1・6.2)——V3〜V7 の製品差はこの警戒が正しかったことを示す。</li>
+    <li><strong>未決定を未決定と明示する文書規律</strong>——本レビューが要求した追加決定(R4)は「隠れた未決定」の摘出であり、規律自体の欠陥ではない。</li>
+  </ul>
+</section>
+
+<!-- ================================================================ -->
+<section id="sec8">
+  <div class="sec-head"><span class="sec-no">8</span><h2>製品仕様の確認結果</h2></div>
+  <p>すべて2026年8月30日に一次資料を取得して確認した。いずれも<strong>文書上の確認</strong>であり、実機検証ではない。出典番号は設計文書第19章の番号に合わせた。</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>ID</th><th>確認した事実</th><th>出典</th><th>設計への含意</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap">V1</td><td>Claude Code は AGENTS.md を直接読まない。CLAUDE.md からの <code>@AGENTS.md</code> 取込が公式の推奨。Windows でのシンボリックリンクは管理者権限または開発者モードが必要と明記</td><td class="nowrap">[S10]</td><td>設計文書6.2の記述は正確。Windows 前提では取込方式が唯一の現実解</td></tr>
+      <tr><td class="nowrap">V2</td><td>CLAUDE.md は200行以下が公式目安。取込ファイルは起動時に展開され文脈を消費する(節約にならない)。取込は4段まで</td><td class="nowrap">[S10]</td><td>「短い入口+必要時読込」(8.1)の方針を裏付け。詳細手順は取込でなく参照(エージェントが必要時に読む)にすべき</td></tr>
+      <tr><td class="nowrap">V3</td><td>GitHub Copilot は AGENTS.md をネイティブ対応(リポジトリ内の任意の場所に置け、最も近いものが優先)。CLAUDE.md・GEMINI.md はルートのみ。<code>.github/copilot-instructions.md</code> と <code>*.instructions.md</code>(applyTo付き)も併存</td><td class="nowrap">[S12]</td><td>6.2の「要確認」を前進させる。入口はルート AGENTS.md 1枚で3製品を賄える(R8)</td></tr>
+      <tr><td class="nowrap">V4</td><td>Copilot のスキル探索はプロジェクトで <code>.github/skills</code>・<code>.claude/skills</code>・<code>.agents/skills</code>、個人で <code>~/.copilot/skills</code>・<code>~/.agents/skills</code>。対象は cloud agent・code review・CLI・GitHub app・VS Code エージェントモード。<strong>同名重複時の挙動は文書化されていない</strong></td><td class="nowrap">[S13]</td><td>6.4の懸念の実在を確認。H1 の実機検証が必要</td></tr>
+      <tr><td class="nowrap">V5</td><td>Codex の AGENTS.md は <code>~/.codex</code> →gitルート→現在位置の順に連結され、近いものが後置されて優先。既定32KiBの容量上限。代替ファイル名を設定可能</td><td class="nowrap">[S07]</td><td>ネスト意味論が Copilot(最近傍のみ)と異なる(R8)。入口の合計サイズに上限がある</td></tr>
+      <tr><td class="nowrap">V6</td><td>Codex のスキルは <code>.agents/skills</code>(現在位置・親・リポジトリルート)+<code>~/.agents/skills</code>+<code>/etc/codex/skills</code>。<strong>同名スキルはマージされず両方が選択肢に現れる</strong>。配布はプラグインが公式案内</td><td class="nowrap">[S08]</td><td>複数配置の危険の実証。12.2の「既存ツールの対応範囲を確認」の対象</td></tr>
+      <tr><td class="nowrap">V7</td><td>Claude Code のスキル探索は enterprise/個人(<code>~/.claude/skills</code>)/プロジェクト(<code>.claude/skills</code>)/プラグイン/ネスト(オンデマンド)。<code>.agents/skills</code> は対象外。同名は近い層が優先、ネストはパス接頭辞で共存、プラグインは名前空間分離。シンボリックリンクの同一実体は1回のみ読込</td><td class="nowrap">[S11]</td><td>3製品共通の探索場所は存在しないことが確定。基本モード退避(6.4)の根拠</td></tr>
+      <tr><td class="nowrap">V8</td><td><code>allowed-tools</code> は「発動ターン中、許可を省略できるツールの付与」。利用を制限するのは別フィールド <code>disallowed-tools</code>。いずれも次のメッセージで解除</td><td class="nowrap">[S11]</td><td>6.2末尾の注意(制限ではない)は正確。権限は実行環境側で確認する方針を維持</td></tr>
+      <tr><td class="nowrap">V9</td><td>Agent Skills 仕様の frontmatter は name(ディレクトリ名と一致必須)・description が必須。license・compatibility・<strong>metadata(自前ツール用の自由な文字列マップ)</strong>・allowed-tools(実験的)が任意。仕様外フィールドは claude.ai へのアップロード経路ではエラーになる</td><td class="nowrap">[S09]・[S11]</td><td>性質タグ(10.5)は metadata に置けば仕様適合のまま持てる。共有スキルは仕様内フィールドに限定すべき</td></tr>
+      <tr><td class="nowrap">V10</td><td>Claude Code の permissions は deny→ask→allow の順で評価。<code>Read(./secrets/**)</code>・<code>Edit(パス)</code> のパス指定 deny が可能で、Read の deny は編集系ツールも塞ぐ。ただし「任意のサブプロセスの読み書きには適用されない。OSレベルの強制はサンドボックスを使う」と明記。CLAUDE.md は「強制ではなく文脈」、確実な阻止は PreToolUse フックと公式に案内</td><td class="nowrap">公式 permissions・memory 文書</td><td>R3・R6 の強制点の実体。限界の明記が対応表に必要</td></tr>
+      <tr><td class="nowrap">V11</td><td>参考事例[S01]の実構成はスキル7本+機能別文書群+振り返り台帳。<strong>台帳の肥大化は「良い解決策を探している」未解決問題</strong>と著者自身が明言</td><td class="nowrap">[S01]</td><td>8.3・R9 の根拠。生成・検証ツールなしでも運用が成立している実例(R2)</td></tr>
+      <tr><td class="nowrap">V12</td><td>参考事例[S02]の実測: 139行のスキルはクラウド環境で全タスクのトークン消費を悪化させ(例: 364,229 対 230,194 cache read)、29行への縮小で改善。「処理自体は成功するため、劣化は評価しないと見えない」。能力補助/選好の分類と評価を推奨</td><td class="nowrap">[S02]</td><td>10.5・11章の直接の裏付け。「スキル追加を改善と同一視しない」(3章)の実証</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note"><span class="note-label">確認できなかったこと</span>
+  [S07][S08] の URL(learn.chatgpt.com)は実在し Codex の公式文書として到達できた。一方、Codex のサンドボックス・承認モードの現行仕様、Copilot 各利用形態の権限・実行制御の実態、[S03]〜[S06]・[S14]〜[S16] の内容は今回再確認していない。これらに依存する判断(強制点の具体値など)はアダプター実装時に再確認を要する——これは設計文書第18.2節末尾の方針そのものであり、追加の欠陥ではない。</div>
+</section>
+
+<!-- ================================================================ -->
+<section id="sec9">
+  <div class="sec-head"><span class="sec-no">9</span><h2>レビュー観点への対応表</h2></div>
+  <p>依頼された8観点それぞれの結論の要約と、対応する指摘・節の索引である。</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>観点</th><th>結論の要約</th><th>関連</th></tr></thead>
+    <tbody>
+      <tr><td>1 目的との整合性</td><td>原則は目的に整合するが、段階割当ての欠落と既定の曖昧さにより、実装時に仕組みの数が目的を上回る恐れがある</td><td class="nowrap">R1・R2・第4節</td></tr>
+      <tr><td>2 共通化と責務の分離</td><td>層の責務に大きな矛盾はない。必須制約の強制点と、正当な上書き経路の2点が未定義</td><td class="nowrap">R3・R5</td></tr>
+      <tr><td>3 複数製品への移植性</td><td>形式と意味の区別は正しく維持されている。ネスト意味論の製品差を追補し、入口1枚原則を固定すれば、基本モードの定義は実用的</td><td class="nowrap">R8・H1・H2・第8節</td></tr>
+      <tr><td>4 配布と変更の安全性</td><td>方針に大きな抜けはない。専用基盤は不要で、git のコミット単位を原子性として使えば大半が既製で満たせる。競合検出後の分岐のみ定義が要る</td><td class="nowrap">R5・R7・第4節丙</td></tr>
+      <tr><td>5 プロジェクトでの成長</td><td>還元の枠組みは妥当。重複解消に照合の手掛かり(候補IDの相互参照)を足せば運用できる</td><td class="nowrap">第3節・R5</td></tr>
+      <tr><td>6 評価と廃止</td><td>方針は参考事例の実測と一致し妥当。評価を二層化しないと個人では回らない恐れがある。性質タグの作成時付与で廃止判断が機械化できる</td><td class="nowrap">第4節乙・H4・V12</td></tr>
+      <tr><td>7 状態・記録・自律性</td><td>引継ぎ項目は十分。様式の分散(4箇所)と上限の既定値欠如が肥大化の残存リスク。完了条件保護は強制点の明示で成立する</td><td class="nowrap">R6・R9・R10・H5</td></tr>
+      <tr><td>8 導入順序と未決定事項</td><td>順序(実証→製品間→配布→自動化)は妥当。着手を阻む隠れた未決定は配置・所有区分の1件。過剰な事前固定は見当たらない</td><td class="nowrap">R4・第5節</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<footer class="colophon">
+  <p>ハーネス設計審査記録(整理番号 HRV-2026-0830)。対象: HARNESS_DESIGN.md 2026年8月30日版。実施: Claude Code 上の Claude Fable 5。製品仕様の確認日はいずれも2026年8月30日。本記録は文書レビューであり、実機検証・実装・設定変更は行っていない。指摘の反映先となる構築仕様は別添「共通ハーネス構築仕様」(HARNESS_SPEC.html)を参照。</p>
+</footer>
+
+</main>
+
+</body>
+</html>

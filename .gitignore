@@ -1,0 +1,7 @@
+# okf render の生成物（docs/ 配下の HTML と資産）
+docs/**/*.html
+docs/_assets/
+
+# Python
+__pycache__/
+*.py[cod]
