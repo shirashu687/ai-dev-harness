@@ -20,7 +20,7 @@ accepts: ["⑳"]
 spec: ["§9.3", "§10", "§11"]
 target: null
 evidence: []
-related: ["/backlog/T-0009-second-repository-rollout.md"]
+related: ["/backlog/T-0009-second-repository-rollout.md", "/backlog/T-0011-distribution-strategy.md"]
 ---
 
 # 自前ハーネスをプラグイン化して導入を統合する
@@ -38,6 +38,7 @@ related: ["/backlog/T-0009-second-repository-rollout.md"]
 - 導入済みリポジトリが3件以上ある。
 - 手作業の反復、導入ミス、更新負担のいずれかが台帳で実測されている。
 - T-0009までの更新・巻戻し・撤去が成功している。
+- T-0011で配布方式と保守責任を比較し、プラグイン化または一括導入の採用が承認されている。
 - 利用者がプラグイン化の範囲を承認している。
 
 ## 進め方
@@ -73,4 +74,4 @@ related: ["/backlog/T-0009-second-repository-rollout.md"]
 
 ## 結果
 
-未着手。T-0009完了かつ着手条件成立まで保留。
+未着手。T-0009とT-0011の完了かつ着手条件成立まで保留。

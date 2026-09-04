@@ -1,12 +1,12 @@
 # backlog ドキュメント
 
-実行順はID順の `T-0002` → `T-0010`。後続タスクは着手直前にだけ詳細化する。`T-0010` は導入先3件以上かつ手作業負担が実測された場合だけ着手する。
+基本の実行順はID順の `T-0002` → `T-0009`。その後は `T-0011` で配布方式と保守責任を判断し、採用が承認された場合だけ `T-0010` の実装へ進む。後続タスクは着手直前にだけ詳細化する。
 
 <!-- okf:auto:start -->
 | state | 件数 |
 |---|---|
 | doing | 0 |
-| todo | 9 |
+| todo | 10 |
 | done | 1 |
 | dropped | 0 |
 
@@ -20,6 +20,7 @@
 * [ObsidianとOKFの知識導線を接続する](/backlog/T-0007-obsidian-okf.md) - `medium` `S` - okf-devkitの同じMarkdownをObsidianで閲覧し、OKFの索引・検査と共存させながら別の正本や無制限な記録を作らない運用を確認する。
 * [ScheLiveAppへ独立した二依存として導入する](/backlog/T-0009-second-repository-rollout.md) - `medium` `XL` - ScheLiveAppへ上流スキルと自前ハーネスを別々の依存として導入し、更新・巻戻し・撤去で固有領域が保たれるか確認する。
 * [自前ハーネスをプラグイン化して導入を統合する](/backlog/T-0010-plugin-and-bootstrap.md) - `low` `XL` - 導入先3件以上と実測された手作業負担を条件に、自前ハーネスだけをプラグイン化し上流公式導入を呼ぶ一括コマンドを検討する。
+* [配布方式と保守責任を比較検討する](/backlog/T-0011-distribution-strategy.md) - `low` `M` - npx・Python・Codex/Claude Codeプラグイン等を安全性・保守負担・導入体験で比較し、共通ハーネスの配布方針を決める。
 
 ## done
 * [仕様を0.2版へ改訂する](/backlog/T-0001-spec-revision.md) - 2026-09-01 完了 - 設計詰めで決まった内容を HARNESS_SPEC.md に反映し、第0.2版とする。
