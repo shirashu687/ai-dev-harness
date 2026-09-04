@@ -6,6 +6,7 @@ okf_version: "0.2"
 
 <!-- okf:auto:start -->
 ## ディレクトリ
+* [agents ドキュメント](/agents/index.md)
 * [backlog ドキュメント](/backlog/index.md)
 * [project ドキュメント](/project/index.md)
 

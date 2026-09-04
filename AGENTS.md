@@ -10,8 +10,9 @@
 | --- | --- | --- |
 | `HARNESS_SPEC.md` | 「何を作るか」の**正本** | 生きた文書。**変更はここにだけ反映する** |
 | `HARNESS_DESIGN.md` | 「なぜ」の根拠集 | **凍結。編集しない** |
-| `HARNESS_REVIEW.html` | 審査の記録 | **凍結。編集しない** |
-| `HARNESS_SPEC.html` | 閲覧用スナップショット | **手編集禁止。** 版が上がる節目に `HARNESS_SPEC.md` から再生成し、同じ Artifact URL へ再公開する |
+| `HARNESS_REVIEW.html` | 第0.2版までの審査記録 | **凍結。編集しない** |
+| `HARNESS_SPEC.html` | 第0.2版の旧スナップショット | **凍結。現行判断には使わない** |
+| `HARNESS_SKILLS_OVERVIEW.html` | 現行方針の人間向け図解 | 説明資料。判断が食い違う場合は `HARNESS_SPEC.md` を正とする |
 
 ## バックログ
 
@@ -27,3 +28,17 @@
 | 他のタスクでも将来のプロジェクトでも成り立つ規定 | `HARNESS_SPEC.md`。タスクからは `→ SPEC §x.y` で参照する |
 | そのタスクを終わらせるためだけの情報 | タスクファイルの「決定と根拠」 |
 | 根拠が1件しかない観測 | 改善台帳（対象プロジェクト側の `harness/ledger.md`） |
+
+## エージェント向け詳細ルール
+
+### 作業項目
+
+作業項目は `docs/backlog/T-NNNN-<kebab>.md` で管理し、作成には `python -m okf_devkit.cli` を使う。詳細は `docs/agents/issue-tracker.md` を読む。
+
+### Triageラベル
+
+`tags:` にカテゴリ1つと状態ラベル1つを記録する。詳細は `docs/agents/triage-labels.md` を読む。
+
+### ドメイン文書
+
+対象プロジェクトでは single-context 構成を使い、ルートの `CONTEXT.md` と `docs/project/decisions/` を参照する。本リポジトリの共通判断は `HARNESS_SPEC.md` に書く。詳細は `docs/agents/domain.md` を読む。

@@ -20,7 +20,7 @@ accepts: []
 spec: ["§1.1", "§2", "§3", "§4", "§5.2", "§7", "§8.1", "§11", "§12"]
 target: harness
 evidence: ["b9c68ca5d9365bf7d4f3c9c47d8103743f2ba9d6"]
-related: ["/backlog/T-0002-pre-start-checklist.md"]
+related: ["/backlog/T-0002-upstream-skills-dependency.md"]
 ---
 
 # 仕様を0.2版へ改訂する

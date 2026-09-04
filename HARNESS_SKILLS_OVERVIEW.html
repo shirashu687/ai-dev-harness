@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="mattpocock/skillsを直接依存として利用する共通ハーネス設計の全体像">
+  <title>mattpocock/skillsと共通ハーネスの最終設計</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f2f0e9;
+      --surface: #fffdf8;
+      --surface-2: #e9eee9;
+      --ink: #162321;
+      --muted: #5f6b67;
+      --line: #ccd3cd;
+      --deep: #103a38;
+      --deep-2: #092927;
+      --accent: #ec6a4b;
+      --accent-soft: #fbe4dc;
+      --mint: #77c8a5;
+      --mint-soft: #dbf0e6;
+      --amber: #e3a63b;
+      --amber-soft: #f8ecd2;
+      --blue: #527fb5;
+      --blue-soft: #e0eaf5;
+      --red: #b84c43;
+      --red-soft: #f7dfdc;
+      --shadow: 0 12px 34px rgba(18, 45, 42, 0.09);
+      --radius: 18px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111816;
+        --surface: #18211f;
+        --surface-2: #202d29;
+        --ink: #edf2ee;
+        --muted: #a8b5af;
+        --line: #35433e;
+        --deep: #163f3d;
+        --deep-2: #092927;
+        --accent: #f08367;
+        --accent-soft: #3a2721;
+        --mint: #8bd5b3;
+        --mint-soft: #20372e;
+        --amber: #efba58;
+        --amber-soft: #3b3120;
+        --blue: #7da8d8;
+        --blue-soft: #233342;
+        --red: #e67d74;
+        --red-soft: #3b2725;
+        --shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 8% 8%, color-mix(in srgb, var(--mint) 18%, transparent), transparent 25rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", "Yu Gothic", Meiryo, sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+    }
+    a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+    a:hover { color: var(--accent); }
+    code {
+      padding: 0.12em 0.38em;
+      border: 1px solid var(--line);
+      border-radius: 0.35em;
+      background: var(--surface-2);
+      color: var(--ink);
+      font-family: Consolas, "SFMono-Regular", monospace;
+      font-size: 0.88em;
+    }
+    p { margin: 0 0 1em; }
+    strong { font-weight: 750; }
+    .wrap { width: min(1120px, calc(100% - 36px)); margin-inline: auto; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 72px 0 58px;
+      background: linear-gradient(135deg, var(--deep-2), var(--deep) 70%, #245b4d);
+      color: #f8fbf8;
+    }
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .hero::before { width: 430px; height: 430px; right: -120px; top: -190px; }
+    .hero::after { width: 260px; height: 260px; right: 70px; top: -100px; }
+    .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.45fr .75fr; gap: 52px; align-items: end; }
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(2.25rem, 6vw, 4.6rem);
+      line-height: 1.08;
+      letter-spacing: -.045em;
+      text-wrap: balance;
+    }
+    .hero .lead {
+      max-width: 760px;
+      margin: 24px 0 0;
+      color: #d6e3dd;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+    }
+    .hero-side {
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.075);
+      backdrop-filter: blur(8px);
+    }
+    .hero-side .label { color: var(--mint); font-size: .78rem; font-weight: 800; letter-spacing: .14em; }
+    .hero-side p { margin: 8px 0 0; color: #f7faf8; font-size: 1.04rem; line-height: 1.65; }
+    .hero-meta { margin-top: 18px; color: #b8cbc3; font-size: .78rem; }
+
+    .jump {
+      position: relative;
+      z-index: 2;
+      margin-top: -24px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--surface) 94%, transparent);
+      box-shadow: var(--shadow);
+    }
+    .jump a {
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .jump a:hover { background: var(--surface-2); color: var(--ink); }
+
+    main { padding: 42px 0 88px; }
+    section { padding: 44px 0; scroll-margin-top: 24px; }
+    section + section { border-top: 1px solid var(--line); }
+    .section-head { display: grid; grid-template-columns: 130px 1fr; gap: 24px; align-items: start; margin-bottom: 28px; }
+    .section-no { color: var(--accent); font-size: .78rem; font-weight: 800; letter-spacing: .12em; }
+    h2 { margin: 0; font-size: clamp(1.65rem, 3vw, 2.45rem); line-height: 1.25; letter-spacing: -.025em; text-wrap: balance; }
+    h3 { margin: 0 0 8px; font-size: 1.06rem; line-height: 1.4; }
+    .intro { max-width: 790px; margin: 12px 0 0; color: var(--muted); }
+
+    .verdict {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 26px;
+      padding: 28px;
+      border: 1px solid color-mix(in srgb, var(--mint) 55%, var(--line));
+      border-radius: var(--radius);
+      background: var(--mint-soft);
+    }
+    .verdict-word { color: color-mix(in srgb, var(--deep) 80%, var(--ink)); font-size: 2.35rem; font-weight: 900; letter-spacing: -.04em; }
+    .verdict p { margin: 0; }
+    .verdict .big { margin-bottom: 8px; font-size: 1.16rem; font-weight: 750; }
+
+    .control-loop {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 30px;
+      margin-top: 28px;
+    }
+    .loop-card {
+      position: relative;
+      min-height: 170px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--surface);
+      box-shadow: 0 8px 20px rgba(18,45,42,.05);
+    }
+    .loop-card:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -24px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-size: 1.35rem;
+      font-weight: 900;
+    }
+    .loop-card .num { display: inline-grid; place-items: center; width: 28px; height: 28px; margin-bottom: 14px; border-radius: 50%; background: var(--deep); color: white; font-size: .75rem; font-weight: 800; }
+    .loop-card p { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.6; }
+    .return-arrow {
+      width: calc(75% - 8px);
+      margin: 15px 0 0 auto;
+      padding: 10px 16px;
+      border-right: 2px solid var(--accent);
+      border-bottom: 2px solid var(--accent);
+      border-left: 2px solid var(--accent);
+      border-radius: 0 0 14px 14px;
+      color: var(--muted);
+      font-size: .83rem;
+      text-align: center;
+    }
+    .return-arrow::before { content: "↖"; float: left; color: var(--accent); font-size: 1.1rem; font-weight: 900; }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 230px;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .stack { display: grid; gap: 10px; }
+    .layer {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 18px;
+      align-items: center;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+    .layer b { font-size: .9rem; }
+    .layer p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .layer.human { background: var(--deep); color: white; border-color: var(--deep); }
+    .layer.human p { color: #c8d9d2; }
+    .layer.local { border-left: 6px solid var(--accent); }
+    .layer.skills { border-left: 6px solid var(--mint); }
+    .layer.sensors { border-left: 6px solid var(--amber); }
+    .layer.base { border-left: 6px solid var(--blue); }
+    .obsidian {
+      display: grid;
+      align-content: center;
+      padding: 22px;
+      border: 1px dashed var(--blue);
+      border-radius: 14px;
+      background: var(--blue-soft);
+    }
+    .obsidian .icon { font-size: 1.8rem; }
+    .obsidian p { margin: 5px 0 0; color: var(--muted); font-size: .86rem; }
+    .obsidian .arrow { margin: 14px 0; color: var(--blue); font-weight: 800; text-align: center; }
+    .caption { margin: 14px 0 0; color: var(--muted); font-size: .82rem; }
+
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; font-size: .91rem; }
+    th, td { padding: 15px 16px; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+    th { background: var(--surface-2); color: var(--muted); font-size: .78rem; letter-spacing: .05em; }
+    tr:last-child td { border-bottom: 0; }
+    td:first-child { width: 25%; font-weight: 730; }
+    td:nth-child(2) { width: 110px; }
+    .status { display: inline-block; min-width: 64px; padding: 3px 9px; border-radius: 999px; font-size: .73rem; font-weight: 800; text-align: center; white-space: nowrap; }
+    .covered { color: #174b37; background: var(--mint-soft); }
+    .partial { color: #6e4a09; background: var(--amber-soft); }
+    .custom { color: #7c302a; background: var(--red-soft); }
+    @media (prefers-color-scheme: dark) {
+      .covered { color: var(--mint); }
+      .partial { color: var(--amber); }
+      .custom { color: var(--red); }
+      .verdict-word { color: var(--mint); }
+    }
+
+    .answer-box {
+      margin-top: 18px;
+      padding: 20px 22px;
+      border-radius: 14px;
+      background: var(--accent-soft);
+      border-left: 5px solid var(--accent);
+    }
+    .answer-box p:last-child { margin-bottom: 0; }
+
+    .lanes { display: grid; gap: 12px; }
+    .lane {
+      display: grid;
+      grid-template-columns: 105px 1fr 180px;
+      gap: 14px;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+    .lane-title { font-weight: 850; }
+    .lane-title small { display: block; color: var(--muted); font-size: .72rem; font-weight: 600; }
+    .steps { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .step { padding: 5px 9px; border-radius: 8px; background: var(--surface-2); font-size: .81rem; font-weight: 700; white-space: nowrap; }
+    .step.skill { background: var(--mint-soft); }
+    .step.local { background: var(--accent-soft); }
+    .chev { color: var(--muted); font-size: .78rem; }
+    .lane-rule { color: var(--muted); font-size: .79rem; line-height: 1.5; }
+
+    .retro-loop {
+      margin-top: 22px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--surface), var(--surface-2));
+    }
+    .retro-loop h3 { margin-bottom: 15px; }
+    .retro-steps { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 8px; }
+    .retro-step { position: relative; min-height: 100px; padding: 12px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); font-size: .78rem; line-height: 1.5; }
+    .retro-step b { display: block; margin-bottom: 5px; color: var(--accent); font-size: .72rem; }
+    .retro-step:not(:last-child)::after { content: "›"; position: absolute; top: 33px; right: -8px; z-index: 1; color: var(--accent); font-size: 1.3rem; font-weight: 900; }
+    .gate-note { margin: 16px 0 0; color: var(--muted); font-size: .84rem; }
+
+    .triad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .tool-card { padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+    .tool-card .tag { color: var(--blue); font-size: .72rem; font-weight: 850; letter-spacing: .1em; }
+    .tool-card h3 { margin-top: 7px; }
+    .tool-card p { margin: 0; color: var(--muted); font-size: .88rem; }
+    .equation { margin: 16px 0; color: var(--accent); font-size: 1.2rem; font-weight: 900; text-align: center; }
+    .recommendation { margin-top: 20px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-2); }
+    .recommendation ul, .language-grid ul { margin: 9px 0 0; padding-left: 1.25rem; }
+    .recommendation li, .language-grid li { margin: .35rem 0; }
+
+    .language-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .language-card { padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+    .language-card.recommended { border-top: 5px solid var(--mint); }
+    .language-card.avoid { border-top: 5px solid var(--amber); }
+    .language-card p, .language-card li { color: var(--muted); font-size: .88rem; }
+
+    .roadmap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; counter-reset: stage; }
+    .roadmap-card { counter-increment: stage; min-height: 190px; padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+    .roadmap-card::before { content: "0" counter(stage); display: block; margin-bottom: 22px; color: var(--accent); font-size: .8rem; font-weight: 850; letter-spacing: .1em; }
+    .roadmap-card p { margin: 0; color: var(--muted); font-size: .86rem; }
+    .spec-warning {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      padding: 18px 20px;
+      border: 1px solid var(--amber);
+      border-radius: 13px;
+      background: var(--amber-soft);
+    }
+    .spec-warning .mark { font-size: 1.4rem; }
+    .spec-warning p { margin: 0; font-size: .88rem; }
+
+    .sources { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 28px; margin: 0; padding: 0; list-style: none; }
+    .sources li { padding: 10px 0; border-bottom: 1px solid var(--line); font-size: .88rem; }
+    .sources small { display: block; color: var(--muted); }
+    footer { padding: 24px 0 38px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; }
+
+    @media (max-width: 850px) {
+      .hero-grid, .architecture { grid-template-columns: 1fr; }
+      .hero-side { max-width: 620px; }
+      .control-loop { grid-template-columns: 1fr 1fr; }
+      .loop-card:nth-child(2)::after { display: none; }
+      .return-arrow { width: 100%; }
+      .retro-steps { grid-template-columns: repeat(3, 1fr); }
+      .retro-step:nth-child(3)::after { display: none; }
+      .triad, .roadmap { grid-template-columns: 1fr 1fr; }
+      .lane { grid-template-columns: 95px 1fr; }
+      .lane-rule { grid-column: 2; }
+    }
+
+    @media (max-width: 590px) {
+      .wrap { width: min(100% - 24px, 1120px); }
+      .hero { padding-top: 48px; }
+      .hero h1 { font-size: 2.3rem; }
+      .section-head { grid-template-columns: 1fr; gap: 5px; }
+      .verdict { grid-template-columns: 1fr; gap: 8px; }
+      .control-loop, .triad, .language-grid, .roadmap, .sources { grid-template-columns: 1fr; }
+      .loop-card { min-height: 0; }
+      .loop-card:not(:last-child)::after { content: "↓"; display: block; right: 50%; top: auto; bottom: -28px; transform: translateX(50%); }
+      .return-arrow { border-top: 0; }
+      .layer { grid-template-columns: 1fr; gap: 4px; }
+      .lane { grid-template-columns: 1fr; }
+      .lane-rule { grid-column: 1; }
+      .retro-steps { grid-template-columns: 1fr 1fr; }
+      .retro-step:nth-child(3)::after { display: block; }
+      .retro-step:nth-child(2n)::after { display: none; }
+      .spec-warning { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      :root { color-scheme: light; --bg: white; --surface: white; --surface-2: #f2f4f2; --ink: #172321; --muted: #52605b; --line: #cbd1cc; }
+      body { background: white; font-size: 10.5pt; }
+      .hero { padding: 34px 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .jump { display: none; }
+      main { padding-top: 10px; }
+      section { padding: 24px 0; break-inside: avoid; }
+      .loop-card, .layer, .table-wrap, .lane, .retro-loop, .tool-card, .language-card, .roadmap-card { box-shadow: none; break-inside: avoid; }
+      a { text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Harness Design Overview</p>
+        <h1>mattpocock/skillsと<br>共通ハーネスの最終設計</h1>
+        <p class="lead">上流スキルは各リポジトリの直接依存、自前ハーネスは日本語の制御層、Obsidianは同じMarkdownを見る画面として分離する。</p>
+      </div>
+      <aside class="hero-side" aria-label="要点">
+        <div class="label">ONE-LINE ANSWER</div>
+        <p><strong>ハーネスエンジニアリングと呼べる。</strong><br>上流スキルを実行能力として利用し、検証・強制・学習・更新の境界まで接続してハーネス全体にする。</p>
+        <div class="hero-meta">説明用スナップショット · 2026-09-05</div>
+      </aside>
+    </div>
+  </header>
+
+  <nav class="wrap jump" aria-label="ページ内目次">
+    <a href="#definition">定義</a>
+    <a href="#architecture">構成</a>
+    <a href="#coverage">役割分担</a>
+    <a href="#workflow">開発フロー</a>
+    <a href="#obsidian">Obsidian</a>
+    <a href="#language">日本語化</a>
+    <a href="#distribution">配布・更新</a>
+    <a href="#start">始め方</a>
+  </nav>
+
+  <main class="wrap">
+    <section id="definition">
+      <div class="section-head">
+        <div class="section-no">01 / DEFINITION</div>
+        <div>
+          <h2>スキルはハーネスの一部。<br>本体は「制御ループ」</h2>
+          <p class="intro">コーディングエージェント向けの外側のハーネスは、よい結果へ先回りして導くものと、実行後の誤りを検知して直させるものの組み合わせとして捉えると分かりやすい。</p>
+        </div>
+      </div>
+
+      <div class="verdict">
+        <div class="verdict-word">YES</div>
+        <div>
+          <p class="big">この取り組みは、十分にハーネスエンジニアリングと呼べます。</p>
+          <p>ただし境目は「スキルを何個入れたか」ではありません。人が意図を示し、エージェントが実行し、テストやレビューが結果を観測し、繰り返す失敗を環境へ戻す——この循環を設計・改善しているかどうかです。</p>
+        </div>
+      </div>
+
+      <div class="control-loop" aria-label="ハーネスの制御ループ">
+        <article class="loop-card">
+          <span class="num">1</span>
+          <h3>Guide / 導く</h3>
+          <p><code>AGENTS.md</code>、OKF文書、ADR、スキルで、目的・制約・進め方を先に渡す。</p>
+        </article>
+        <article class="loop-card">
+          <span class="num">2</span>
+          <h3>Execute / 実行</h3>
+          <p>エージェントが調査、設計、実装、修正を行う。mattpocock/skillsが主に強い領域。</p>
+        </article>
+        <article class="loop-card">
+          <span class="num">3</span>
+          <h3>Sense / 観測</h3>
+          <p>テスト、型、lint、CI、ログ、レビューで、期待との差を具体的な信号にする。</p>
+        </article>
+        <article class="loop-card">
+          <span class="num">4</span>
+          <h3>Learn / 学習</h3>
+          <p>振り返りを候補として記録し、再発を見て試行・採用・却下・廃止する。</p>
+        </article>
+      </div>
+      <div class="return-arrow">観測された再発だけを、よりよいガイドや機械的チェックへ戻す</div>
+    </section>
+
+    <section id="architecture">
+      <div class="section-head">
+        <div class="section-no">02 / ARCHITECTURE</div>
+        <div>
+          <h2>「上流の直接依存」と<br>「自前の制御層」に分ける</h2>
+          <p class="intro">全部を自作する必要はありません。ただし所有と更新は混ぜません。再利用できる能力は各対象リポジトリがmattpocock/skillsから直接導入し、プロジェクト契約だけを自前で持ちます。</p>
+        </div>
+      </div>
+
+      <div class="architecture">
+        <div class="stack" aria-label="ハーネスのレイヤー">
+          <div class="layer human">
+            <b>人間の操舵</b>
+            <p>目的、優先順位、受け入れ条件、不可逆な判断を与える。</p>
+          </div>
+          <div class="layer local">
+            <b>自前の薄い層</b>
+            <p>入口、プロジェクト固有の検証・報告契約、改善台帳、採用ゲート、CI等の強制点、製品差のアダプター。</p>
+          </div>
+          <div class="layer skills">
+            <b>mattpocock/skills · 上流直接依存</b>
+            <p>各対象リポジトリが選択プロファイルを直接インストール。<code>ask-matt</code> → <code>grill-with-docs</code> → <code>to-spec</code> → <code>to-tickets</code> → <code>implement</code> と、TDD・レビュー・診断を再利用。</p>
+          </div>
+          <div class="layer sensors">
+            <b>実行可能な検査</b>
+            <p>プロジェクトのテスト、型検査、lint、構造検査、CI、ログ・メトリクス、必要に応じたエージェントレビュー。</p>
+          </div>
+          <div class="layer base">
+            <b>正本と実体</b>
+            <p>コード、設定、Markdown、OKFメタデータ、Git履歴。エージェントが直接読める形を正本にする。</p>
+          </div>
+        </div>
+
+        <aside class="obsidian" aria-label="Obsidianの位置づけ">
+          <div class="icon" aria-hidden="true">◇</div>
+          <h3>Obsidian</h3>
+          <p>Markdownを人間が読み、探し、リンクをたどるための画面。</p>
+          <div class="arrow">↕ 同じファイル</div>
+          <p><strong>別の正本にはしない。</strong><br>OKF/Gitの上に載る任意のビュー。</p>
+        </aside>
+      </div>
+      <p class="caption">図の読み方：mattpocock/skillsは本ハーネスへ同梱せず、対象リポジトリごとに上流へ直接接続する。自前にするのは、その上下をつなぐ日本語案内、プロジェクト契約、フィードバックだけ。</p>
+    </section>
+
+    <section id="coverage">
+      <div class="section-head">
+        <div class="section-no">03 / COVERAGE</div>
+        <div>
+          <h2>何が既にあり、<br>何を自前で足すのか</h2>
+          <p class="intro">「無い」と言い切るより、完成形まで含むかで判定するのが正確です。隣接するスキルはあっても、プロジェクト固有の制御としては未完成な領域があります。</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>機能</th>
+              <th>判定</th>
+              <th>mattpocock/skillsにあるもの</th>
+              <th>追加するもの</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>入口とルーティング</td>
+              <td><span class="status covered">カバー</span></td>
+              <td><code>ask-matt</code> が主要フロー、分岐、単独スキルを案内。</td>
+              <td>人間向けの日本語一覧があれば十分。</td>
+            </tr>
+            <tr>
+              <td>詳細化・仕様・分割</td>
+              <td><span class="status covered">カバー</span></td>
+              <td><code>grill-with-docs</code>、<code>prototype</code>、<code>to-spec</code>、<code>to-tickets</code>、<code>domain-modeling</code>。</td>
+              <td>対象プロジェクトの文書配置だけ接続。</td>
+            </tr>
+            <tr>
+              <td>実装・TDD・レビュー・診断</td>
+              <td><span class="status covered">カバー</span></td>
+              <td><code>implement</code> が <code>tdd</code> と <code>code-review</code> を使用。難しい不具合には <code>diagnosing-bugs</code>。</td>
+              <td>各リポジトリの実コマンドと合格条件。</td>
+            </tr>
+            <tr>
+              <td>プロジェクト固有の検証・完了報告</td>
+              <td><span class="status custom">自前</span></td>
+              <td><code>implement</code> に一般的な型検査・テスト指示はある。<code>handoff</code> は別エージェント向け引継ぎ。</td>
+              <td>変更種別→実行コマンド、未実施理由、結果、残存リスクを揃えた短い報告契約。</td>
+            </tr>
+            <tr>
+              <td>振り返りの分析</td>
+              <td><span class="status partial">部分</span></td>
+              <td><code>retro</code> が環境改善の候補を分類し、重要度順に提示。ただし現在は上流の<code>in-progress</code>。</td>
+              <td>初期プロファイルからは外し、毎回実行するかのゲートと、候補を一旦保留する運用を自前で置く。</td>
+            </tr>
+            <tr>
+              <td>改善台帳のライフサイクル</td>
+              <td><span class="status custom">自前</span></td>
+              <td>永続台帳、同一症状の集約、件数上限、保持期限は定義されていない。</td>
+              <td><em>観測 → 候補 → 試行 → 採用 / 却下 / 廃止</em>、再発回数、最大10件など。</td>
+            </tr>
+            <tr>
+              <td>規則への昇格・除去ゲート</td>
+              <td><span class="status custom">自前</span></td>
+              <td><code>retro</code> は候補提示までで、ルール変更の承認や評価比較は持たない。</td>
+              <td>一度の失敗では恒久化しない、試行期限、効果比較、廃止条件。安全上の例外のみ即時。</td>
+            </tr>
+            <tr>
+              <td>機械的な強制</td>
+              <td><span class="status partial">部分</span></td>
+              <td><code>setup-pre-commit</code> やGitガードレールなど個別部品はある。</td>
+              <td>プロジェクトのCI・lint・型・権限へ、どの規則をどこで強制するかの対応表。</td>
+            </tr>
+            <tr>
+              <td>Codex / Claude Code差の吸収</td>
+              <td><span class="status partial">部分</span></td>
+              <td>多くは移植可能だが、<code>/clear</code>、Skill tool、Claude固有hookなどの表現が残る。</td>
+              <td>製品ごとの呼び出し・権限・hook・一時ファイルの差だけを薄いアダプターにする。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="answer-box">
+        <p><strong>質問への短い答え：</strong> はい、以前挙げた「自前部分」の中心はmattpocock/skillsに完成品としては入っていない、という認識で合っています。</p>
+        <p>上流スキルは能力、自前部分はプロジェクト契約です。上流を一括フォークするのではなく、外側に小さな台帳・検証契約・昇格ゲートを足すのが保守しやすい構成です。</p>
+      </div>
+    </section>
+
+    <section id="workflow">
+      <div class="section-head">
+        <div class="section-no">04 / WORKFLOW</div>
+        <div>
+          <h2>全タスクを同じ重さにしない</h2>
+          <p class="intro">グリリング、仕様書、チケット、完全な振り返りを毎回強制すると、軽い変更まで重くなります。仕事の大きさと不確実性で入口を変え、検証と報告だけは共通にします。</p>
+        </div>
+      </div>
+
+      <div class="lanes" aria-label="タスク規模別の推奨フロー">
+        <div class="lane">
+          <div class="lane-title">小さい<small>明確・低リスク</small></div>
+          <div class="steps">
+            <span class="step skill">implement</span><span class="chev">›</span>
+            <span class="step local">検証・報告</span>
+          </div>
+          <div class="lane-rule">摩擦があった時だけretroへ。</div>
+        </div>
+        <div class="lane">
+          <div class="lane-title">通常<small>判断が少し必要</small></div>
+          <div class="steps">
+            <span class="step skill">ask-matt</span><span class="chev">›</span>
+            <span class="step skill">grill</span><span class="chev">›</span>
+            <span class="step skill">implement + TDD + review</span><span class="chev">›</span>
+            <span class="step local">検証・報告</span>
+          </div>
+          <div class="lane-rule">最後にretroゲートを判定。</div>
+        </div>
+        <div class="lane">
+          <div class="lane-title">大きい<small>複数セッション</small></div>
+          <div class="steps">
+            <span class="step skill">grill</span><span class="chev">›</span>
+            <span class="step skill">prototype?</span><span class="chev">›</span>
+            <span class="step skill">to-spec</span><span class="chev">›</span>
+            <span class="step skill">to-tickets</span><span class="chev">›</span>
+            <span class="step skill">implement × N</span><span class="chev">›</span>
+            <span class="step local">統合検証・報告</span>
+          </div>
+          <div class="lane-rule">判断点と証拠を残し、必要ならfull retro。</div>
+        </div>
+      </div>
+
+      <div class="retro-loop">
+        <h3>振り返りは「記録」ではなく「昇格フィルター」にする</h3>
+        <div class="retro-steps">
+          <div class="retro-step"><b>1 · OBSERVE</b>今回の摩擦を短く記録</div>
+          <div class="retro-step"><b>2 · GROUP</b>同じ症状なら件数を加算</div>
+          <div class="retro-step"><b>3 · CANDIDATE</b><code>retro</code>で改善案を作る</div>
+          <div class="retro-step"><b>4 · TRIAL</b>期限付きで小さく試す</div>
+          <div class="retro-step"><b>5 · DECIDE</b>採用・却下・廃止</div>
+          <div class="retro-step"><b>6 · PROMOTE</b>文書、skill、検査へ昇格</div>
+        </div>
+        <p class="gate-note"><strong>full retroの目安：</strong> 人が修正した／同じ探索を繰り返した／検証漏れがあった／ツールやコンテキストに大きな摩擦があった／高コスト・高リスクだった。何も起きていない回は5行程度の完了要約で十分。</p>
+      </div>
+    </section>
+
+    <section id="obsidian">
+      <div class="section-head">
+        <div class="section-no">05 / OBSIDIAN</div>
+        <div>
+          <h2>Obsidianは「記憶装置」より<br>人間向けの読書・探索画面</h2>
+          <p class="intro">Obsidianはローカルフォルダ内のMarkdownをそのままノートとして扱います。専用データベースへ閉じ込めず、エディタやGitとも同じファイルを共有できます。</p>
+        </div>
+      </div>
+
+      <div class="triad">
+        <article class="tool-card">
+          <div class="tag">HUMAN VIEW</div>
+          <h3>Obsidian</h3>
+          <p>検索、バックリンク、グラフ、プロパティ表示で、人間が知識間のつながりを見つける。</p>
+        </article>
+        <article class="tool-card">
+          <div class="tag">DOCUMENT CONTRACT</div>
+          <h3>OKF</h3>
+          <p>frontmatter、語彙、index、関連、検証状態、stale判定を機械的に揃える。</p>
+        </article>
+        <article class="tool-card">
+          <div class="tag">SYSTEM OF RECORD</div>
+          <h3>Markdown + Git</h3>
+          <p>人とエージェントが直接読める正本。差分、履歴、レビュー、復元を担う。</p>
+        </article>
+      </div>
+      <div class="equation">Obsidian ≠ 別の知識庫　／　Obsidian = 同じ正本を見る窓</div>
+
+      <div class="recommendation">
+        <h3>この構成で使うなら</h3>
+        <ul>
+          <li>リポジトリ自体をVaultとして開き、Markdownの正本を重複させない。</li>
+          <li>OKFの <code>related</code> やMarkdownリンクを育てる。グラフは「リンクを作った結果」として使う。</li>
+          <li><code>.obsidian/workspace*.json</code> など個人の画面状態は原則Git管理外。共有する設定だけを選ぶ。</li>
+          <li>振り返りを無制限に保存しない。台帳は活動中を最大10件程度にし、同じ症状は新規ノートではなく件数を増やす。</li>
+        </ul>
+      </div>
+      <p class="caption">この方針ではObsidianを利用する。ただしハーネスの実行条件にはせず、Obsidianがない環境でも同じMarkdownとGitだけで動く状態を保つ。</p>
+    </section>
+
+    <section id="language">
+      <div class="section-head">
+        <div class="section-no">06 / LANGUAGE</div>
+        <div>
+          <h2>全文翻訳より、<br>日本語の案内層を足す</h2>
+          <p class="intro">日本語だから精度が下がる、という単純な関係ではありません。ただし全文翻訳は上流更新とのズレを生み、スキルの起動条件や強い表現のニュアンスを変える可能性があります。</p>
+        </div>
+      </div>
+
+      <div class="language-grid">
+        <article class="language-card recommended">
+          <h3>推奨：原文 + 日本語カタログ</h3>
+          <ul>
+            <li>上流の <code>SKILL.md</code> はまず英語のまま保つ</li>
+            <li>目的、使う場面、呼び出す先を日本語で1枚に整理</li>
+            <li>プロジェクト固有の入口・検証・報告は日本語で書いてよい</li>
+            <li>誤起動が出る場合だけdescriptionを日英併記し、実タスクで比較</li>
+          </ul>
+        </article>
+        <article class="language-card avoid">
+          <h3>慎重に：全スキルの一括翻訳</h3>
+          <ul>
+            <li>上流更新を毎回追従する翻訳フォークになる</li>
+            <li>must / should、例外、起動条件の意味がずれる可能性</li>
+            <li>どの変更が動作差を生んだか分かりにくい</li>
+            <li>翻訳するなら代表タスクで原文版と結果を比較する</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="distribution">
+      <div class="section-head">
+        <div class="section-no">07 / DISTRIBUTION</div>
+        <div>
+          <h2>配布経路も<br>二つに分ける</h2>
+          <p class="intro">再配布できるかと、再配布するのが保守しやすいかは別問題です。上流MITライセンスを守りつつ、通常運用では更新経路を短く保ちます。</p>
+        </div>
+      </div>
+
+      <div class="triad">
+        <article class="tool-card">
+          <div class="tag">UPSTREAM</div>
+          <h3>mattpocock/skills</h3>
+          <p>各対象リポジトリで公式インストーラーを実行。<code>skills-lock.json</code>とライセンス通知を保持し、明示的に更新する。</p>
+        </article>
+        <article class="tool-card">
+          <div class="tag">OUR LAYER</div>
+          <h3>自前ハーネス</h3>
+          <p>日本語ガイド、検証・報告、retroゲート、台帳、テンプレートだけを独立した版として管理。将来はプラグイン化する。</p>
+        </article>
+        <article class="tool-card">
+          <div class="tag">FUTURE FRONT DOOR</div>
+          <h3>一括導入コマンド</h3>
+          <p>3リポジトリ以上で負担が実測された時だけ作る。二つの公式経路を順に呼び、上流本体を自前配布物へ混ぜない。</p>
+        </article>
+      </div>
+      <div class="equation">直接依存 = 自動更新ではない　／　更新は各リポジトリで diff → trigger test → 1 commit</div>
+    </section>
+
+    <section id="start">
+      <div class="section-head">
+        <div class="section-no">08 / FIRST ITERATION</div>
+        <div>
+          <h2>実装はこの順で進める</h2>
+          <p class="intro">最初の適用先はokf-devkit。上流依存の境界から固め、最後に実作業で有効性を確認します。後続タスクは着手直前にだけ詳細化します。</p>
+        </div>
+      </div>
+
+      <div class="roadmap">
+        <article class="roadmap-card">
+          <h3>1 · 直接依存</h3>
+          <p><code>ask-matt</code>の参照が閉じたプロファイルを選び、重複・lock・ライセンスを確認。</p>
+        </article>
+        <article class="roadmap-card">
+          <h3>2 · 日本語入口</h3>
+          <p>短い入口と、目的・対象外・呼出関係が分かる日本語ガイドを設置。</p>
+        </article>
+        <article class="roadmap-card">
+          <h3>3 · 完了契約</h3>
+          <p>規模別フロー、4値の検証・報告、引継ぎ、実在する強制点を接続。</p>
+        </article>
+        <article class="roadmap-card">
+          <h3>4 · 学習ループ</h3>
+          <p>retroゲートと最大10件の改善台帳を置き、一度の失敗を即ルール化しない。</p>
+        </article>
+        <article class="roadmap-card">
+          <h3>5 · Obsidian / OKF</h3>
+          <p>リポジトリをVaultとして開き、同じMarkdownを索引・検索・リンクで扱う。</p>
+        </article>
+        <article class="roadmap-card">
+          <h3>6 · 実証</h3>
+          <p>3件の代表作業をClaude CodeとCodexで流し、品質・手戻り・起動精度を比較。</p>
+        </article>
+      </div>
+
+      <div class="spec-warning">
+        <div class="mark" aria-hidden="true">✓</div>
+        <p><strong>正本へ反映済み：</strong> <code>HARNESS_SPEC.md</code> 第0.3版で、上流の直接依存、自前レイヤー、日本語化、Obsidian/OKF、retroゲート、段階導入を確定しました。このHTMLは理解用であり、今後も判断の正本にはしません。</p>
+      </div>
+    </section>
+
+    <section id="sources">
+      <div class="section-head">
+        <div class="section-no">09 / SOURCES</div>
+        <div>
+          <h2>根拠と参照先</h2>
+          <p class="intro">外部の考え方と、このリポジトリの現行仕様・導入済みスキルを照合して整理しています。</p>
+        </div>
+      </div>
+
+      <ul class="sources">
+        <li><a href="https://openai.com/index/harness-engineering/">OpenAI — Harness engineering</a><small>環境・フィードバックループ・機械的強制</small></li>
+        <li><a href="https://martinfowler.com/articles/harness-engineering.html">Martin Fowler — Harness engineering for coding agent users</a><small>Guide / Sensorとsteering loopの整理</small></li>
+        <li><a href="https://github.com/mattpocock/skills/blob/main/README.md">mattpocock/skills — README</a><small>導入、直接更新、二重インストールの注意</small></li>
+        <li><a href="https://github.com/mattpocock/skills/blob/main/LICENSE">mattpocock/skills — MIT License</a><small>利用・改変・再配布と通知条件</small></li>
+        <li><a href="https://learn.chatgpt.com/ja-JP/docs/build-skills">OpenAI — スキルの構築</a><small>repo scope、重複、description、プラグイン配布</small></li>
+        <li><a href="https://learn.chatgpt.com/ja-JP/docs/build-plugins">OpenAI — プラグインを作成する</a><small>再利用可能な自前スキルの配布単位</small></li>
+        <li><a href="https://obsidian.md/help/Files%2Band%2Bfolders/How%2BObsidian%2Bstores%2Bdata">Obsidian Help — How Obsidian stores data</a><small>VaultとローカルMarkdownの関係</small></li>
+        <li><a href="https://kawasin73.hatenablog.com/entry/2026/08/22/124436">楽をするための AI ハーネス</a><small>着想元の開発フロー、report、retrospective</small></li>
+        <li><a href="./HARNESS_SPEC.md">このリポジトリの HARNESS_SPEC.md</a><small>正本。改善台帳、段階導入、検証・報告の規定</small></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">HARNESS_SKILLS_OVERVIEW.html — 理解と議論のための説明資料。決定の正本は HARNESS_SPEC.md。</div>
+  </footer>
+</body>
+</html>
