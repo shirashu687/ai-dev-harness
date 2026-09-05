@@ -20,7 +20,7 @@ accepts: ["⑦", "⑧", "⑨"]
 spec: ["§2.2", "§2.3", "§4", "§8.1"]
 target: okf-devkit
 evidence:
-  - "okf-devkit: T-0004成果物commit 4a00b50, b0db5ff, c68a0b3, b8e6e3d, db057a5, 21aef73, 5267934, c6b91e7。T-0005外部commit 456c8b5 / 8acec25は対象外。"
+  - "okf-devkit: T-0004成果物commit 4a00b50, b0db5ff, c68a0b3, b8e6e3d, db057a5, 21aef73, 5267934, c6b91e7, 4cb39dc, 89e8c56。T-0005外部commit 456c8b5 / 8acec25は対象外。"
   - "okf-devkit: harness/state/journal/T-0004-workflow-and-completion-contract.md と T-0004-workflow-and-completion-contract.changes.json"
   - "検証: T-0004境界の既存テスト144件成功、現在HEADの153件成功、OKF index/lint/index-check成功、参照/scope/変更宣言検査成功。"
   - "演習: small-flow、normal-flow、large-flow、report-four-state、review-working-tree、handover-resume、references-and-scope成功。"
