@@ -22,7 +22,7 @@ target: okf-devkit
 evidence:
   - "okf-devkit: T-0004成果物commit 4a00b50, b0db5ff, c68a0b3, b8e6e3d, db057a5, 21aef73, 5267934, c6b91e7, 4cb39dc, 89e8c56。T-0005外部commit 456c8b5 / 8acec25は対象外。"
   - "okf-devkit: harness/state/journal/T-0004-workflow-and-completion-contract.md と T-0004-workflow-and-completion-contract.changes.json"
-  - "検証: T-0004境界の既存テスト144件成功、現在HEADの153件成功、OKF index/lint/index-check成功、参照/scope/変更宣言検査成功。"
+  - "検証: T-0004境界の既存テスト144件成功、現HEADの最新155件成功、OKF index/lint/index-check成功、参照/scope/変更宣言検査成功。"
   - "演習: small-flow、normal-flow、large-flow、report-four-state、review-working-tree、handover-resume、references-and-scope成功。"
   - "review: 固定比較点2ae7c426から初回実装列、456c8b5から最終修正列を仕様軸・標準軸で確認。"
 related: ["/backlog/T-0003-japanese-entry-and-guide.md", "/backlog/T-0005-requirements-and-enforcement.md", "/backlog/T-0006-retro-and-ledger.md"]
@@ -137,7 +137,7 @@ T-0003の上記コミットを含む対象作業ツリーで実装する。利�
 | report-four-state | 成功 | okf-devkit worklog / verify-report | 成功・失敗・未実行・実行不能と失敗→成功の再試行履歴を隔離演習で記録 |
 | review-working-tree | 成功 | okf-devkit worklog | 隔離Git演習で開始時既存変更、tracked差分、未追跡補完を確認 |
 | references-and-scope | 成功 | okf-devkit static check | 相対リンク到達性、コアscope、必須契約マーカーを確認 |
-| project-required | 成功 | okf-devkit `.venv` | T-0004境界144件成功、外部T-0005完了後の現在HEAD153件成功 |
+| project-required | 成功 | okf-devkit `.venv` | T-0004境界144件成功、現HEADの最新155件成功 |
 | change-declaration | 成功 | okf-devkit `check_changes.py` | `456c8b5...b8e6e3d` で `result=ok`。保護対象宣言漏れなし |
 | code-review-standards | 成功 | okf-devkit fixed-point review | 初回実装列と最終修正列を標準軸で確認。最終指摘なし |
 | code-review-spec | 成功 | okf-devkit fixed-point review | 初回実装列と最終修正列を仕様軸で確認。最終指摘なし |
