@@ -13,7 +13,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 FORMAT = 'sha256-canonical-text-v1'
 MANIFEST = 'distribution/manifest.json'
-REPOSITORY = 'https://github.com/shirashu687/harness'
+REPOSITORY = 'https://github.com/shirashu687/ai-dev-harness.git'
 
 
 def canonical(data):
