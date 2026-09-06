@@ -5,18 +5,18 @@
 <!-- okf:auto:start -->
 | state | 件数 |
 |---|---|
-| doing | 1 |
-| todo | 8 |
+| doing | 2 |
+| todo | 7 |
 | done | 4 |
 | dropped | 0 |
 
 ## doing
+* [共通コアを本リポジトリへ抽出し最小配布物を確立する](/backlog/T-0013-extract-distributable-core.md) - `high` `M` - okf-devkitで実証した共通コアをharnessへ抽出し、二つ目の導入前にGitで版管理する最小配布物と管理手順を確立する。
 * [日本語の入口とスキル案内を設置する](/backlog/T-0003-japanese-entry-and-guide.md) - `high` `M` - okf-devkitの既存入口を保ちながら、作業分類・プロジェクト制約・上流スキルの呼出関係へ到達できる日本語ガイドを設置する。
 
 ## todo
 * [上流スキルを直接依存として導入する](/backlog/T-0002-upstream-skills-dependency.md) - `high` `M` - okf-devkitへ依存関係が閉じたmattpocock/skillsプロファイルを直接導入し、出所・重複・ライセンス・更新方法を確認する。
 * [代表作業3件と2製品で実証する](/backlog/T-0008-pilot-two-products.md) - `high` `L` - okf-devkitの実作業3件をClaude CodeとCodexで進め、品質・手戻り・検証・スキル起動・文脈負担を比較する。
-* [共通コアを本リポジトリへ抽出し最小配布物を確立する](/backlog/T-0013-extract-distributable-core.md) - `high` `M` - okf-devkitで実証した共通コアをharnessへ抽出し、二つ目の導入前にGitで版管理する最小配布物と管理手順を確立する。
 * [ObsidianとOKFの知識導線を接続する](/backlog/T-0007-obsidian-okf.md) - `medium` `S` - okf-devkitの同じMarkdownをObsidianで閲覧し、OKFの索引・検査と共存させながら別の正本や無制限な記録を作らない運用を確認する。
 * [ScheLiveAppへ独立した二依存として導入する](/backlog/T-0009-second-repository-rollout.md) - `medium` `XL` - ScheLiveAppへ上流スキルと自前ハーネスを別々の依存として導入し、更新・巻戻し・撤去で固有領域が保たれるか確認する。
 * [自立継続運用の仕組みを設計・検証する](/backlog/T-0012-continuous-autonomous-operation.md) - `medium` `L` - ハーネスが人手の常時監視なしで継続実行できる運用契約と、停止・失敗・更新時に安全に介入できる仕組みを設計・検証する。
