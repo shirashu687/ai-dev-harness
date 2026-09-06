@@ -5,13 +5,12 @@
 <!-- okf:auto:start -->
 | state | 件数 |
 |---|---|
-| doing | 2 |
+| doing | 1 |
 | todo | 7 |
-| done | 4 |
+| done | 5 |
 | dropped | 0 |
 
 ## doing
-* [共通コアを本リポジトリへ抽出し最小配布物を確立する](/backlog/T-0013-extract-distributable-core.md) - `high` `M` - okf-devkitで実証した共通コアをharnessへ抽出し、二つ目の導入前にGitで版管理する最小配布物と管理手順を確立する。
 * [日本語の入口とスキル案内を設置する](/backlog/T-0003-japanese-entry-and-guide.md) - `high` `M` - okf-devkitの既存入口を保ちながら、作業分類・プロジェクト制約・上流スキルの呼出関係へ到達できる日本語ガイドを設置する。
 
 ## todo
@@ -26,6 +25,7 @@
 ## done
 * [規模別フローと完了契約を設置する](/backlog/T-0004-workflow-and-completion-contract.md) - 2026-09-06 完了 - 小・通常・大の開発フロー、4値の検証報告、作業記録、セッション引継ぎをokf-devkitへ設置する。
 * [必須制約と強制点を接続する](/backlog/T-0005-requirements-and-enforcement.md) - 2026-09-06 完了 - okf-devkitの必須制約を既存CI・権限設定・差分レビューへ対応づけ、運用だけに依存する限界も明示する。
+* [共通コアを本リポジトリへ抽出し最小配布物を確立する](/backlog/T-0013-extract-distributable-core.md) - 2026-09-06 完了 - okf-devkitで実証した共通コアをharnessへ抽出し、二つ目の導入前にGitで版管理する最小配布物と管理手順を確立する。
 * [retroゲートと改善台帳を設置する](/backlog/T-0006-retro-and-ledger.md) - 2026-09-06 完了 - full retrospectiveの実行条件と、観測から試行・採用・却下・廃止へ進む上限付き改善台帳をokf-devkitへ設置する。
 * [仕様を0.2版へ改訂する](/backlog/T-0001-spec-revision.md) - 2026-09-01 完了 - 設計詰めで決まった内容を HARNESS_SPEC.md に反映し、第0.2版とする。
 <!-- okf:auto:end -->
