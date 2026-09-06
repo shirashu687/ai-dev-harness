@@ -19,7 +19,7 @@ done_at: null
 accepts: ["⑲"]
 spec: ["§2.3", "§9.1.1", "§9.1.2", "§9.1.3", "§9.2", "§9.2.1", "§10"]
 target: harness
-evidence: ["45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc"]
+evidence: ["898d514f0594ff09f6c19292ef4df56f6cc4ac50"]
 related: ["/backlog/T-0008-pilot-two-products.md", "/backlog/T-0009-second-repository-rollout.md"]
 ---
 
@@ -139,7 +139,7 @@ GitHubの接続・取得確認はこの詳細化では実行せず、上記の�
 
 ## 決定と根拠
 
-- 2026-09-06 今回の利用者指定：配布物の確立・検証・GitHub取得確認まで実施し、okf-devkitへの移行は次セッションへ送る。T-0013はdoing、done_atはnullを維持し、後続タスクを詳細化しない。GitHubは `shirashu687/harness` をpublicで新規作成する承認を取得した。
+- 2026-09-06 今回の利用者指定：配布物の確立・検証・GitHub取得確認まで実施し、okf-devkitへの移行は次セッションへ送る。T-0013はdoing、done_atはnullを維持し、後続タスクを詳細化しない。GitHubは当初 `shirashu687/harness` を予定したが、利用者がpublicの `shirashu687/ai-dev-harness` を作成し、そのURLで進める指定を受けた。
 
 - 2026-09-06 利用者判断：Claude Codeは現状利用できないため、その実証はスキップ予定とする。T-0013の詳細化は先行し、実装は並行中のCodex比較再試行終了後に別セッションで行う。これは本タスクの着手順序についての例外であり、受け入れ⑰の達成や2製品での実証成功を意味しない。
 - 実装開始時に比較再試行の結果・証拠所在・抽出元コミットを確認し、判明した不適合と残存課題を引き継ぐ。現在調査済みの旧比較結果やHEADを、再試行後の確定結果・抽出元として代用しない。Claude Codeの未確認範囲を消さず、T-0008の状態更新は並行作業側に委ねる。
@@ -157,16 +157,16 @@ GitHubの接続・取得確認はこの詳細化では実行せず、上記の�
 
 ## 完了条件
 
-- [ ] Codex比較再試行が終了し、結果・抽出元SHA・残存課題を確認した。Claude Code未確認を実証成功と扱っていない
-- [ ] 成果物表のコア6本・雛形5本・manifest・手順書・検証があり、配布版を完全SHAで特定できる
-- [ ] manifestの明示一覧と配布ファイルが一致し、固有設定・作業記録・台帳実データ・上流本体・対象専用検査が混入していない
-- [ ] SPEC §9.1.3の記録・ハッシュが実配布物で成立し、出所の固定版から再取得・再照合できる
-- [ ] GitHubの正式配布元URLから独立したcloneを作り、配布SHA・manifest・配布ファイル・手順書を取得して内容一致を確認した
-- [ ] 新規導入・pilot移行・更新・巻戻し・撤去の手順があり、再導入・故障注入・復旧を含む全検証ケースを確認した
-- [ ] 導入後のリンクと採用プロファイルが成立し、非OKF構成でもSPECコピーなしで日常手順を辿れる
+- [x] Codex比較再試行が終了し、結果・抽出元SHA・残存課題を確認した。Claude Code未確認を実証成功と扱っていない
+- [x] 成果物表のコア6本・雛形5本・manifest・手順書・検証があり、配布版を完全SHAで特定できる
+- [x] manifestの明示一覧と配布ファイルが一致し、固有設定・作業記録・台帳実データ・上流本体・対象専用検査が混入していない
+- [x] SPEC §9.1.3の記録・ハッシュが実配布物で成立し、出所の固定版から再取得・再照合できる
+- [x] GitHubの正式配布元URLから独立したcloneを作り、配布SHA・manifest・配布ファイル・手順書を取得して内容一致を確認した
+- [x] 新規導入・pilot移行・更新・巻戻し・撤去の手順があり、再導入・故障注入・復旧を含む全検証ケースを確認した
+- [x] 導入後のリンクと採用プロファイルが成立し、非OKF構成でもSPECコピーなしで日常手順を辿れる
 - [ ] okf-devkitを配布版へ実移行し、install.jsonとコアの一致、事前列挙した移設差分だけでの固有機能・実データ保持を確認した
 - [ ] 対象の必須既存テスト・変更宣言検査、適用する文書検査が成立し、CI/製品実機の未確認範囲を分けて記録した
-- [ ] T-0009で使う配布元・版・手順が特定されている
+- [x] T-0009で使う配布元・版・手順が特定されている
 - [ ] 固定比較点からの仕様軸・標準軸reviewと必要な再検証が済み、必須検証を4値で記録し、2リポジトリの成果物コミットをevidenceと結果へ対応づけた
 - [ ] stateをdoneにし、done_atを記入した
 
@@ -174,22 +174,31 @@ GitHubの接続・取得確認はこの詳細化では実行せず、上記の�
 
 | 識別子 | 結果 | 対象（コミット・版） | 証拠（要約・ログ所在） |
 |---|---|---|---|
-| distribution-boundary | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 11ファイル、core6本、混入・schema・パス境界をunittestで確認 |
-| source-version-and-install-record | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 固定Git blobと現物全11本一致。manifest正規化SHA-256は結果欄。fixture導入記録を再計算照合 |
-| github-source-retrieval | 実行不能 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 自動承認レビューが作成＋pushを拒否。既存履歴を含む公開範囲の追加回答待ち。リモートは未作成・未接続 |
-| installed-links-and-profile | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 非OKF fixtureの役割と実コマンドを記入し、journal複製後を含むリンク・候補/採用区別を確認 |
-| lifecycle-procedures | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | unittestとは別の一時Gitで5操作・同版再導入・追加変更削除を含む巻戻し・撤去時参照を演習 |
-| conflict-and-recovery | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 手修正・欠落・未知ファイル・不正記録は操作前不変。故障注入、限定復旧、再試行、競合停止 |
-| pilot-reconciliation | 未実行 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 利用者指定で実移行は次セッション。pilot fixtureの成功とは区別 |
-| pilot-required-checks | 未実行 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 今回okf-devkitは変更しないため、移行後の対象venv・変更宣言検査は次セッション |
-| harness-docs | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | affectedで手順書を特定、index生成・lint error 0/warn 0・index check・diff check成功 |
-| implementation-review | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 今回範囲の二軸review。仕様1件修正後0、標準0。okf-devkit移行のreviewは未実行 |
+| distribution-boundary | 成功 | `898d514f0594ff09f6c19292ef4df56f6cc4ac50` | 11ファイル、core6本、混入・schema・パス境界をunittestで確認 |
+| source-version-and-install-record | 成功 | `898d514f0594ff09f6c19292ef4df56f6cc4ac50` | 固定Git blobと現物全11本一致。manifest正規化SHA-256は結果欄。fixture導入記録を再計算照合 |
+| github-source-retrieval | 成功 | `898d514f0594ff09f6c19292ef4df56f6cc4ac50` | 正式GitHub URLの独立cloneで完全SHA・clean状態・15ファイル一致。clone側unittest11件と別手順演習8ケース成功 |
+| installed-links-and-profile | 成功 | `898d514f0594ff09f6c19292ef4df56f6cc4ac50` | 非OKF fixtureの役割と実コマンドを記入し、journal複製後を含むリンク・候補/採用区別を確認 |
+| lifecycle-procedures | 成功 | `898d514f0594ff09f6c19292ef4df56f6cc4ac50` | unittestとは別の一時Gitで5操作・同版再導入・追加変更削除を含む巻戻し・撤去時参照を演習 |
+| conflict-and-recovery | 成功 | `898d514f0594ff09f6c19292ef4df56f6cc4ac50` | 手修正・欠落・未知ファイル・不正記録は操作前不変。故障注入、限定復旧、再試行、競合停止 |
+| pilot-reconciliation | 未実行 | `898d514f0594ff09f6c19292ef4df56f6cc4ac50` | 利用者指定で実移行は次セッション。pilot fixtureの成功とは区別 |
+| pilot-required-checks | 未実行 | `898d514f0594ff09f6c19292ef4df56f6cc4ac50` | 今回okf-devkitは変更しないため、移行後の対象venv・変更宣言検査は次セッション |
+| harness-docs | 成功 | `898d514f0594ff09f6c19292ef4df56f6cc4ac50` | affectedで手順書を特定、index生成・lint error 0/warn 0・index check・diff check成功 |
+| implementation-review | 成功 | `898d514f0594ff09f6c19292ef4df56f6cc4ac50` | 今回範囲の二軸review。仕様1件修正後0、標準0。okf-devkit移行のreviewは未実行 |
 
-結果は成功 / 失敗 / 未実行 / 実行不能のいずれか。ここは実装成果物の検証表であり、詳細化中の文書検査を実装成功として転記しない。現在の未実行理由は実装を別セッションで行うため。必須条件の未達が残る場合はstateをdoneにしない。
+結果は成功 / 失敗 / 未実行 / 実行不能のいずれか。ここは実装成果物の検証表であり、詳細化中の文書検査を実装成功として転記しない。未実行のpilot移行は利用者指定で次セッションへ延期。必須条件の未達が残る場合はstateをdoneにしない。
 
 ## 結果
 
-配布物の実装中。移行は利用者指定で次セッションへ分け、stateはdoingを維持する。
+今回指定された配布物確立・検証・GitHub取得確認は完了。okf-devkit移行は次セッションへ残し、`state: doing`、`done_at: null`を維持する。後続タスクは詳細化していない。
+
+### 正式配布版と取得確認
+
+- 配布元：`https://github.com/shirashu687/ai-dev-harness.git`（public、利用者作成）。初回確認では空、既存ブランチなし。送信したブランチは `codex/t-0013-distribution` のみ。
+- **配布物の完全SHA：`898d514f0594ff09f6c19292ef4df56f6cc4ac50`**。新URLに合わせた手順書・検証コードを含む。後の引継ぎ記録コミットやbranchの最新HEADと取り違えない。
+- 手順書：同SHAの `docs/project/harness-distribution.md`。manifest：`distribution/manifest.json`、形式 `sha256-canonical-text-v1`、正規化SHA-256 `46d193e267973b8d3b3808f5d0c2fea3f953aff5b234ab3e97b8d2a4d8004a03`。
+- GitHub URLから `git clone --no-checkout` → 上記完全SHAを `checkout --detach`。独立cloneは `C:/Users/rinta/AppData/Local/Temp/t0013-github-b5a837956f954d2490edd3cb9db9b3b3`。origin URL、HEAD、cleanな作業ツリーを確認。
+- 配布11本＋manifest＋手順書＋検証コード＋SPECの計15ファイルを、GitHub clone現物と配布コミットのGit blobで正規化ハッシュ照合し一致。ローカルcloneを取得証拠に代用していない。
+- `evidence` はharnessの配布版を示す。okf-devkit移行コミットはまだ存在せず、次セッションで追加する。
 
 ### 着手確認
 
@@ -199,34 +208,25 @@ GitHubの接続・取得確認はこの詳細化では実行せず、上記の�
 - R2は元版 `8c72c05274bf6880778c9a89a98221b189b57943`、同モデル設定・Python 3.12.14。A成果 `d49f3256b696b271a91d14d31bcabf5ffb989b0a`、B成果 `885dbb71f6d0f34fb723858a065771d5441eb9a9`。両側164件・独立出力7件成功、両軸要修正0件。改善差は未確認、読込量・token・未発動の網羅測定は欠測、CI/Claude Codeは未実行。⑯⑰達成とはしない。
 - R2の製品修正・未採用改善候補は抽出しない。小作業の省略方針を保持する。policyの固有checker/CI仕様とguideの実採用索引は配布から分離し、実移設は次セッション。worklogはjournal複製後に相対参照が壊れないようconfigの役割対応から辿る形へ修正した。
 
-### 配布前検証とレビュー
+### 検証・演習・レビュー
 
-- `python -B -m unittest discover -s tests -p test_distribution.py`：成功、11件。実体は同梱Python 3.12.14。初回23.232秒、schema修正後23.412秒。テスト自身が注入する失敗は期待する拒否として判定する。
-- 別の手順演習：成功。手順書の読取り照合器と明示反映・退避・復旧を一時Gitで実行し、5操作、同版再導入、途中失敗復旧、撤去後再導入を確認。新規fixtureは実在する `checks.py` と必須役割を記入し、SPECコピー・OKFなしで参照確認。pilot fixtureはpolicy→configだけの移設を許容し固有データを比較した。正式なokf-devkit移行ではない。
-- 演習原本：`C:/Users/rinta/AppData/Local/Temp/t0013-exercise.py`、結果 `t0013-exercise-result.json`、fixture `t0013-manual-1nltq2mk`。演習用v1 `f6c4920595802db008e712993d9249939228ed7c` / v2 `252abcf0c7f5879cd798662da1ee0b99248f8504` は正式配布SHAではない。
-- 仕様軸：初回に導入記録schemaがtrue/1.0を受理するP2指摘1件。整数型検査と操作前後不変の回帰ケースを追加し、再レビューは残存0件。seed/manual配置先の事前検査も補強した。
-- 標準軸：要修正0件。比較点は開始SHA、未コミット・未追跡配布ファイルと手順書・検証コードを含む。証拠欄は後続の記録コミットで確定する。
-- 文書：affectedは配布手順書を列挙。SPECはcode_globs未カバーだが正本として直接確認。index生成、lint error 0 / warn 0、diff check成功。
-- 公開対象確認：現在の12コミット・174個の一意blob、ファイル一覧と履歴・差分を確認。秘密鍵・主要token形式の検査で一致なし（完全な秘密情報検出の保証ではない）。既存調査用 `.agents/skills` はMIT通知を保持し、配布manifest対象外。branch一つだけを送信し、他worktreeの作業・比較の隔離成果は送らない。
+- 同梱Python実体：`C:/Users/rinta/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe`、Python 3.12.14。PATHのpythonが使えるという前提にしない。
+- `python -B -m unittest discover -s tests -p test_distribution.py`：成功11件。初回23.232秒、schema修正後23.412秒、新URL変更後23.251秒、GitHub独立clone側23.396秒。fixture内の故障は期待する拒否として判定する。
+- unittestとは別の明示手順演習：GitHub取得物を一時Gitへ入れ、新規導入、同版再導入、更新、巻戻し、途中失敗復旧、pilot明示移行、撤去、撤去後再導入の8ケース成功。新規fixtureでは実在するchecks.pyと役割を記入し、非OKF・SPECコピーなしで参照確認。pilotはpolicy→configの列挙差分だけを許容して既存データを比較した。
+- 演習スクリプト原本：`C:/Users/rinta/AppData/Local/Temp/t0013-exercise.py`。GitHub版結果：同Tempの `t0013-github-exercise-result.json`、fixture `t0013-manual-81ni6g3r`。演習用v1 `ea64eb363bbc8c7988739f7a723c9664e6b058fc` / v2 `4292095914e5fb0b3e6e6855f29948a8fb04e428` は正式配布SHAではない。コアの追加・変更・削除、固有領域保持、入口重複なし、復旧後照合を確認した。
+- 仕様軸：初回P2指摘1件（導入記録schemaがtrue/1.0を整数1として受理）。整数型検査と操作前後不変の回帰を追加、再レビュー残存0件。seed/manual配置先も事前検査へ補強。
+- 標準軸：要修正0件。比較点は開始SHA、未コミット・未追跡の配布物と手順書・検証コードを含む。再開後のURL変更は旧版との差分を直接照合し、範囲がURL・記録だけであることとsuiteを確認した。
+- 文書：affectedは手順書を列挙。index生成、lint error 0 / warn 0、index check、diff check成功。初期SPECはcode_globs未カバーだが正本として直接確認。配布変更のlogはCLIで生成し、記録コミットへ分ける。
 
-### 次セッションへ残す範囲
+### 再試行と公開の履歴
 
-okf-devkitの実移行・install.json新設・固有強制点と採用索引の実移設・対象venv全件検証・変更宣言検査は未実行（今回の利用者指定）。CI・Claude Code実機も未実行。T-0008の状態更新と後続タスク詳細化は行っていない。
+- 旧ローカル配布候補 `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` と引継ぎ `84a345f` は履歴として残す。コア/manifestは新配布版と同一だが、導入記録の出所には新URLを使う。
+- 旧名への作成＋pushは自動承認レビューが実行前に拒否（既存履歴全体の公開承認を確認できないため）。これは当時の実行不能として保持する。その後、既存履歴・設計・バックログ・MIT通知付きスキル・今回成果の公開範囲を提示し、利用者が新リポジトリを作成してURLを指定した。新URLへのpushは承認され成功し、取得確認も成功した。
+- 公開前に既存12コミット・174一意blobの内容種別と履歴・差分を確認し、秘密鍵・主要token形式で一致なし。完全な機密検出保証とはしない。調査用 `.agents/skills` はMIT通知を保持し、配布manifestの対象外。
 
-### 配布版の固定
+### 残作業と次の一手
 
-- 配布物コミット：`45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc`（harness）。このSHAの配布物は以後書き換えず、検証・引継ぎ記録は別コミットにする。
-- manifest：`distribution/manifest.json`、`sha256-canonical-text-v1` によるSHA-256 `46d193e267973b8d3b3808f5d0c2fea3f953aff5b234ab3e97b8d2a4d8004a03`。コミット内blobと作業ツリーの配布全11本を同方式で照合済み。
-- 公開待ち：publicリポジトリ作成＋pushは自動承認レビューが拒否（作成承認だけでは既存履歴・ファイル全体の公開承認を確認できないため）。履歴12コミットと既存設計・バックログ・MIT通知付き調査用スキル・今回成果の具体範囲を提示して追加確認中。GitHubからの取得はまだ成功としない。
-
-### 中断時の次の一手
-
-公開範囲の回答が承認なら、上記配布コミットを含む `codex/t-0013-distribution` だけを `https://github.com/shirashu687/harness` へ送信する。認証確認済み所有者はshirashu687、public作成自体は承認済み。作成＋pushのツール呼出しは実行前に拒否され、今回remoteはまだ存在しない。GitHubの存在を再確認してから作成・接続し、別の一時cloneで配布完全SHAをcheckout、manifestと11本・手順書を照合し、そのcloneでunittestと別手順演習を実行してgithub-source-retrievalを更新する。回答が拒否なら公開しない。
-
-移行セッションは、このGitHub取得確認が済んだ配布SHAと手順書を読み、okf-devkitの現在HEAD・作業ツリーを再確認して、policy固有情報と採用索引の移設差分を列挙するところから開始する。現時点ではGitHub取得確認が未達のため、正式配布元確立済みとは扱わない。
-
-retro：今回の差分・検証・review・引継ぎを照合。schema型の検査漏れは独立reviewで検出・回帰を追加、環境のGit管理領域/認証アクセスと公開承認境界は既存権限を保って対処した。原因は数値等価と形式型の区別不足、公開範囲の粒度不足であり、再発・改善効果の数値は未測定。新しい共通ルールや対象側ledgerの実データを追加せず、今回の修正と未解決の公開承認を本タスクに記録して引き継ぐ。
-
-### 配布先の確定（再開）
-
-利用者が `https://github.com/shirashu687/ai-dev-harness.git` を作成し、このURLで進めるよう指定した。旧名harnessへの作成計画を取り下げ、手順書と検証コードの出所URLを新URLへ変更する。旧配布SHAは履歴として保持し、新しい検証済みコミットを正式配布候補とする。
+- okf-devkit実移行・install.json新設・policy固有強制点とguide採用索引の実移設・対象venv全件検証・変更宣言検査は未実行（利用者指定）。CI・Claude Code実機も未実行。fixtureの成功で置き換えない。
+- 終了時にokf-devkitは開始と同じ `9724d5dc1095a433d654d41444c7fe450b3c7443`、作業ツリー変更なしを再確認した。
+- 次セッションの一手：上記GitHub URL・完全SHAの手順書を読み、okf-devkitの最新HEADと現物を確認して、policy→config・guide採用索引→profileの移設差分と保持対象を列挙する。対象configに従ってworklogと変更宣言を用意してから移行する。
+- retro：差分・検証・review・引継ぎを照合。schema型の検査漏れは修正し回帰を追加、公開承認境界は具体的な範囲提示と利用者の指定で解消。再発や改善効果は未測定。新しい共通規定や対象側ledger実データを追加せず、今回の結果と残作業を本タスクに記録した。
