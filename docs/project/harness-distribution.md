@@ -14,7 +14,7 @@ related: ["/backlog/T-0013-extract-distributable-core.md"]
 
 # 共通ハーネス配布物の導入と保守
 
-配布元は `https://github.com/shirashu687/harness`。使う完全SHAと確認結果は [T-0013](/backlog/T-0013-extract-distributable-core.md) の結果を参照する。本書中の例示値を実在値に置き換える。タグ・ブランチの最新状態で配布版を代用しない。契約の正本は配布コミット内の `HARNESS_SPEC.md` §9.1.2〜§9.2.1。
+配布元は `https://github.com/shirashu687/ai-dev-harness.git`。使う完全SHAと確認結果は [T-0013](/backlog/T-0013-extract-distributable-core.md) の結果を参照する。本書中の例示値を実在値に置き換える。タグ・ブランチの最新状態で配布版を代用しない。契約の正本は配布コミット内の `HARNESS_SPEC.md` §9.1.2〜§9.2.1。
 
 配布はmanifestの11ファイルだけ。coreの6本を継続管理し、seedは初回作成後project所有、manualは既存入口へ反映する断片である。上流は対象側から直接導入する。Gitリポジトリ全体のcloneを対象へコピーしない。
 
@@ -25,7 +25,7 @@ PowerShell、Git、Python標準ライブラリを使う。次のPython実体は�
 ```powershell
 $taskPython = (Get-Command python -ErrorAction Stop).Source
 & $taskPython --version
-$taskRepository = 'https://github.com/shirashu687/harness'
+$taskRepository = 'https://github.com/shirashu687/ai-dev-harness.git'
 $taskCommit = '<確認済みの40桁SHA>'
 $taskSource = '<新しいcloneの絶対パス>'
 $taskTarget = '<導入先Gitルートの絶対パス>'
