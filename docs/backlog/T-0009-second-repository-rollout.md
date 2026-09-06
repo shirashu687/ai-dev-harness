@@ -20,7 +20,7 @@ accepts: ["⑱", "⑲"]
 spec: ["§5.1", "§5.5", "§9", "§10"]
 target: ScheLiveApp
 evidence: []
-related: ["/backlog/T-0008-pilot-two-products.md", "/backlog/T-0010-plugin-and-bootstrap.md"]
+related: ["/backlog/T-0008-pilot-two-products.md", "/backlog/T-0013-extract-distributable-core.md", "/backlog/T-0010-plugin-and-bootstrap.md"]
 ---
 
 # ScheLiveAppへ独立した二依存として導入する
@@ -35,7 +35,7 @@ mattpocock/skillsはScheLiveApp自身から上流へ直接接続し、本ハー�
 
 ## 進め方
 
-既存役割を写像して不足だけを導入し、上流更新と自前コア更新を別コミットで一回ずつ演習する。その後、巻戻しと撤去を行い、固有領域と本来の検証が保たれるか確認する。
+T-0013完了を着手条件とし、そこで確立した配布物を使う（→ SPEC §9.1.1）。既存役割を写像して不足だけを導入し、上流更新と自前コア更新を別コミットで一回ずつ演習する。その後、巻戻しと撤去を行い、固有領域と本来の検証が保たれるか確認する。
 
 ## 決定と根拠
 
@@ -65,4 +65,4 @@ mattpocock/skillsはScheLiveApp自身から上流へ直接接続し、本ハー�
 
 ## 結果
 
-未着手。T-0008完了後に詳細化する。
+未着手。T-0013完了後に詳細化する。
