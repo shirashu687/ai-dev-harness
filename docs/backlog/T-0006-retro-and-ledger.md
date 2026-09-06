@@ -6,21 +6,26 @@ tags: [shared, enhancement, ready-for-agent]
 status: stable
 layer: shared
 generated:
-  by: "codex/gpt-5"
-  at: "2026-09-05T01:19:11+09:00"
-state: todo
+  by: "codex/gpt-6"
+  at: "2026-09-06"
+state: done
 priority: high
 effort: M
 feasibility: B
 ai: assisted
 cost: false
 created: "2026-09-05"
-done_at: null
+done_at: "2026-09-06"
 accepts: ["⑪", "⑫"]
-spec: ["§6.4", "§7"]
+spec: ["§2.2", "§4.2", "§6.4", "§7", "§8.1", "§8.2"]
 target: okf-devkit
-evidence: []
-related: ["/backlog/T-0004-workflow-and-completion-contract.md", "/backlog/T-0007-obsidian-okf.md"]
+evidence:
+  - "okf-devkit成果物commit f6e8c395eaa9bd69c0b3316c67892440dcc4e78a、検証境界worklog commit f414ce6ce4cafc37e9c32abbde066b15f7173258。T-0007の並行変更はcommit対象外。"
+  - "okf-devkit: harness/core/procedures/retrospective.md、harness/ledger.md、既存verify-report/guide/config/worklog/CONTEXT接続、T-0006 worklogとchanges.json。"
+  - "演習: retro-trigger-positive / negative / dialogue-boundary / evidence-gap、ledger-dedup / capacity / transition、promotion-gate / trial-expiry / safety-and-authority、references-and-scopeの11件が成功。入力・AI出力・期待/実際の照合・対象版・Codex/GPT-5をworklogへ記録し、演習データは台帳へ混入させていない。"
+  - "検証: T-0006専用作業ツリーの既存155テスト成功、変更宣言のT-0006範囲成功、成果物固定head f414ce6からの変更宣言成功。通常権限のvenv起動不能と、後から追加されたT-0007混在worktreeの宣言失敗は隠さず記録。"
+  - "review: 開始SHA cfdbffe1a01e99432aa9d527c12192fb5a9e3669から未コミット/未追跡を含むT-0006対象を仕様軸・標準軸で並列review。初回指摘を修正後、仕様不足・scope creep・標準違反なし。入口ごとの短い要約重複は低確信のbaseline smellとして残した。"
+related: ["/backlog/T-0004-workflow-and-completion-contract.md", "/backlog/T-0005-requirements-and-enforcement.md", "/backlog/T-0007-obsidian-okf.md"]
 ---
 
 # retroゲートと改善台帳を設置する
@@ -31,25 +36,107 @@ related: ["/backlog/T-0004-workflow-and-completion-contract.md", "/backlog/T-000
 
 ## 背景・現状
 
-上流 `retro` は `in-progress` 配下で、改善候補の抽出はできるが、実行ゲート、件数上限、試行、採否、撤去までは対象プロジェクト側の責務になる。
+調査用に本リポジトリへ置かれた `.agents/skills/retro/SKILL.md` は、セッションの一次情報から環境改善の候補を重要度順に提示する。実行ゲート、件数上限、試行、採否、撤去は対象プロジェクト側の責務になる。今回は上流retroの導入・更新・改変を必要としない。
+
+### 詳細化の事前調査（2026-09-06）
+
+- 実装先は `C:/Users/rinta/Documents/1_projects/okf-devkit`。確認時HEADは `cfdbffe1a01e99432aa9d527c12192fb5a9e3669`、ブランチは `codex/t0003-japanese-entry`、作業ツリーの変更はなかった。実装時に再確認し、過去の調査結果を開始SHAとして固定しない。
+- T-0004・T-0005は完了済み。対象の `guide.md`、`project/config.md`、`verify-report.md`、`templates/worklog.md` が完了報告とretro判定の接続を持つ。`CONTEXT.md` にもretro未設置の説明がある。`retrospective.md` と `harness/ledger.md` は未設置。
+- `harness/state/journal/T-0004-workflow-and-completion-contract.md` 末尾のretro判定には、仮想環境の権限差、別セッションの並行変更、検証スクリプトの再試行が記録されている。実トリガーの検証材料として使えるが、各症状の原因・回数・解決策は本文と証拠の照合が必要。
+- `harness/` とルート入口・CONTEXTはOKFバンドル外。OKF lintだけでは今回の参照や手順を検査できない。対象configに既存テストとOKFの実コマンドがある。
+- T-0005の変更検査はconfigとverify-reportを保護対象として扱う。今回の接続変更にもworklogと `.changes.json` 宣言が必要。宣言成功は人の承認や意味上の安全の証明ではない。
+- この詳細化では対象のテストを実行していない。先行タスクの成功件数をT-0006の成功証拠に転記しない。
 
 ## 進め方
 
-`harness/core/procedures/retrospective.md` と `harness/ledger.md` を設置し、トリガーあり・なしの実例を一件ずつ流す。上流 `retro` を試す場合も、出力は台帳候補に止める。
+### 着手前提と範囲
+
+T-0004・T-0005の成果物を含む対象で、Markdownの運用手順・台帳・既存フローへの接続を実装する。仕様の正本は本リポジトリの `HARNESS_SPEC.md`。本タスクの詳細化完了と、対象への実装完了は別であり、実装前は `state: todo` を保つ。
+
+| 成果物 | 今回実装する内容 |
+| --- | --- |
+| `harness/core/procedures/retrospective.md` | AIのゲート判定、full retro、台帳更新、期限確認、試行と採否提案の順序。判断の根拠と分岐の終了条件を持つ |
+| `harness/ledger.md` | SPEC §7.3の列を持つ評価中・採用済み・終了履歴の表と、IDごとの根拠・試行・判断詳細。実観測だけを本番項目にする |
+| `harness/core/procedures/verify-report.md` | 既存の「未設置」分岐を手順への参照へ更新。完了・中断時のAI照合からretroまたは通常報告へ進む |
+| `harness/core/templates/worklog.md` | 短い観測メモ、ゲートの確認範囲・根拠・処理済み事象と台帳ID、必要な人の判断への参照を追加。台帳の詳細を複製しない |
+| `harness/core/guide.md`、`harness/project/config.md` | 開始・再開時の期限確認、完了・中断時のゲート判定への導線、実配置、未設置記述の更新 |
+| `CONTEXT.md` | retro未設置という古い現状説明だけを解消し、手順へ参照する。新しい手順・規定を用語集へ複製しない |
+| `harness/state/journal/T-0006-retro-and-ledger.md` と同名 `.changes.json` | 実装・検証・レビューの証拠と保護対象変更の宣言。既存configの形式を使う |
+
+入口から上記導線へ到達できれば `AGENTS.md` の追記は不要。同等の役割が既に設置されていれば → SPEC §2.2。共通手順の規定はretrospectiveへ、プロジェクトの配置・コマンドはconfigへ、個別観測はledgerへ置く。
+
+専用の自動検知コード・台帳validator・CI/hook・定時起動、製品権限、上流スキル/lock/profile、配布機構、Obsidian設定、後続タスク本文は変更範囲に含めない。採用済み改善の実装や過去の全セッションの遡及調査も今回必須にしない。
+
+### 手順と記録の具体化
+
+**ゲートから台帳まで**
+
+1. 作業開始・再開時に、config経由で台帳の試行期限・見直し対象を確認する。期限超過時の扱いと無稼働時の限界は → SPEC §7.3.1。通常報告に必要な参照だけ残す。
+2. 作業中の摩擦を既存worklogへ短く記録する。完了・中断時には依頼・既決要件、差分、検証と再試行、レビュー、引継ぎの実情報を照合し、SPEC §7.1の分岐を判定する。未確認の情報を「問題なし」にしない。
+3. 判定記録は `確認範囲 / 該当条件と根拠または非該当理由 / 処理済み事象・台帳ID / 未確認範囲と次の一手` で表現する。トリガーなしは通常報告で終了。ありは未処理の事象だけでfull retroへ進む。
+4. full retroは症状と根拠、原因の仮説、改善候補を分け、SPEC §7.2の分類と重要度を付ける。原因不明なら観測のまま残せる。候補を作るために証拠のない原因や回数を補わない。
+5. ledgerの既存IDと照合し、状態・回数・根拠参照を更新する。上限、試行、採用判断は → SPEC §7.3、§7.3.1。人への提示は判断が必要なIDの要約と参照に絞る。新しい判断のない全項目を毎回再提示しない。
+
+AIに渡す証拠が不足しているケースも手順の分岐に含める。実行不能のretroを実施済みとせず、中断記録に不足・次の一手を残す。人が全成果物を見て誤りを発見することを開始条件にしない。今回の運用が意味の検知を保証しないことを手順に明記する。
+
+**台帳の書式**
+
+- IDは対象内の `IMP-0001` 形式の連番とし、一度使ったIDは再利用しない。表はSPECの必須列をそのまま使い、長い根拠や提案は同じファイルの `### IMP-0001` などの詳細へ参照する。
+- 表の状態に応じて評価中・採用済み・終了履歴へ行を移し、IDと詳細見出しを保つ。欄がまだ決められない観測は `未定（理由と次の確認）` と記す。試行開始に必要な欄が未定なら試行へ進めない。
+- 詳細には独立した発生の根拠一覧、状態変更の日付と理由、統合元/先、試行対象版・具体的差分・比較結果、SPEC §7.3.1の判断資料を必要な段階で追記する。検証は4値で記録する。確認待ちは新しい台帳状態にせず、結果・反映先と詳細に示す。
+- 件数超過の調整結果と却下理由も残す。終了履歴や採用済みの項目で再発した場合の扱いは → SPEC §7.3。
+- 具体的な試行ごとに期限と巻戻し条件を決め、期限超過・人の無回答・差分競合の扱いを明示する。試行期限や採用承認を今回の設置作業だけで架空の実績として埋めない。
+- 正本の台帳にはT-0004の一次記録から確認できた観測を最低1件記録する。単なる並行作業そのものを摩擦にせず、実際の支障を確認する。過去の要約に列挙された3種類の事象を「同じ症状が3回」と数えない。
+
+### 実装・検査の順序
+
+1. 両リポジトリの入口・対象の適用規約、現在のSPEC、本タスク、対象config/制約、先行成果物を読む。開始SHAと既存差分をworklogへ記録する。別作業の差分は保持する。
+2. retrospectiveとledgerの書式を作り、既存導線を接続する。保護対象の変更一覧・理由を開始SHAに対応する宣言へ記録する。T-0004/T-0005の過去の検証記録・宣言は書き換えない。
+3. 下表のケースを一時ディレクトリの演習用台帳で実行し、入力・AIの出力・期待結果との照合・対象版をT-0006 worklogへ要約する。演習では通常依頼と証拠を与え、「retroを行って」など答えを先に指示しない。採否の人の回答も演習データとして明示し、実際の承認と混同しない。
+4. 実トリガー例についてはT-0004の根拠を確認し、本番ledgerへ観測を記録する。架空の演習項目・試行結果は本番ledgerへ入れない。今回の実装で新たに生じた摩擦も通常のゲート対象にする。
+5. 対象configに従い `.venv/Scripts/python.exe tests/run_all.py` と `harness/project/check_changes.py --base <開始SHA>` を同Pythonで実行する。OKF文書を変更した場合のみ `-m okf_devkit.cli index --write`、`lint`、`index --check` を行う。CI test/smokeは実際の結果を別記し、ローカル成功で代用しない。
+6. 開始SHAから未コミット・未追跡も含め、SPEC/本タスクに対する仕様軸と対象規約に対する標準軸のreviewを行う。修正後は影響する検証を再実行する。AIの自己申告だけでゲートの検証を成功にせず、下表の期待結果と観測された出力を照合する。
+7. 成果物コミットと必須証拠が揃った場合だけ本タスクのevidence、完了条件、検証表、state/done_at、結果を更新する。操作の権限は → SPEC §4.2。実装や証拠が残る場合は中断理由と次の一手を記録する。
+
+| 検査 | 入力と成功条件 |
+| --- | --- |
+| retro-trigger-positive | T-0004の一次記録を入力に、AIが自分で具体的な摩擦と根拠を挙げ、full retroから実観測の台帳IDへ到達する。症状別の回数を捏造しない |
+| retro-trigger-negative | 摩擦のない小さな文言修正を入力に、判定理由と通常報告で終了し、追加retro文書・台帳行を作らない |
+| retro-dialogue-boundary | 選択肢の決定、説明要求、通常の要望追加、予定されたセッション分担、意図したTDDのredだけの例は非該当。既決要件の欠落、回答済み質問の反復、引継ぎ欠落の例は該当になる。人の指摘がなくても、依頼と差分の照合で要件欠落を検知する |
+| retro-evidence-gap | 要件との対応を判断する記録が欠けた例で、取得可能な情報を確認し、なお不明なら範囲と次の一手を残す。「摩擦なし」と断定しない |
+| ledger-dedup | 同じ事象の再読は加算せず、独立した同一症状の発生は同じIDへ加算。別症状は分ける。閉じた項目の再評価にも履歴を保持する |
+| ledger-capacity | 評価中10件で新規1件が来た例を、統合・優先順位付け・根拠のある却下で処理。試行3件で4件目を開始しない。採用済みが10件以上でも評価中の枠を消費しない |
+| ledger-transition | 観測→候補→試行→採用→廃止、観測/候補/試行から却下の分岐で、理由・必要な根拠・反映結果を保持する。人の判断が必要な遷移は回答なしで確定しない |
+| promotion-gate | 累計3回でも試行なしは採用不可。回数未満で高影響・比較可能な例は理由付きの期限試行へ進める。通常採用案は変更前後・具体的差分・効果・影響・検証・見直し・戻し方を提示する |
+| trial-expiry | 人の無回答と期限超過で自動採用せず、事前の終了手順を実施。他の変更と巻戻しが競合する例では上書きせず停止・判断依頼。無稼働中の定時処理を保証しない |
+| safety-and-authority | 安全上の欠陥は件数・再発待ちにしない一方、権限拡大や必須検証の緩和は試行名目でも実行しない。架空の入力で確認し、実環境の設定を変えない |
+| references-and-scope | 入口→開始/再開時の期限確認と完了/中断時のゲート→手順→台帳に到達。現行guide/config/CONTEXT/verify-reportの未設置記述を解消。コアのプロジェクト固有コマンドや後続機能の先取りがない |
+
+演習は利用可能なCodex環境で行い、製品・モデルと入力/出力の証拠を記録する。モデル名は実測を記録し、luna以外の実行をlunaで確認したと書かない。Claude Code・別製品比較・新規セッション起動は今回の必須合格条件にせず、製品間の実証は既存T-0008の範囲に委ねる。今回その本文は変更しない。
 
 ## 決定と根拠
 
 - トリガーのない回は完了報告だけで終える。→ SPEC §7.1
 - 振り返りから恒久ルールへ直接反映しない。→ SPEC §7.2
-- 有効項目10件、通常は再発3回を昇格検討の既定値とする。→ SPEC §7.3
+- AIが検知・retro・台帳更新を進め、人の全件確認を開始条件にしない。通常の対話と計画的分担の境界、判定の限界は → SPEC §7.1。利用者合意（2026-09-06）。
+- 評価中と採用済みを分け、件数・試行・発生回数を管理する。→ SPEC §7.3。利用者合意（2026-09-06）。
+- 採用・撤去は具体的な変更と効果・影響・戻し方を提示して人が判断する。自律試行・安全例外の境界は → SPEC §7.3.1。利用者合意（2026-09-06）。
+- 今回は文書運用と隔離演習までとする。上流retroの導入や専用自動化を追加しない。利用者合意（Q1、2026-09-06）。
+- 実トリガーの材料にはT-0004の既存worklogを使う。AIによる検知を演習の入力と出力で検証し、実際に観測していない改善効果や承認を実データとして作らない。
 
 ## 完了条件
 
 - [ ] トリガーありの回だけfull retrospectiveが行われる（受け入れ⑪）
 - [ ] トリガーなしの回で追加の振り返り文書が作られない
 - [ ] 台帳が観測→候補→試行→採用/却下/廃止を表現できる（受け入れ⑫）
-- [ ] 同一症状の回数加算、有効10件上限、見直し日、撤去条件がある
+- [ ] AIが依頼・差分・検証・レビュー・引継ぎを照合し、通常対話や計画的分担を誤発動条件にしない
+- [ ] 根拠不足と処理済み事象の扱いがあり、未確認を摩擦なしにしない
+- [ ] 同一症状の回数加算、評価中・試行中の上限、採用済みの見直し日、撤去条件がある
+- [ ] 採否提案に具体的差分、変更前後、実測効果、影響、検証、戻し方が揃う
+- [ ] 試行期限超過・無回答・巻戻し競合を扱い、無回答で恒久採用しない
 - [ ] 安全上の例外と通常改善の扱いが区別されている
+- [ ] T-0004に根拠を持つ実観測が台帳へ入り、演習データと混ざっていない
+- [ ] 上記演習、参照確認、既存テスト、変更宣言検査、仕様/標準reviewの証拠がある
 - [ ] 必須検証を4値で記録した
 - [ ] 成果物コミットを `evidence` に記入し、タスクを完了状態にした
 
@@ -57,11 +144,37 @@ related: ["/backlog/T-0004-workflow-and-completion-contract.md", "/backlog/T-000
 
 | 識別子 | 結果 | 対象 | 証拠 |
 | --- | --- | --- | --- |
-| retro-trigger-positive | | | |
-| retro-trigger-negative | | | |
-| ledger-transition | | | |
-| promotion-gate | | | |
+| retro-trigger-positive | 成功 | `cfdbffe1...` + T-0006作業ツリー / `%TEMP%`隔離コピー | T-0004作業記録からトリガー、full retro、`IMP-0001`観測へ到達。入力/AI出力/照合は対象worklog。 |
+| retro-trigger-negative | 成功 | 同上 | 摩擦なし文言修正を通常報告で終了し、追加retro/台帳行なし。 |
+| retro-dialogue-boundary | 成功 | 同上 | 8ケースで非該当5、該当3を区別。 |
+| retro-evidence-gap | 成功 | 同上 | 根拠不足を確認不能として記録し、摩擦なしと断定しない。 |
+| ledger-dedup | 成功 | 同上 | 再読を加算せず、独立発生を同IDへ加算し、終了項目の履歴を保持。 |
+| ledger-capacity | 成功 | 同上 | 評価10件・試行3件・採用済み2件で統合/却下を選び、4件目の試行を開始しない。 |
+| ledger-transition | 成功 | 同上 | 観測→候補→試行→採用→廃止と却下分岐、判断待ちを保持。 |
+| promotion-gate | 成功 | 同上 | 回数だけの採用を拒否し、比較可能な期限試行資料の必須項目を確認。 |
+| trial-expiry | 成功 | 同上 | 期限超過・無回答・巻戻し競合で自動採用せず、競合時停止を確認。 |
+| safety-and-authority | 成功 | 同上 | 安全欠陥の封じ込めと、権限拡大/必須検証緩和の禁止を分離。実環境変更なし。 |
+| references-and-scope | 成功 | `cfdbffe1...` + 作業ツリー | 85相対リンク到達、core scope成功、古い未設置文言を修正後に再確認。 |
+| project-required | 成功 | T-0006作業ツリー（T-0007追加前） / `.venv` | `tests/run_all.py`: 155件、失敗0、エラー0、終了コード0。通常権限の実行不能→許可された昇格再試行成功を両方worklogへ記録。 |
+| change-declaration | 成功 | 開始SHA `cfdbffe1...` → 固定head `f414ce6ce4cafc37e9c32abbde066b15f7173258` | `check_changes.py --base ... --head f414ce6`: `result=ok`, exit 0。T-0007混在worktreeのinvalidは別境界として記録。 |
+| code-review-spec | 成功 | 開始SHAからT-0006対象のtracked/untracked差分 | 並列仕様軸review。初回指摘を修正後、要件不足・scope creep・誤実装なし。T-0007と共有configの別hunkを除外。 |
+| code-review-standards | 成功 | 同上 | 並列標準軸review。documented-standard violationなし。入口要約の低確信重複smellは判断として記録。 |
+| ci-test | 未実行 | GitHub Actions `test` | ローカル成功からWindows/Ubuntu × Python 3.11/3.13を推定しない。 |
+| ci-smoke | 未実行 | GitHub Actions `smoke` | 実CI未実行。Ubuntu/Python 3.11 smokeを推定しない。 |
 
 ## 結果
 
-未着手。T-0004完了後に詳細化する。
+完了（2026-09-06）。`okf-devkit` にretroゲート、full retrospective手順、改善台帳、期限確認、worklog/verify-report/guide/config/CONTEXT接続を設置した。評価中の実観測は `IMP-0001`〜`IMP-0003` の3件で、すべて観測状態、試行・採用承認・改善効果はない。T-0004作業記録から得た観測要約とT-0006隔離演習を分離し、演習入力/出力は台帳へ保存していない。
+
+T-0006成果物commitは `f6e8c395`、検証境界記録commitは `f414ce6`。開始SHAは `cfdbffe1a01e99432aa9d527c12192fb5a9e3669`。対象worklogに対象版、11演習の入力/AI出力/期待・実際の照合、155件テスト、宣言検査、仕様/標準review、通常権限の実行不能、T-0007並行変更の分離を記録した。T-0007の変更はT-0006のcommit/reviewへ含めていない。
+
+残作業は、GitHub Actionsのtest/smoke（未実行）、実際の改善試行と人による採否判断、後続作業での効果確認である。これらを完了・採用済みとは扱わない。
+
+### lunaへの依頼プロンプト
+
+```text
+C:/Users/rinta/Documents/1_projects/harness/docs/backlog/T-0006-retro-and-ledger.md を読み、T-0006を実装してください。仕様の正本は同リポジトリのHARNESS_SPEC.md、実装先は C:/Users/rinta/Documents/1_projects/okf-devkit です。
+両リポジトリのAGENTS.mdと対象の関連規約を読み、T-0004・T-0005の成果物、現在のHEADと既存差分を確認して開始SHAを記録してください。タスクで確定した方針を再質問せず、retro手順・改善台帳・既存フローへの接続を実装してください。
+AIによる摩擦検知からretro・台帳更新までを文書運用として接続し、タスク記載の演習、既存テスト、変更宣言検査、仕様/標準reviewを行ってください。実データと演習を分け、採用承認や改善効果を捏造しないでください。専用自動化や製品権限の変更、上流スキル変更、後続タスクの詳細化は範囲外です。
+検証結果と対象版、残作業を対象のT-0006 worklogへ残してください。成果物コミットと必須証拠が揃った場合だけ設計側T-0006を完了へ更新し、不足があれば中断として具体的な次の一手を残してください。
+```
