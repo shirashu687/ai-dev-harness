@@ -19,7 +19,7 @@ done_at: null
 accepts: ["⑲"]
 spec: ["§2.3", "§9.1.1", "§9.1.2", "§9.1.3", "§9.2", "§9.2.1", "§10"]
 target: harness
-evidence: []
+evidence: ["45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc"]
 related: ["/backlog/T-0008-pilot-two-products.md", "/backlog/T-0009-second-repository-rollout.md"]
 ---
 
@@ -174,16 +174,16 @@ GitHubの接続・取得確認はこの詳細化では実行せず、上記の�
 
 | 識別子 | 結果 | 対象（コミット・版） | 証拠（要約・ログ所在） |
 |---|---|---|---|
-| distribution-boundary | 未実行 | 実装時に記入 | 11ファイルの許可一覧、混入なし、schema・パス境界 |
-| source-version-and-install-record | 未実行 | 実装時に記入 | 配布元・SHA・manifest・導入記録・内容ハッシュの相互照合 |
-| github-source-retrieval | 未実行 | 実装時に記入 | GitHub URLから独立cloneで配布SHA・manifest・配布物・手順書を取得し照合 |
-| installed-links-and-profile | 未実行 | 実装時に記入 | 導入後の参照、候補/採用済み、非OKFでの日常手順 |
-| lifecycle-procedures | 未実行 | 実装時に記入 | 5操作、同版再導入、追加削除を含む巻戻し、撤去時の入口 |
-| conflict-and-recovery | 未実行 | 実装時に記入 | 不明既存物・手修正・記録破損の事前停止、途中失敗復旧 |
-| pilot-reconciliation | 未実行 | 実装時に記入 | okf-devkitへの実移行、配布内容一致、固有領域と既存機能の保持 |
-| pilot-required-checks | 未実行 | 実装時に記入 | 対象venvの既存テストと変更宣言検査。CI/製品は別扱い |
-| harness-docs | 未実行 | 実装時に記入 | 実装で作成する手順書を含むOKF lint・index確認・diff check |
-| implementation-review | 未実行 | 実装時に記入 | 2リポジトリの固定比較点からの仕様軸・標準軸 |
+| distribution-boundary | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 11ファイル、core6本、混入・schema・パス境界をunittestで確認 |
+| source-version-and-install-record | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 固定Git blobと現物全11本一致。manifest正規化SHA-256は結果欄。fixture導入記録を再計算照合 |
+| github-source-retrieval | 実行不能 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 自動承認レビューが作成＋pushを拒否。既存履歴を含む公開範囲の追加回答待ち。リモートは未作成・未接続 |
+| installed-links-and-profile | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 非OKF fixtureの役割と実コマンドを記入し、journal複製後を含むリンク・候補/採用区別を確認 |
+| lifecycle-procedures | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | unittestとは別の一時Gitで5操作・同版再導入・追加変更削除を含む巻戻し・撤去時参照を演習 |
+| conflict-and-recovery | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 手修正・欠落・未知ファイル・不正記録は操作前不変。故障注入、限定復旧、再試行、競合停止 |
+| pilot-reconciliation | 未実行 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 利用者指定で実移行は次セッション。pilot fixtureの成功とは区別 |
+| pilot-required-checks | 未実行 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 今回okf-devkitは変更しないため、移行後の対象venv・変更宣言検査は次セッション |
+| harness-docs | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | affectedで手順書を特定、index生成・lint error 0/warn 0・index check・diff check成功 |
+| implementation-review | 成功 | `45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc` | 今回範囲の二軸review。仕様1件修正後0、標準0。okf-devkit移行のreviewは未実行 |
 
 結果は成功 / 失敗 / 未実行 / 実行不能のいずれか。ここは実装成果物の検証表であり、詳細化中の文書検査を実装成功として転記しない。現在の未実行理由は実装を別セッションで行うため。必須条件の未達が残る場合はstateをdoneにしない。
 
@@ -212,3 +212,17 @@ GitHubの接続・取得確認はこの詳細化では実行せず、上記の�
 ### 次セッションへ残す範囲
 
 okf-devkitの実移行・install.json新設・固有強制点と採用索引の実移設・対象venv全件検証・変更宣言検査は未実行（今回の利用者指定）。CI・Claude Code実機も未実行。T-0008の状態更新と後続タスク詳細化は行っていない。
+
+### 配布版の固定
+
+- 配布物コミット：`45cad3ffeb17bfb01e8978d1afeca57ccf0a2efc`（harness）。このSHAの配布物は以後書き換えず、検証・引継ぎ記録は別コミットにする。
+- manifest：`distribution/manifest.json`、`sha256-canonical-text-v1` によるSHA-256 `46d193e267973b8d3b3808f5d0c2fea3f953aff5b234ab3e97b8d2a4d8004a03`。コミット内blobと作業ツリーの配布全11本を同方式で照合済み。
+- 公開待ち：publicリポジトリ作成＋pushは自動承認レビューが拒否（作成承認だけでは既存履歴・ファイル全体の公開承認を確認できないため）。履歴12コミットと既存設計・バックログ・MIT通知付き調査用スキル・今回成果の具体範囲を提示して追加確認中。GitHubからの取得はまだ成功としない。
+
+### 中断時の次の一手
+
+公開範囲の回答が承認なら、上記配布コミットを含む `codex/t-0013-distribution` だけを `https://github.com/shirashu687/harness` へ送信する。認証確認済み所有者はshirashu687、public作成自体は承認済み。作成＋pushのツール呼出しは実行前に拒否され、今回remoteはまだ存在しない。GitHubの存在を再確認してから作成・接続し、別の一時cloneで配布完全SHAをcheckout、manifestと11本・手順書を照合し、そのcloneでunittestと別手順演習を実行してgithub-source-retrievalを更新する。回答が拒否なら公開しない。
+
+移行セッションは、このGitHub取得確認が済んだ配布SHAと手順書を読み、okf-devkitの現在HEAD・作業ツリーを再確認して、policy固有情報と採用索引の移設差分を列挙するところから開始する。現時点ではGitHub取得確認が未達のため、正式配布元確立済みとは扱わない。
+
+retro：今回の差分・検証・review・引継ぎを照合。schema型の検査漏れは独立reviewで検出・回帰を追加、環境のGit管理領域/認証アクセスと公開承認境界は既存権限を保って対処した。原因は数値等価と形式型の区別不足、公開範囲の粒度不足であり、再発・改善効果の数値は未測定。新しい共通ルールや対象側ledgerの実データを追加せず、今回の修正と未解決の公開承認を本タスクに記録して引き継ぐ。
