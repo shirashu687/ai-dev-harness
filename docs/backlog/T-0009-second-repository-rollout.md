@@ -63,6 +63,8 @@ T-0013完了を着手条件とし、そこで確立した配布物を使う（�
 | rollback-remove | | | |
 | project-required | | | |
 
+T-0014で整備した [URL付きの導入依頼](/project/harness-distribution.md#ai-install) を入口に使い、導入体験の計測項目は同How-To §10に従ってworklogへ残す。実導入が先行した場合は、後日の入口確認と先行する導入結果を区別する。入口側の検証範囲は [T-0014](/backlog/T-0014-ai-distribution-entry.md) を参照する。
+
 ## 結果
 
 未着手。T-0013完了後に詳細化する。

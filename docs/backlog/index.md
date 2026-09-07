@@ -5,7 +5,7 @@
 <!-- okf:auto:start -->
 | state | 件数 |
 |---|---|
-| doing | 3 |
+| doing | 4 |
 | todo | 5 |
 | done | 5 |
 | dropped | 0 |
@@ -13,6 +13,7 @@
 ## doing
 * [代表作業3件と2製品で実証する](/backlog/T-0008-pilot-two-products.md) - `high` `L` - okf-devkitの実作業3件をClaude CodeとCodexで進め、品質・手戻り・検証・スキル起動・文脈負担を比較する。
 * [日本語の入口とスキル案内を設置する](/backlog/T-0003-japanese-entry-and-guide.md) - `high` `M` - okf-devkitの既存入口を保ちながら、作業分類・プロジェクト制約・上流スキルの呼出関係へ到達できる日本語ガイドを設置する。
+* [AIへのURL付き依頼で導入・更新できる入口を整備する](/backlog/T-0014-ai-distribution-entry.md) - `medium` `S` - Git配布のREADME入口と推奨固定版の記録を整え、URL付きの依頼から既存の導入・更新手順へ接続する。
 * [ObsidianとOKFの知識導線を接続する](/backlog/T-0007-obsidian-okf.md) - `medium` `M` - okf-devkitの同じMarkdownをObsidianで閲覧し、OKFの索引・検査と共存させながら別の正本や無制限な記録を作らない運用を確認する。
 
 ## todo
