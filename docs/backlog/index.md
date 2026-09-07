@@ -5,15 +5,14 @@
 <!-- okf:auto:start -->
 | state | 件数 |
 |---|---|
-| doing | 4 |
+| doing | 3 |
 | todo | 5 |
-| done | 5 |
+| done | 6 |
 | dropped | 0 |
 
 ## doing
 * [代表作業3件と2製品で実証する](/backlog/T-0008-pilot-two-products.md) - `high` `L` - okf-devkitの実作業3件をClaude CodeとCodexで進め、品質・手戻り・検証・スキル起動・文脈負担を比較する。
 * [日本語の入口とスキル案内を設置する](/backlog/T-0003-japanese-entry-and-guide.md) - `high` `M` - okf-devkitの既存入口を保ちながら、作業分類・プロジェクト制約・上流スキルの呼出関係へ到達できる日本語ガイドを設置する。
-* [AIへのURL付き依頼で導入・更新できる入口を整備する](/backlog/T-0014-ai-distribution-entry.md) - `medium` `S` - Git配布のREADME入口と推奨固定版の記録を整え、URL付きの依頼から既存の導入・更新手順へ接続する。
 * [ObsidianとOKFの知識導線を接続する](/backlog/T-0007-obsidian-okf.md) - `medium` `M` - okf-devkitの同じMarkdownをObsidianで閲覧し、OKFの索引・検査と共存させながら別の正本や無制限な記録を作らない運用を確認する。
 
 ## todo
@@ -24,6 +23,7 @@
 * [配布方式と保守責任を比較検討する](/backlog/T-0011-distribution-strategy.md) - `low` `M` - npx・Python・Codex/Claude Codeプラグイン等を安全性・保守負担・導入体験で比較し、共通ハーネスの配布方針を決める。
 
 ## done
+* [AIへのURL付き依頼で導入・更新できる入口を整備する](/backlog/T-0014-ai-distribution-entry.md) - 2026-09-07 完了 - Git配布のREADME入口と推奨固定版の記録を整え、URL付きの依頼から既存の導入・更新手順へ接続する。
 * [規模別フローと完了契約を設置する](/backlog/T-0004-workflow-and-completion-contract.md) - 2026-09-06 完了 - 小・通常・大の開発フロー、4値の検証報告、作業記録、セッション引継ぎをokf-devkitへ設置する。
 * [必須制約と強制点を接続する](/backlog/T-0005-requirements-and-enforcement.md) - 2026-09-06 完了 - okf-devkitの必須制約を既存CI・権限設定・差分レビューへ対応づけ、運用だけに依存する限界も明示する。
 * [共通コアを本リポジトリへ抽出し最小配布物を確立する](/backlog/T-0013-extract-distributable-core.md) - 2026-09-06 完了 - okf-devkitで実証した共通コアをharnessへ抽出し、二つ目の導入前にGitで版管理する最小配布物と管理手順を確立する。

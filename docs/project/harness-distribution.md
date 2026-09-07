@@ -7,7 +7,7 @@ status: stable
 layer: shared
 generated:
   by: codex/gpt-6
-  at: "2026-09-07T13:51:59Z"
+  at: "2026-09-07T14:05:39Z"
 code_globs: ["README.md", "distribution/**", "tests/test_distribution.py"]
 related: ["/backlog/T-0013-extract-distributable-core.md", "/backlog/T-0014-ai-distribution-entry.md"]
 ---

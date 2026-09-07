@@ -7,19 +7,19 @@ status: stable
 layer: shared
 generated:
   by: "codex/gpt-6"
-  at: "2026-09-07T14:02:16Z"
-state: doing
+  at: "2026-09-07T14:05:39Z"
+state: done
 priority: medium
 effort: S
 feasibility: B
 ai: assisted
 cost: false
 created: "2026-09-07"
-done_at: null
+done_at: "2026-09-07"
 accepts: ["④"]
 spec: ["§9.1.3", "§9.1.4", "§9.2.1", "§9.3"]
 target: harness
-evidence: []
+evidence: ["5cd28d6806d1d030bf321e464116a9e810c18a1e"]
 related: ["/backlog/T-0011-distribution-strategy.md", "/backlog/T-0013-extract-distributable-core.md", "/backlog/T-0009-second-repository-rollout.md", "/project/harness-distribution.md"]
 ---
 
@@ -53,14 +53,14 @@ T-0011でGit配布を継続する利用方針を検討し、プラグイン化�
 - [x] 推奨版なし・記録不正・版を解決できない場合の扱いが既存契約につながっている
 - [x] 固定SHAの実在・手順参照・導入体験の実証範囲を区別して記録した
 - [x] 必須検証を実行し、下の検証記録を4値で埋めた
-- [ ] `evidence` に成果物側のコミット SHA を記入した
-- [ ] 本ファイルの `state` を `done` にし `done_at` を記入した
+- [x] `evidence` に成果物側のコミット SHA を記入した
+- [x] 本ファイルの `state` を `done` にし `done_at` を記入した
 
 ## 検証記録
 
 | 識別子 | 結果 | 対象（コミット・版） | 証拠（要約・ログ所在） |
 |---|---|---|---|
-| entry-and-version-reference | 成功 | 今回のREADME・How-Toと固定配布版 | ローカル文書14リンクのファイル・明示アンカー、固定版How-To §1〜§9の実在を確認。版選択・停止の分岐は下記。新規AIセッションでの実導入は含まない |
+| entry-and-version-reference | 成功 | 成果物 `5cd28d6` のREADME・How-Toと固定配布版 | ローカル文書14リンクのファイル・明示アンカー、固定版How-To §1〜§9の実在を確認。版選択・停止の分岐は下記。新規AIセッションでの実導入は含まない |
 | fixed-source-check | 成功 | `898d514f0594ff09f6c19292ef4df56f6cc4ac50` | 正式GitHubから独立clone、origin・完全SHA・clean状態を確認。配布11本＋manifest＋How-To＋検証コード＋SPECの15本を固定Git blobと正規化ハッシュ照合。READMEが参照するT-0013の記録コミットも取得 |
 | fixed-distribution-tests | 成功 | 上記固定版のGitHub clone | Python 3.12.14で `python -B -m unittest discover -s tests -p test_distribution.py`、11件成功・24.537秒・exit 0。既存suiteの再実行であり、別手順による5操作の再演習ではない |
 | current-version-example | 成功 | okf-devkitの現物と上記固定版 | `harness/install.json` から現在版を取得し、固定版の `Distribution` / `verify` / `preflight` で管理6本一致・現在版＝目的版・内容変更0件を確認。対象への書込みなし |
@@ -71,7 +71,7 @@ T-0011でGit配布を継続する利用方針を検討し、プラグイン化�
 
 ## 結果
 
-README、How-Toの依頼文・版解決手順、T-0009への実証接続を実装した。成果物コミットを確定し、そのSHAを完了記録へ記入する。
+README、How-Toの依頼文・版解決手順、T-0009への実証接続を実装した。成果物コミットは `5cd28d6806d1d030bf321e464116a9e810c18a1e`。検証・履歴・完了証拠を揃え、`state: done`、`done_at: 2026-09-07` とした。配布コアの改訂は不要であり、推奨配布SHAと文書成果物SHAを分けて記録した。
 
 ### 入口と版の確認範囲
 
