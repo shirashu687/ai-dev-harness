@@ -27,7 +27,7 @@ evidence:
   - "target worklog: C:/Users/rinta/Documents/1_projects/okf-devkit/harness/state/journal/T-0007-obsidian-okf.md"
   - "verification: 163 tests passed; index/lint/check/render/affected/change-declaration and static Markdown navigation recorded in target worklog"
   - "review: fixed point cfdbffe1a01e99432aa9d527c12192fb5a9e3669; specification and standards review completed, findings fixed; low-confidence P3 test-fixture duplication retained as non-blocking candidate"
-  - "runtime boundary: Computer Use returned apps: []; Obsidian Vault/search/link/frontmatter operations are実行不能, not treated as static success"
+  - "Computer Useで利用可能なアプリは0件。ObsidianのVault・検索・リンク・frontmatter操作は実行不能であり、静的確認の成功で代替しない。"
 related: ["/backlog/T-0006-retro-and-ledger.md", "/backlog/T-0008-pilot-two-products.md"]
 ---
 
