@@ -7,19 +7,19 @@ status: stable
 layer: shared
 generated:
   by: "codex/gpt-6"
-  at: "2026-09-07T14:21:23Z"
-state: doing
+  at: "2026-09-07T14:30:49Z"
+state: done
 priority: medium
 effort: S
 feasibility: A
 ai: full
 cost: false
 created: "2026-09-07"
-done_at: null
+done_at: "2026-09-07"
 accepts: []
 spec: ["§1.1"]
 target: harness
-evidence: []
+evidence: ["664f720067a1b0a81df28c59fbc12c6d9ccc5e9e"]
 related: []
 ---
 
@@ -53,9 +53,9 @@ related: []
 - [x] 未使用フック2本と空の重複ログを削除し、現行配布物・スキル・記録を保持した
 - [x] アーカイブを保持し、通常の生成HTMLをGit管理外にする規則を確認した
 - [x] 必須検証を実行し、下の検証記録を4値で埋めた
-- [ ] `evidence` に成果物側のコミット SHA を記入した
-- [ ] 本ファイルの `state` を `done` にし `done_at` を記入した
-- [ ] 索引・変更履歴を更新し、整理用ブランチのPRを作成した
+- [x] `evidence` に成果物側のコミット SHA を記入した
+- [x] 本ファイルの `state` を `done` にし `done_at` を記入した
+- [x] 索引・変更履歴を更新し、整理用ブランチのPRを作成した
 
 ## 検証記録
 
@@ -70,4 +70,4 @@ related: []
 
 ## 結果
 
-整理差分と検証を完了した。OKF CLIは利用可能なPythonに既存のokf-devkitソースと依存パッケージを読み込ませて実行した。成果物コミット、変更履歴、PRの記録を残す。
+旧版資料4本の移動と未使用ファイル3本の削除を完了し、[PR #2](https://github.com/shirashu687/ai-dev-harness/pull/2) を作成した。成果物は `evidence` のコミット、変更履歴は `docs/log.md` に記録した。OKF CLIは利用可能なPythonに既存のokf-devkitソースと依存パッケージを読み込ませて実行した。配布手順書の既存stale警告2件をPRにも記載した。

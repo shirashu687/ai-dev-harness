@@ -1,6 +1,7 @@
 # 変更履歴 — shared
 
 ## 2026-09-07
+- **Deprecation** chore: archive historical harness docs and remove unused files。 (`664f720`)
 - **Update** docs: recover T-0008 results and approved T-0012 plan。 (`34d0760`)
 - **Update** Merge branch 'main' of https://github.com/shirashu687/ai-dev-harness。 (`4423704`)
 - **Update** Update T-0008 pilot two products documentation and backlog index。 (`c05c2c4`)
