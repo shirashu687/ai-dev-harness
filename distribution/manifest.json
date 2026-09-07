@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "hash_format": "sha256-canonical-text-v1",
+  "files": [
+    {
+      "source": "distribution/core/guide.md",
+      "target": "harness/core/guide.md",
+      "mode": "core"
+    },
+    {
+      "source": "distribution/core/policy/requirements.md",
+      "target": "harness/core/policy/requirements.md",
+      "mode": "core"
+    },
+    {
+      "source": "distribution/core/procedures/handover.md",
+      "target": "harness/core/procedures/handover.md",
+      "mode": "core"
+    },
+    {
+      "source": "distribution/core/procedures/retrospective.md",
+      "target": "harness/core/procedures/retrospective.md",
+      "mode": "core"
+    },
+    {
+      "source": "distribution/core/procedures/verify-report.md",
+      "target": "harness/core/procedures/verify-report.md",
+      "mode": "core"
+    },
+    {
+      "source": "distribution/core/templates/worklog.md",
+      "target": "harness/core/templates/worklog.md",
+      "mode": "core"
+    },
+    {
+      "source": "distribution/templates/config.md",
+      "target": "harness/project/config.md",
+      "mode": "seed"
+    },
+    {
+      "source": "distribution/templates/skill-profile.md",
+      "target": "harness/project/skill-profile.md",
+      "mode": "seed"
+    },
+    {
+      "source": "distribution/templates/ledger.md",
+      "target": "harness/ledger.md",
+      "mode": "seed"
+    },
+    {
+      "source": "distribution/templates/agents-entry.md",
+      "target": "AGENTS.md",
+      "mode": "manual"
+    },
+    {
+      "source": "distribution/templates/claude-entry.md",
+      "target": "CLAUDE.md",
+      "mode": "manual"
+    }
+  ]
+}
