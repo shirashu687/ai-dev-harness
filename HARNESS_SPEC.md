@@ -15,10 +15,11 @@
 
 | 文書 | 役割 | 扱い |
 | --- | --- | --- |
-| `HARNESS_DESIGN.md` | 「なぜ」の根拠集 | 凍結。編集しない |
-| `HARNESS_REVIEW.html` | 第0.2版までの審査記録 | 凍結。編集しない |
+| [HARNESS_DESIGN.md](docs/_archive/v0.2/HARNESS_DESIGN.md) | 「なぜ」の根拠集 | 凍結。編集しない |
+| [HARNESS_REVIEW.html](docs/_archive/v0.2/HARNESS_REVIEW.html) | 第0.2版までの審査記録 | 凍結。編集しない |
+| [HARNESS_REVIEW_PROMPT.md](docs/_archive/v0.2/HARNESS_REVIEW_PROMPT.md) | 審査時のレビュー依頼文 | 凍結。審査の前提を確認するときに参照する |
 | **`HARNESS_SPEC.md`（本書）** | 「何を作るか」の正本 | 生きた文書。共通の設計判断はここだけを変更する |
-| `HARNESS_SPEC.html` | 第0.2版の旧スナップショット | 凍結。現行判断には使わない |
+| [HARNESS_SPEC.html](docs/_archive/v0.2/HARNESS_SPEC.html) | 第0.2版の旧スナップショット | 凍結。現行判断には使わない |
 | `HARNESS_SKILLS_OVERVIEW.html` | 人間向けの図解 | 説明資料。判断が食い違う場合は本書を正とする |
 | `docs/backlog/T-NNNN-*.md` | 実装単位、順序、完了条件 | 1タスク1ファイル。`docs/CONVENTIONS.md` に従う |
 
