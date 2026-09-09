@@ -7,7 +7,7 @@ status: stable
 layer: shared
 generated:
   by: codex/gpt-6
-  at: "2026-09-09T12:35:00Z"
+  at: "2026-09-09T12:54:51Z"
 code_globs: ["README.md", "LICENSE", "distribution/**", "tests/test_distribution.py"]
 related: ["/project/harness-usage.md", "/backlog/T-0013-extract-distributable-core.md", "/backlog/T-0014-ai-distribution-entry.md"]
 ---
@@ -81,7 +81,7 @@ https://github.com/shirashu687/ai-dev-harness のREADMEを入口に、このリ�
 
 ### ライセンス通知の準備と保持
 
-配布元の [LICENSE](../../LICENSE) と [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) を確認する。通知の扱いの正は現行 `HARNESS_SPEC.md` §5.4。以下は固定版の操作に進む前に確認し、§2の退避・変更計画と併せて実施する。
+配布元の [LICENSE](../../LICENSE) と [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) を確認する。著作権者表記も取得したLICENSE全文に従い、古い通知を更新する場合は取得元SHAと変更差分を残す。通知の扱いの正は現行 `HARNESS_SPEC.md` §5.4。以下は固定版の操作に進む前に確認し、§2の退避・変更計画と併せて実施する。
 
 1. **通知の出所を確定する。** 配布版にLICENSEがあればその全文を使う。現在の推奨固定版には独自LICENSEがないため、配布元のLICENSEを取得した完全コミットSHAを別に記録し、コピーする独自ファイルがそのコミットの許諾対象と一致することを照合する。出所・適用対象を確認できない場合はコピー前に止める。配布元の第三者通知だけを本ハーネスの許諾とみなさない。
 2. **保存先を決めて退避する。** 導入先の `THIRD_PARTY_NOTICES.md` に `ai-dev-harness` の節があれば照合し、なければ追加する。既存の通知は保持する。通知用の既存配置がなければ `harness/project/ai-dev-harness-LICENSE` に全文を置き、configから出所とともに参照してもよい。選んだパスと変更するconfigを§2の `extra` に含める。
