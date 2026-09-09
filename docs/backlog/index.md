@@ -23,20 +23,20 @@ T-0001〜T-0007・T-0009・T-0011・T-0013〜T-0015は完了済み。段階1の�
 <!-- okf:auto:start -->
 | state | 件数 |
 |---|---|
-| doing | 2 |
+| doing | 1 |
 | todo | 2 |
-| done | 12 |
+| done | 13 |
 | dropped | 0 |
 
 ## doing
 * [代表作業3件と2製品で実証する](/backlog/T-0008-pilot-two-products.md) - `high` `L` - 代表3作業・比較再試行と利用者によるClaude Code確認は完了し、評価指標の補完とHTMLレポートの仕上げを残す。
-* [初めての利用者向けにREADME・使用手順・ライセンスを整備する](/backlog/T-0016-getting-started-and-license.md) - `medium` `S` - 実装未読の利用者が導入と最初の作業を試せる文書とMITライセンスを整える。
 
 ## todo
 * [Remoteから手動開始した1課題の自律実行を検証する](/backlog/T-0012-continuous-autonomous-operation.md) - `medium` `M` - 既存PCのCodexとハーネスを使い、モバイルからの手動開始、実装・検証・報告、標準通知、停止・再開をokf-devkitで実証する。
 * [自前ハーネスをプラグイン化して導入を統合する](/backlog/T-0010-plugin-and-bootstrap.md) - `low` `XL` - 導入先3件以上と実測された手作業負担を条件に、自前ハーネスだけをプラグイン化し上流公式導入を呼ぶ一括コマンドを検討する。
 
 ## done
+* [初めての利用者向けにREADME・使用手順・ライセンスを整備する](/backlog/T-0016-getting-started-and-license.md) - 2026-09-09 完了 - 実装未読の利用者が導入と最初の作業を試せる文書とMITライセンスを整える。
 * [ScheLiveAppへ独立した二依存として導入する](/backlog/T-0009-second-repository-rollout.md) - 2026-09-08 完了 - ScheLiveAppへ上流スキルと自前ハーネスを別々の依存として導入し、更新・巻戻し・撤去で固有領域が保たれるか確認する。
 * [配布方式と保守責任を比較検討する](/backlog/T-0011-distribution-strategy.md) - 2026-09-07 完了 - 確立済みのGit配布を基準に、自分の複数リポジトリ向けの配布方式と必要時保守の範囲を比較する。
 * [旧版資料と未使用ファイルを整理する](/backlog/T-0015-repository-cleanup.md) - 2026-09-07 完了 - 旧版資料の内容を保持してアーカイブへ移し、未使用フックと空の重複ログを削除してPRにまとめる。
