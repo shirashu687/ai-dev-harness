@@ -7,6 +7,7 @@
 - **Creation** docs: add AI install and update entry with verified release。 (`5cd28d6`)
 - **Update** docs: define AI-assisted Git distribution entry and compare delivery options。 (`e0ec92e`)
 - **Update** 利用者のClaude Code・Obsidian確認により、T-0002・T-0003・T-0007を完了し、段階1の導入確認を終えた。T-0008のClaude確認も完了として受理し、評価・報告を残作業とした（利用者確認: 2026-09-07、導入成果物: okf-devkit `c14025aea7e7f5e5c40bbe8ee25b37e00cf5d35c`）。
+- **Deprecation** chore: archive historical harness docs and remove unused files。 (`664f720`)
 - **Update** docs: recover T-0008 results and approved T-0012 plan。 (`34d0760`)
 - **Update** Merge branch 'main' of https://github.com/shirashu687/ai-dev-harness。 (`4423704`)
 - **Update** Update T-0008 pilot two products documentation and backlog index。 (`c05c2c4`)

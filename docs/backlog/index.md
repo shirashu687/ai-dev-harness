@@ -9,10 +9,10 @@
 | 評価の仕上げ | [T-0008 代表作業と比較](/backlog/T-0008-pilot-two-products.md) | 最新評価のHTML反映・表示確認、介入と限界の整理、スキル未発動・文脈負担の観測 |
 | 次の実行候補 | [T-0012 Remoteで1課題を実証](/backlog/T-0012-continuous-autonomous-operation.md) | 指定Python・固定依頼を準備し、スマホの標準通知・停止確認から始める。詳細化済み |
 | 導入完了・後日確認あり | [T-0009 ScheLiveAppへ導入](/backlog/T-0009-second-repository-rollout.md) | 正式コア・上流の継続導入と隔離演習を完了。公開README入口・Claude・成果物SHAのCIは別の未確認範囲 |
-| 実証結果の確認 | [T-0011 配布製品化の比較](/backlog/T-0011-distribution-strategy.md) | 確立済みのGit配布を基準に、追加の製品化と保守責任を判断 |
+| 方針確定済み | [T-0011 配布製品化の比較](/backlog/T-0011-distribution-strategy.md) | 比較・保守範囲の判断は完了。文書入口はT-0014で完了し、製品化はT-0010で条件待ち |
 | 条件待ち | [T-0010 プラグイン・一括導入](/backlog/T-0010-plugin-and-bootstrap.md) | T-0009・T-0011の結果、導入先3件以上、実測負担と採用判断が揃った場合に着手 |
 
-T-0001〜T-0007・T-0009・T-0013は完了済み。段階1の導入確認と共通コアの抽出・配布・okf-devkit移行が揃った。配布の後続関係は `T-0013（完了）→ T-0009（導入完了）→ T-0011 → T-0010（条件付き）`。T-0012はRemote運用の別実証であり、T-0009の技術的な前提には追加しない。
+T-0001〜T-0007・T-0009・T-0011・T-0013〜T-0015は完了済み。段階1の導入確認と共通コアの抽出・配布・okf-devkit移行が揃った。配布の後続関係は `T-0013（完了）→ T-0009（導入完了）→ T-0011（完了）→ T-0014（完了）／T-0010（条件付き）`。T-0012はRemote運用の別実証であり、T-0009の技術的な前提には追加しない。
 
 2026-09-07の利用者確認を受け、[T-0002](/backlog/T-0002-upstream-skills-dependency.md)・[T-0003](/backlog/T-0003-japanese-entry-and-guide.md) のClaude Code確認と [T-0007](/backlog/T-0007-obsidian-okf.md) のObsidian確認を完了に反映した。T-0008のClaude確認（⑰）も完了。改善効果（⑯）は未実証のまま保持し、評価・報告の仕上げへ進む。
 
@@ -25,7 +25,7 @@ T-0001〜T-0007・T-0009・T-0013は完了済み。段階1の導入確認と共�
 |---|---|
 | doing | 1 |
 | todo | 2 |
-| done | 11 |
+| done | 12 |
 | dropped | 0 |
 
 ## doing
@@ -38,6 +38,7 @@ T-0001〜T-0007・T-0009・T-0013は完了済み。段階1の導入確認と共�
 ## done
 * [ScheLiveAppへ独立した二依存として導入する](/backlog/T-0009-second-repository-rollout.md) - 2026-09-08 完了 - ScheLiveAppへ上流スキルと自前ハーネスを別々の依存として導入し、更新・巻戻し・撤去で固有領域が保たれるか確認する。
 * [配布方式と保守責任を比較検討する](/backlog/T-0011-distribution-strategy.md) - 2026-09-07 完了 - 確立済みのGit配布を基準に、自分の複数リポジトリ向けの配布方式と必要時保守の範囲を比較する。
+* [旧版資料と未使用ファイルを整理する](/backlog/T-0015-repository-cleanup.md) - 2026-09-07 完了 - 旧版資料の内容を保持してアーカイブへ移し、未使用フックと空の重複ログを削除してPRにまとめる。
 * [日本語の入口とスキル案内を設置する](/backlog/T-0003-japanese-entry-and-guide.md) - 2026-09-07 完了 - 日本語の入口・ガイド、Codex代表ルートと利用者によるClaude Code確認を終えた。
 * [上流スキルを直接依存として導入する](/backlog/T-0002-upstream-skills-dependency.md) - 2026-09-07 完了 - 上流25スキルの直接導入・Codex検証と利用者によるClaude Code確認を終え、導入を完了した。
 * [ObsidianとOKFの知識導線を接続する](/backlog/T-0007-obsidian-okf.md) - 2026-09-07 完了 - OKFの相対索引・静的導線・統合版CIと利用者によるObsidian実機確認を終えた。

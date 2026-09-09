@@ -2,7 +2,7 @@
 type: Backlog Item
 title: ScheLiveAppへ独立した二依存として導入する
 description: ScheLiveAppへ上流スキルと自前ハーネスを別々の依存として導入し、更新・巻戻し・撤去で固有領域が保たれるか確認する。
-tags: [shared, enhancement]
+tags: [shared, enhancement, ready-for-human]
 status: stable
 layer: shared
 generated:
