@@ -126,7 +126,7 @@ AIには[更新の依頼文](docs/project/harness-distribution.md#ai-update)を�
 
 ## ライセンス
 
-独自のコード・文書・配布テンプレートは **[MIT License](LICENSE)** です。著作権者表記は `ai-dev-harness contributors`。利用・改変・再配布の際はLICENSEの条件に従い、コピーまたは主要部分に著作権表示と許諾表示を保持してください。標準文面は [Open Source Initiative](https://opensource.org/license/mit) を参照しています。
+独自のコード・文書・配布テンプレートは **[MIT License](LICENSE)** です。著作権者表記はGitHubアカウント名の `shirashu687`。利用・改変・再配布の際はLICENSEの条件に従い、コピーまたは主要部分に著作権表示と許諾表示を保持してください。標準文面は [Open Source Initiative](https://opensource.org/license/mit) を参照しています。
 
 調査用に導入した `.agents/skills/` の上流著作物は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) と各上流の条件に従います。本ハーネスのライセンスでその表示を置き換えません。導入先への通知の保存方法は[導入手順のライセンス通知](docs/project/harness-distribution.md#license-notices)を参照してください。
 
