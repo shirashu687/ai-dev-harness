@@ -8,18 +8,18 @@ layer: shared
 generated:
   by: codex/gpt-6
   at: "2026-09-09T12:54:51Z"
-state: doing
+state: done
 priority: medium
 effort: S
 feasibility: A
 ai: full
 cost: false
 created: "2026-09-09"
-done_at: null
+done_at: "2026-09-09"
 accepts: []
 spec: ["§5.4"]
 target: harness
-evidence: []
+evidence: ["aa9194ef8613af46be45fae2a07a0d99ff04bd16"]
 related: ["/backlog/T-0016-getting-started-and-license.md", "/project/harness-distribution.md"]
 ---
 
@@ -48,7 +48,7 @@ LICENSE・READMEを修正し、通知保持手順を読み合わせる。文書�
 - [x] LICENSEとREADMEの著作権者表記が一致する
 - [x] MIT本文・第三者通知・配布物が変更されていない
 - [x] 文書検査と差分検査が成功する
-- [ ] 成果物SHAと完了状態を記録する
+- [x] 成果物SHAと完了状態を記録する
 
 ## 検証記録
 
@@ -59,4 +59,4 @@ LICENSE・READMEを修正し、通知保持手順を読み合わせる。文書�
 
 ## 結果
 
-LICENSEとREADMEを修正し、導入手順に取得したLICENSEの著作権者表記を保持する旨を補足した。成果物確定後に完了記録を追記する。
+LICENSEとREADMEを修正し、導入手順に取得したLICENSEの著作権者表記を保持する旨を補足した。成果物コミット `aa9194ef8613af46be45fae2a07a0d99ff04bd16` を記録して完了した。
