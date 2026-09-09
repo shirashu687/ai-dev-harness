@@ -1,5 +1,8 @@
 # 変更履歴 — shared
 
+## 2026-09-09
+- **Update** T-0016: READMEに用途・制約・導入準備・確認点・最初の小作業を追加し、日常利用の手順へ接続した。独自部分のMIT LICENSEと導入先への通知保持を整備した。
+
 ## 2026-09-08
 - **Update** T-0009: ScheLiveAppへ正式コアと上流スキルを独立導入し、隔離演習・Codex実利用・既存検証・独立reviewを完了した。公開README入口などの未確認範囲を別記した（ScheLiveApp `897e90ddf3535c0adea47bfddcc3d69fc4f54d80`）。
 

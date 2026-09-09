@@ -23,13 +23,14 @@ T-0001〜T-0007・T-0009・T-0011・T-0013〜T-0015は完了済み。段階1の�
 <!-- okf:auto:start -->
 | state | 件数 |
 |---|---|
-| doing | 1 |
+| doing | 2 |
 | todo | 2 |
 | done | 12 |
 | dropped | 0 |
 
 ## doing
 * [代表作業3件と2製品で実証する](/backlog/T-0008-pilot-two-products.md) - `high` `L` - 代表3作業・比較再試行と利用者によるClaude Code確認は完了し、評価指標の補完とHTMLレポートの仕上げを残す。
+* [初めての利用者向けにREADME・使用手順・ライセンスを整備する](/backlog/T-0016-getting-started-and-license.md) - `medium` `S` - 実装未読の利用者が導入と最初の作業を試せる文書とMITライセンスを整える。
 
 ## todo
 * [Remoteから手動開始した1課題の自律実行を検証する](/backlog/T-0012-continuous-autonomous-operation.md) - `medium` `M` - 既存PCのCodexとハーネスを使い、モバイルからの手動開始、実装・検証・報告、標準通知、停止・再開をokf-devkitで実証する。

@@ -7,9 +7,9 @@ status: stable
 layer: shared
 generated:
   by: codex/gpt-6
-  at: "2026-09-07T14:05:39Z"
-code_globs: ["README.md", "distribution/**", "tests/test_distribution.py"]
-related: ["/backlog/T-0013-extract-distributable-core.md", "/backlog/T-0014-ai-distribution-entry.md"]
+  at: "2026-09-09T12:35:00Z"
+code_globs: ["README.md", "LICENSE", "distribution/**", "tests/test_distribution.py"]
+related: ["/project/harness-usage.md", "/backlog/T-0013-extract-distributable-core.md", "/backlog/T-0014-ai-distribution-entry.md"]
 ---
 
 # 共通ハーネス配布物の導入と保守
@@ -17,6 +17,8 @@ related: ["/backlog/T-0013-extract-distributable-core.md", "/backlog/T-0014-ai-d
 配布元は `https://github.com/shirashu687/ai-dev-harness.git`。依頼の入口と推奨版の記録は配布元の [README](../../README.md) を参照する。§0で版を解決した後、実操作は目的の固定SHAにある本書と検証コードに従う。本書中の例示値を実在値に置き換える。依頼・版選択の契約は配布元の現行 `HARNESS_SPEC.md` §9.1.4、操作の契約は配布コミット内の同仕様書 §9.1.2〜§9.2.1。
 
 配布はmanifestの11ファイルだけ。coreの6本を継続管理し、seedは初回作成後project所有、manualは既存入口へ反映する断片である。上流は対象側から直接導入する。Gitリポジトリ全体のcloneを対象へコピーしない。
+
+初めて使う人は [READMEの導入手順](../../README.md#getting-started) で準備と導入後の確認点を読んでから本書へ進む。導入後は [最初の作業と日常の使い方](harness-usage.md) を使う。本書のコードは、各節の前提と照合を伴う操作例であり、コードブロックだけをまとめて貼り付ける一括インストーラーではない。
 
 ## 0. AIへの依頼と版の解決
 
@@ -74,6 +76,19 @@ https://github.com/shirashu687/ai-dev-harness のREADMEを入口に、このリ�
 例えばokf-devkitの導入記録が示すSHAとREADMEの推奨SHAが一致すれば「更新」の依頼でも同版確認になる。推奨版を別の検証済みSHAへ変更した後は、導入記録の旧SHAを `old_sha`、READMEの新SHAを `sha` とする。READMEの変更で対象の現在版が変わることはない。
 
 この§0は配布元の文書入口であり、既存の固定配布版に存在しない場合がある。版解決後は、そのSHAの本書§1〜§9へ接続する。新しい入口ができたことを、新しいコア配布版の検証と数えない。
+
+<a id="license-notices"></a>
+
+### ライセンス通知の準備と保持
+
+配布元の [LICENSE](../../LICENSE) と [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) を確認する。通知の扱いの正は現行 `HARNESS_SPEC.md` §5.4。以下は固定版の操作に進む前に確認し、§2の退避・変更計画と併せて実施する。
+
+1. **通知の出所を確定する。** 配布版にLICENSEがあればその全文を使う。現在の推奨固定版には独自LICENSEがないため、配布元のLICENSEを取得した完全コミットSHAを別に記録し、コピーする独自ファイルがそのコミットの許諾対象と一致することを照合する。出所・適用対象を確認できない場合はコピー前に止める。配布元の第三者通知だけを本ハーネスの許諾とみなさない。
+2. **保存先を決めて退避する。** 導入先の `THIRD_PARTY_NOTICES.md` に `ai-dev-harness` の節があれば照合し、なければ追加する。既存の通知は保持する。通知用の既存配置がなければ `harness/project/ai-dev-harness-LICENSE` に全文を置き、configから出所とともに参照してもよい。選んだパスと変更するconfigを§2の `extra` に含める。
+3. **全文と参照を保存する。** 著作権・許諾・免責を含むLICENSE全文、配布元URL、配布SHA、LICENSEの取得元SHAを残す。対象プロジェクト自身のLICENSEは置き換えない。通知はproject所有とし、manifestや `install.json` の `managed_files` へ足さない。
+4. **操作後に確認する。** 新規導入・同版確認・更新時に通知の存在と内容を照合し、不足を補う場合はコア更新と別の差分として記録する。巻戻し・撤去では、残るseed・入口等にも必要な通知を保持する。
+
+上流スキルを別途導入する際は、取得した上流版のライセンス通知も保持する。配布元の調査用 `.agents/skills/` やそのlockを導入先へコピーする手順ではない。
 
 ## 1. 準備と固定版の取得
 
