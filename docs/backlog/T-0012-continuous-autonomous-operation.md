@@ -7,7 +7,7 @@ status: stable
 layer: shared
 generated:
   by: "process:codex"
-  at: "2026-09-06"
+  at: "2026-09-07"
 state: todo
 priority: medium
 effort: M
@@ -20,7 +20,7 @@ accepts: ["⑧", "⑨", "⑩"]
 spec: ["§4.2", "§4.3", "§7.1", "§7.4", "§8.1", "§8.2", "§10.1"]
 target: okf-devkit
 evidence: []
-related: ["/backlog/T-0004-workflow-and-completion-contract.md", "/backlog/T-0005-requirements-and-enforcement.md", "/backlog/T-0006-retro-and-ledger.md", "/backlog/T-0008-pilot-two-products.md"]
+related: ["/backlog/T-0004-workflow-and-completion-contract.md", "/backlog/T-0005-requirements-and-enforcement.md", "/backlog/T-0006-retro-and-ledger.md", "/backlog/T-0008-pilot-two-products.md", "/backlog/T-0013-extract-distributable-core.md"]
 ---
 
 # Remoteから手動開始した1課題の自律実行を検証する
@@ -169,3 +169,9 @@ related: ["/backlog/T-0004-workflow-and-completion-contract.md", "/backlog/T-000
 ## 結果
 
 詳細化済み（2026-09-06）。合意内容を反映し、着手手順・範囲・演習・評価を定めた。運用の設定変更・試行は未着手のため `state: todo`、`done_at: null`、`evidence: []` を維持する。次の一手は対象側で実行前提と固定依頼を準備し、標準通知・停止の確認から始めること。
+
+### 次の実行候補（2026-09-07整理）
+
+T-0004〜T-0006とT-0013は完了し、T-0008 R2の固定依頼・検査・証拠も対象側にあるため、合意済みの本タスクを次の実行候補とする。Claude CodeやObsidianの実機確認を本タスクの開始条件へ追加しない。
+
+調査時HEADは過去の記録であり、整理時点の対象本流は `c14025aea7e7f5e5c40bbe8ee25b37e00cf5d35c`。実行時には最新状態を確認するが、再演する製品コードの固定開始版 `8c72c05274bf6880778c9a89a98221b189b57943` を本流HEADへ置き換えない。再開は「1. 実行前提を確認する」から行い、指定Python・Remote・標準通知の実機確認を先に済ませる。今回のバックログ整理では試行を開始していない。

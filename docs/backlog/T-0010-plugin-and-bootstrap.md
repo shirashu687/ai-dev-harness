@@ -6,8 +6,8 @@ tags: [shared, enhancement, ready-for-human]
 status: stable
 layer: shared
 generated:
-  by: "codex/gpt-5"
-  at: "2026-09-05T01:19:11+09:00"
+  by: "process:codex"
+  at: "2026-09-07"
 state: todo
 priority: low
 effort: XL
@@ -20,7 +20,7 @@ accepts: ["⑳"]
 spec: ["§9.3", "§10", "§11"]
 target: null
 evidence: []
-related: ["/backlog/T-0009-second-repository-rollout.md", "/backlog/T-0011-distribution-strategy.md"]
+related: ["/backlog/T-0009-second-repository-rollout.md", "/backlog/T-0011-distribution-strategy.md", "/backlog/T-0014-ai-distribution-entry.md"]
 ---
 
 # 自前ハーネスをプラグイン化して導入を統合する
@@ -50,10 +50,11 @@ related: ["/backlog/T-0009-second-repository-rollout.md", "/backlog/T-0011-distr
 - 複数リポジトリへ再利用スキルを配る場合はプラグインを優先する。→ SPEC §9.3
 - 上流の配布経路と更新責任は統合しない。→ SPEC §9.1
 - トリガー前は明示手順とGitコミットで運用する。→ SPEC §11
+- 2026-09-07のT-0011検討で、利用者はプラグイン化を別タスクで扱う意向を示した。本タスクをその実装先とし、文書の入口整備はT-0014へ分ける。配布の追加便益と必要時保守の判断はT-0011を参照する。→ T-0010
 
 ## 完了条件
 
-- [ ] 着手条件の四項目が証拠付きで満たされている
+- [ ] 着手条件の全項目が証拠付きで満たされている
 - [ ] プラグインが本ハーネス所有物だけを含む
 - [ ] 一括導入が上流公式インストーラーを対象リポジトリ上で呼ぶ
 - [ ] 上流スキル本体を自前配布物へ同梱していない
@@ -75,3 +76,5 @@ related: ["/backlog/T-0009-second-repository-rollout.md", "/backlog/T-0011-distr
 ## 結果
 
 未着手。T-0009とT-0011の完了かつ着手条件成立まで保留。
+
+2026-09-07のT-0011検討後も、導入先3件以上と手作業負担の証拠は揃っていない。本人向け・必要時保守・URL付きのAI依頼という利用方針では、まずT-0014の文書入口から追加便益を測る。本タスクはプラグイン化の実装先として保持し、着手条件が揃った時点で方式と保守責任を再評価する。T-0013の最小配布完了やT-0014の文書整備だけでは開始条件を満たさない。

@@ -1,25 +1,25 @@
 ---
 type: Backlog Item
 title: 上流スキルを直接依存として導入する
-description: okf-devkitへ依存関係が閉じたmattpocock/skillsプロファイルを直接導入し、出所・重複・ライセンス・更新方法を確認する。
-tags: [shared, enhancement, ready-for-agent]
+description: 上流25スキルの直接導入・Codex検証と利用者によるClaude Code確認を終え、導入を完了した。
+tags: [shared, enhancement, ready-for-human]
 status: stable
 layer: shared
 generated:
-  by: "codex/gpt-6"
-  at: "2026-09-05"
-state: todo
+  by: "process:codex"
+  at: "2026-09-07"
+state: done
 priority: high
 effort: M
 feasibility: B
 ai: assisted
 cost: false
 created: "2026-09-05"
-done_at: null
+done_at: "2026-09-07"
 accepts: ["①", "②", "③", "④"]
 spec: ["§5.1", "§5.2", "§5.4", "§5.5"]
 target: okf-devkit
-evidence: []
+evidence: ["427f726d756620006a4f1765810d7887c7a319ff", "585f9dfcfb398adc9edba70044eccd3d503a4a8a", "c14025aea7e7f5e5c40bbe8ee25b37e00cf5d35c"]
 related: ["/backlog/T-0003-japanese-entry-and-guide.md"]
 ---
 
@@ -118,34 +118,40 @@ SPEC §5.5 の更新を小さな作業単位で行う。調査した上流CLIで
 
 ## 完了条件
 
-- [ ] mattpocock/skills が `okf-devkit` から直接導入されている（受け入れ①）
-- [ ] `skill-profile.md` の全参照先が導入済みである（受け入れ②）
-- [ ] repo / user / plugin間に同名スキルの重複がない（受け入れ③）
-- [ ] `skills-lock.json`、出所、更新コマンド、MIT通知を確認できる（受け入れ④）
-- [ ] `in-progress` 配下が既定プロファイルに含まれていない
-- [ ] 肯定・否定トリガーと主要ルートの結果が記録されている
-- [ ] 両製品で発見と起動を確認し、文脈負担の観測を記録した
-- [ ] 最小設定と入口への接続があり、課題とドメイン文書の出力先が定まっている
-- [ ] 更新後も確定プロファイルと両製品のコピー配置を維持できる手順を確認した
-- [ ] 必須検証を4値で記録した
-- [ ] 成果物コミットを `evidence` に記入し、`state: done` と `done_at` を更新した
+- [x] mattpocock/skills が `okf-devkit` から直接導入されている（受け入れ①）
+- [x] `skill-profile.md` の全参照先が導入済みである（受け入れ②）
+- [x] repo / user / plugin間に同名スキルの重複がない（受け入れ③。導入時の一覧・設定検査。Claudeモデル起動は下記で別判定）
+- [x] `skills-lock.json`、出所、更新コマンド、MIT通知を確認できる（受け入れ④）
+- [x] `in-progress` 配下が既定プロファイルに含まれていない
+- [x] 肯定・否定トリガーと主要ルートの結果が記録されている（Claude側は2026-09-07の利用者確認で完了受理）
+- [x] 両製品で発見と起動を確認し、文脈負担の観測を記録した（Claude側の残条件は同利用者確認で完了受理）
+- [x] 最小設定と入口への接続があり、課題とドメイン文書の出力先が定まっている
+- [x] 更新後も確定プロファイルと両製品のコピー配置を維持できる手順を確認した
+- [x] 必須検証を4値で記録した
+- [x] 成果物コミットを `evidence` に記入した
+- [x] 残る製品検証を満たし、`state: done` と `done_at` を更新した
 
 ## 検証記録
 
 | 識別子 | 結果 | 対象 | 証拠 |
 | --- | --- | --- | --- |
-| dependency-closure | | | |
-| duplicate-scan | | | |
-| trigger-positive | | | |
-| trigger-negative | | | |
-| license-provenance | | | |
-| minimal-setup | | | |
-| context-load | | | |
-| update-layout | | | |
-| project-required | | | |
+| dependency-closure | 成功 | 導入版25スキル | 採用プロファイルの導入時記録。両製品のコピー、補助ファイル、ask-mattの24案内先を確認 |
+| duplicate-scan | 成功 | 導入時のrepo / user / plugin一覧と設定 | 同記録で衝突0件、対象プロジェクトで上流プラグイン無効。モデル起動の結果とは区別 |
+| trigger-positive-initial | 実行不能 | 初回検証のCodex / Claude Code | Codexの明示14・暗黙11は成功、当時のClaudeは未ログインで未観測 |
+| trigger-negative-initial | 実行不能 | 初回検証のCodex / Claude Code | Codexの非該当11件・明示用抑制は成功、当時のClaudeは未ログインで未観測 |
+| license-provenance | 成功 | 導入版のLICENSEと出所 | `THIRD_PARTY_NOTICES.md`、採用プロファイル、lockが存在 |
+| minimal-setup | 成功 | 入口・課題管理・triage・ドメイン文書 | 同記録で一時場所のbacklog/ADR生成先と参照を確認 |
+| context-load | 成功 | 導入時の一覧・Codex context probe | 採用名と明示/暗黙の扱いを記録。Claudeのモデル起動成功を意味しない |
+| update-layout | 成功 | 導入時の一時作業場所 | `npx skills update -y` が終了0、両製品25コピーとlockを維持した記録 |
+| project-required | 成功 | 導入時の対象venv / OKF | 既存144件成功、index check・lint error 0 / warn 0の記録 |
+| claude-user-confirmation | 成功 | Claude Codeの確認 | 2026-09-07、利用者が「claudeの確認は大丈夫です」と報告し、該当部分の完了を指示 |
+
+導入時の行は `okf-devkit` の設定コミット `585f9dfcfb398adc9edba70044eccd3d503a4a8a` にある `harness/project/skill-profile.md` の検証記録を照合したもの。Claude確認の最終行は今回の利用者報告による。エージェントによる再試験は行っていない。統合版のCI実結果は [T-0007の追補](/backlog/T-0007-obsidian-okf.md) を参照する。
 
 ## 結果
 
-詳細化は完了。利用者が直接導入・プラグイン無効化・最小設定の包含・OKF課題管理に合意し、着手可能な状態とした。導入は未着手のため `state: todo` を維持する。
+2026-09-07の整理で、導入未着手という旧記載を訂正した。上流導入 `427f726d756620006a4f1765810d7887c7a319ff` と最小設定 `585f9dfcfb398adc9edba70044eccd3d503a4a8a` は実在し、[okf-devkit PR #2](https://github.com/shirashu687/okf-devkit/pull/2) で本流 `c14025aea7e7f5e5c40bbe8ee25b37e00cf5d35c` へ統合済み。現物のプロファイル、lock、両製品の配置、通知を照合した。
+
+2026-09-07、利用者のClaude Code確認済み報告と完了指示を受け、残っていた製品確認を完了として受理した。`state: done`、`done_at: 2026-09-07` に更新し、本タスクの残作業はない。過去の実行不能記録は初回検証の履歴として保持する。
 
 詳細化文書の検証（2026-09-05）: 対象プロジェクトの `.venv/Scripts/python.exe -m okf_devkit.cli lint` は error 0 / warn 0。前回の仮想環境起動失敗は、許可された実行環境で同じPythonを起動して解消した。導入成果物の検証結果ではない。

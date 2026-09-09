@@ -1,25 +1,25 @@
 ---
 type: Backlog Item
 title: 日本語の入口とスキル案内を設置する
-description: okf-devkitの既存入口を保ちながら、作業分類・プロジェクト制約・上流スキルの呼出関係へ到達できる日本語ガイドを設置する。
-tags: [shared, enhancement, ready-for-agent]
+description: 日本語の入口・ガイド、Codex代表ルートと利用者によるClaude Code確認を終えた。
+tags: [shared, enhancement, ready-for-human]
 status: stable
 layer: shared
 generated:
-  by: "codex/gpt-6"
-  at: "2026-09-05"
-state: doing
+  by: "process:codex"
+  at: "2026-09-07"
+state: done
 priority: high
 effort: M
 feasibility: B
 ai: assisted
 cost: false
 created: "2026-09-05"
-done_at: null
+done_at: "2026-09-07"
 accepts: ["⑤", "⑥"]
 spec: ["§1.3", "§2.2", "§2.3", "§4.1", "§5.3", "§6.3", "§8.2"]
 target: okf-devkit
-evidence: ["2ae7c4261bce9d31324c35d6eaeb244c67794c22"]
+evidence: ["2ae7c4261bce9d31324c35d6eaeb244c67794c22", "c14025aea7e7f5e5c40bbe8ee25b37e00cf5d35c"]
 related: ["/backlog/T-0002-upstream-skills-dependency.md", "/backlog/T-0004-workflow-and-completion-contract.md"]
 ---
 
@@ -110,9 +110,10 @@ related: ["/backlog/T-0002-upstream-skills-dependency.md", "/backlog/T-0004-work
 - [x] 全採用スキルの用途・対象外・起動方式・呼出関係が導入版に一致する
 - [x] `config.md` の役割対応・コマンド・実行前提を実物で確認した
 - [x] `requirements.md` の確定済み制約に現状の強制点・確認方法・限界がある
-- [ ] 両製品で代表依頼から適切な経路と参照文書へ到達し、小作業を不要に重くしない
+- [x] 両製品で代表依頼から適切な経路と参照文書へ到達し、小作業を不要に重くしない（Claude側は2026-09-07の利用者確認で完了受理）
 - [x] 必須検証を4値で記録した
-- [ ] 成果物コミットを `evidence` に記入し、タスクを完了状態にした
+- [x] 成果物コミットを `evidence` に記入した
+- [x] 残る製品検証を満たし、タスクを完了状態にした
 
 ## 検証記録
 
@@ -120,13 +121,22 @@ related: ["/backlog/T-0002-upstream-skills-dependency.md", "/backlog/T-0004-work
 | --- | --- | --- | --- |
 | entry-navigation | 成功 | `AGENTS.md` → `guide.md` / `config.md` / `requirements.md`、`CLAUDE.md` の同一入口接続 | `check_docs.py --installed`、Codexの4代表依頼 |
 | guide-profile-consistency | 成功 | 導入プロファイル25名、Codex/Claude Codeコピー | ガイド25名、ローカルリンク63件、コピー差分0 |
-| representative-routes | 実行不能 | Codex: 小・設計・診断・レビューの4件は成功。Claude Code:未ログイン | `C:/Users/rinta/AppData/Local/Temp/harness-t0003/gpt55/*-answer.txt`、`claude auth status` は `loggedIn: false` |
+| representative-routes-initial | 実行不能 | 初回検証。Codex: 小・設計・診断・レビューの4件は成功。Claude Code:未ログイン | `C:/Users/rinta/AppData/Local/Temp/harness-t0003/gpt55/*-answer.txt`、当時の `claude auth status` は `loggedIn: false` |
+| claude-user-confirmation | 成功 | Claude Codeの代表ルート確認 | 2026-09-07、利用者のClaude確認済み報告と完了指示により受理。エージェントの再実行結果ではない |
 | config-map | 成功 | 役割対応、実コマンド、実行前提、OKF境界 | `harness/project/config.md`、既存CIと設定の照合 |
 | requirements-baseline | 成功 | SPEC §8.2の5制約、強制点・確認方法・限界 | `harness/core/policy/requirements.md`、Standards/Specレビュー |
 | duplicate-entry-scan | 成功 | 既存入口・OKF生成入口・上流同名コピー | T-0002成果物、静的リンク・コピー検査 |
 | project-required | 成功 | 既存テスト、OKF検査、CI smoke相当 | `tests/run_all.py`: 144件成功、`index --check`、`lint` error 0/warn 0、smoke 2件成功 |
 
 ## 結果
+
+### 完了確認（2026-09-07）
+
+利用者のClaude Code確認済み報告と完了指示を受け、残っていた代表ルート確認を完了として受理した。`state: done`、`done_at: 2026-09-07` に更新し、本タスクの残作業はない。以下の実行不能・再開待ちは初回実装時の履歴として保持する。
+
+実装はokf-devkitの本流 `c14025aea7e7f5e5c40bbe8ee25b37e00cf5d35c` に統合済み。T-0013による配布版移行後の採用スキル索引は `harness/project/skill-profile.md` にある。統合版CIの実結果は [T-0007の追補](/backlog/T-0007-obsidian-okf.md) を参照する。
+
+### 初回実装の結果（2026-09-05）
 
 実装は対象リポジトリのコミット `2ae7c4261bce9d31324c35d6eaeb244c67794c22` に記録した。短い入口、ガイド、設定、制約表を適用し、Codexの代表4ルート、既存テスト、OKF検査、CI smoke相当を確認した。Claude Codeは未ログインのため代表ルートを実行不能として記録しており、両製品の到達条件を満たしていない。したがって `state: doing` を維持し、認証後にClaude側の代表ルートを再実行してから完了判定する。後続タスクは変更していない。
 
