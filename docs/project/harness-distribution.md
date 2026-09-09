@@ -1,22 +1,79 @@
 ---
 type: How-To
 title: 共通ハーネス配布物の導入と保守
-description: 固定Git版の配布物を照合し固有領域を保持して導入・移行・更新・巻戻し・撤去する明示手順。
+description: URL付きのAI依頼から現在版と目的版を解決し、固定Git版の導入・移行・更新・巻戻し・撤去へ進む手順。
 tags: [harness, distribution]
 status: stable
 layer: shared
 generated:
   by: codex/gpt-6
-  at: "2026-09-06"
-code_globs: ["distribution/**", "tests/test_distribution.py"]
-related: ["/backlog/T-0013-extract-distributable-core.md"]
+  at: "2026-09-07T14:05:39Z"
+code_globs: ["README.md", "distribution/**", "tests/test_distribution.py"]
+related: ["/backlog/T-0013-extract-distributable-core.md", "/backlog/T-0014-ai-distribution-entry.md"]
 ---
 
 # 共通ハーネス配布物の導入と保守
 
-配布元は `https://github.com/shirashu687/ai-dev-harness.git`。使う完全SHAと確認結果は [T-0013](/backlog/T-0013-extract-distributable-core.md) の結果を参照する。本書中の例示値を実在値に置き換える。タグ・ブランチの最新状態で配布版を代用しない。契約の正本は配布コミット内の `HARNESS_SPEC.md` §9.1.2〜§9.2.1。
+配布元は `https://github.com/shirashu687/ai-dev-harness.git`。依頼の入口と推奨版の記録は配布元の [README](../../README.md) を参照する。§0で版を解決した後、実操作は目的の固定SHAにある本書と検証コードに従う。本書中の例示値を実在値に置き換える。依頼・版選択の契約は配布元の現行 `HARNESS_SPEC.md` §9.1.4、操作の契約は配布コミット内の同仕様書 §9.1.2〜§9.2.1。
 
 配布はmanifestの11ファイルだけ。coreの6本を継続管理し、seedは初回作成後project所有、manualは既存入口へ反映する断片である。上流は対象側から直接導入する。Gitリポジトリ全体のcloneを対象へコピーしない。
+
+## 0. AIへの依頼と版の解決
+
+対象リポジトリをAIの作業場所として開き、導入または更新の依頼を一つ渡す。別の対象を指定したい場合だけ、そのリポジトリのパスを依頼へ追記する。
+
+<a id="ai-install"></a>
+
+### 導入の依頼文
+
+```text
+https://github.com/shirashu687/ai-dev-harness のREADMEを入口に、このリポジトリへ共通ハーネスを導入してください。推奨配布版と検証根拠を確認し、既存の構成・入口・必要検証を調べて、固定版の導入手順を実行してください。上流スキルと自前コアを別の依存として扱い、対象版・変更内容・検証結果と未確認範囲を記録してください。
+```
+
+<a id="ai-update"></a>
+
+### 更新の依頼文
+
+```text
+https://github.com/shirashu687/ai-dev-harness のREADMEを入口に、このリポジトリの共通ハーネスを推奨配布版へ更新してください。harness/install.jsonの現在版と目的版を別々に解決し、固定版の更新手順に従って照合・差分確認・必要検証を行い、対象版・変更内容・検証結果と未確認範囲を記録してください。
+```
+
+特定の版を使う依頼では、目的版の完全SHAを追記する。更新の依頼だけで上流スキルの版を変更することはない。上流も更新する場合は依頼へ明示し、対象のprofileにある上流の更新手順を別に実行する。
+
+<a id="resolve-versions"></a>
+
+### 現在版と目的版を解決する
+
+1. **対象を確認する。** 作業場所のGitルート、開始SHA、既存差分を確認し、対象のAGENTS等の入口から構成・必要検証・利用可能な実行環境を読む。実際に使う入口、仕様・課題、ドメイン文書、検証、採用スキル、worklogの所在を列挙する。既存の役割へ接続する情報は対象のconfigへ記録する（初回は§3）。
+2. **現在版の候補を読む。** 対象の `harness/install.json` から `source.repository`・`source.commit`・`source.manifest` を取得する。次の表示は候補の読取りであり、記録の有効性は固定版の `verify` で確定する。
+
+   ```powershell
+   $taskTarget = (git rev-parse --show-toplevel)
+   if ($LASTEXITCODE -ne 0) { throw 'target Git root unavailable' }
+   $taskRecordPath = Join-Path $taskTarget 'harness/install.json'
+   if (Test-Path -LiteralPath $taskRecordPath) {
+       $taskRecord = Get-Content -LiteralPath $taskRecordPath -Raw -Encoding utf8 | ConvertFrom-Json -ErrorAction Stop
+       $taskRecord.source | Format-List repository, commit, manifest
+   } else {
+       Write-Output '導入記録なし。既存コアの有無を確認して操作を選ぶ。'
+   }
+   ```
+
+3. **目的版を選ぶ。** 版指定があればその完全SHA、なければ配布元READMEの推奨版を候補にする。同じSHAを対象とする検証根拠と、取り下げ・問題の記録を読む。現在版も問題記録と照合する。版指定なしで推奨版がない場合、記録が不正な場合、出所・SHA・検証根拠が確認できない場合は、対象への書込み前に版の解決で止め、欠けた情報を報告する（→ SPEC §9.1.4）。問題が記録された版は影響と対処を確認してから操作を選ぶ。
+4. **固定した配布元を確認する。** §1のGit取得部分で目的版を独立cloneへcheckoutする。`git rev-parse HEAD` が選んだ完全SHAと一致すること、出所URL、cleanな作業ツリー、同SHAのmanifest・全配布ファイル・本書・`tests/test_distribution.py`・SPECの実在を確認する。固定版の手順とコードを読んでから同版のテスト・照合器を実行する。必要な現在版もその記録の出所から取得し、`Distribution` で解決する。取得不能時に最新HEADを代用しない（→ SPEC §9.1.3）。
+5. **操作を選ぶ。** 下表から固定版の節へ進む。ここまでで書込みの準備ができたという意味であり、退避・全件照合・競合時の中断・権限の確認は§2および → SPEC §9.2.1に従う。
+
+| 現物と解決結果 | 固定版で使う操作 |
+| --- | --- |
+| 記録なし、既存コアなし | §3の新規導入。`current = None` として全配置先を事前照合 |
+| 記録なし、既存コアあり | 新規導入を停止。§4はokf-devkitの既知pilot用であり、他の対象は比較点・移設差分を明示した移行計画が必要 |
+| 有効な現在版と目的版が同じ | `verify(target, desired)` と入口・必須設定の確認を行い、§3の同版再導入として変更なしで終了 |
+| 有効な現在版と目的版が異なる | `current = Distribution(source, old_sha)`、`desired = Distribution(source, sha)` を解決し、§5の更新。以前の版を指定した巻戻しは§6 |
+| 記録不正・現在版取得不能・管理コアの手修正等 | 照合で停止。§2・§9の中断と復旧へ接続し、不正記録を「未導入」として扱わない |
+
+例えばokf-devkitの導入記録が示すSHAとREADMEの推奨SHAが一致すれば「更新」の依頼でも同版確認になる。推奨版を別の検証済みSHAへ変更した後は、導入記録の旧SHAを `old_sha`、READMEの新SHAを `sha` とする。READMEの変更で対象の現在版が変わることはない。
+
+この§0は配布元の文書入口であり、既存の固定配布版に存在しない場合がある。版解決後は、そのSHAの本書§1〜§9へ接続する。新しい入口ができたことを、新しいコア配布版の検証と数えない。
 
 ## 1. 準備と固定版の取得
 
@@ -115,7 +172,7 @@ for row in desired.manifest['files']:
 
 ## 4. 記録なしpilotの明示移行
 
-okf-devkitの移行はT-0013の次セッションで行う。新規導入の停止を無効化せず、以下の独立した変更として扱う。
+以下はT-0013で実施したokf-devkitの記録なしpilot移行手順である。結果は [T-0013](/backlog/T-0013-extract-distributable-core.md) を参照する。新規導入の停止を無効化せず、独立した変更として扱う。
 
 1. 移行開始SHA・現物・全対象一覧を保存する。抽出元policyの制約表と「強制点の適用範囲」を既存configへ移す差分を列挙する。保護一覧、宣言形式、終了値、CIのPR/push差、GitHub権限と限界を欠落させない。
 2. guideの25スキル採用索引・製品配置・確認状態は既存profile側で保持する。共通カタログへの置換差分を列挙する。コアchecker、テスト、CI、上流両コピー、lock、通知、製品設定、既存journal・ledgerは保持する。
@@ -191,3 +248,5 @@ for n in applied:
 標準ライブラリunittestは実配布物を一時Gitへ入れ、11ファイル境界、6本の記録、改行、パス・記録破損、pilot fixture、追加変更削除のv1/v2/v1、復旧・再試行・競合・撤去・再導入を検査する。テスト用v2は正式配布版にしない。
 
 テストとは別に、§1〜§9の手順を一時Gitで実行し、終了後のファイル一覧・ハッシュ・固有データと入口参照を独立確認する。新規fixtureのconfigには実在する小さな検証コマンドを設定し、pilot fixtureは移設差分を明示する。演習した版、5操作、初回失敗と再実行結果をT-0013へ残す。fixtureの成功をokf-devkit移行・CI・Claude Code実機の成功へ読み替えない。
+
+§0からの入口確認は [T-0014](/backlog/T-0014-ai-distribution-entry.md)、ScheLiveAppでのURL付き依頼による実導入体験は [T-0009](/backlog/T-0009-second-repository-rollout.md) に記録する。実導入では依頼文、製品・環境、対象開始SHA、現在版・目的版、参照したREADMEのコミット、人の追加回答回数・概算作業時間・再試行をworklogへ残す。未測定値は未測定と書く。T-0009の導入が先行した場合は既存の導入結果と後日の入口確認を別の記録にする。

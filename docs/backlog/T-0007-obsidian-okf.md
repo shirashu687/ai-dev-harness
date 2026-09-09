@@ -1,33 +1,32 @@
 ---
 type: Backlog Item
 title: ObsidianとOKFの知識導線を接続する
-description: okf-devkitの同じMarkdownをObsidianで閲覧し、OKFの索引・検査と共存させながら別の正本や無制限な記録を作らない運用を確認する。
-tags: [shared, enhancement, ready-for-agent]
+description: OKFの相対索引・静的導線・統合版CIと利用者によるObsidian実機確認を終えた。
+tags: [shared, enhancement, ready-for-human]
 status: stable
 layer: shared
 generated:
-  by: "codex/gpt-6"
-  at: "2026-09-06"
-state: doing
+  by: "process:codex"
+  at: "2026-09-07"
+state: done
 priority: medium
 effort: M
 feasibility: B
 ai: assisted
 cost: false
 created: "2026-09-05"
-done_at: null
+done_at: "2026-09-07"
 accepts: ["⑬", "⑭"]
 spec: ["§4.2", "§6", "§8.1"]
 target: okf-devkit
 evidence:
-  - "okf-devkit target implementation: e75a041713ca1666c2fe236e9aee06c43c8a0810, a7d0c82df81bf6f94f6fae0350d49c0c7d6fad2e, 996f7a08685e90a63f0aec9505db1678456b1d83"
-  - "target worklog evidence commit: 8a9545feb406e32b113dbeb1ddddc62145406a9b"
-  - "target worklog handoff-history correction: 008c63e029db77e75337ce02479c946c0d879501"
-  - "target worklog final handoff note: 1a646369621dcdf7c918c04493963784ff95a5cb"
-  - "target worklog: C:/Users/rinta/Documents/1_projects/okf-devkit/harness/state/journal/T-0007-obsidian-okf.md"
-  - "verification: 163 tests passed; index/lint/check/render/affected/change-declaration and static Markdown navigation recorded in target worklog"
-  - "review: fixed point cfdbffe1a01e99432aa9d527c12192fb5a9e3669; specification and standards review completed, findings fixed; low-confidence P3 test-fixture duplication retained as non-blocking candidate"
-  - "Computer Useで利用可能なアプリは0件。ObsidianのVault・検索・リンク・frontmatter操作は実行不能であり、静的確認の成功で代替しない。"
+  - "e75a041713ca1666c2fe236e9aee06c43c8a0810"
+  - "a7d0c82df81bf6f94f6fae0350d49c0c7d6fad2e"
+  - "996f7a08685e90a63f0aec9505db1678456b1d83"
+  - "8a9545feb406e32b113dbeb1ddddc62145406a9b"
+  - "008c63e029db77e75337ce02479c946c0d879501"
+  - "1a646369621dcdf7c918c04493963784ff95a5cb"
+  - "c14025aea7e7f5e5c40bbe8ee25b37e00cf5d35c"
 related: ["/backlog/T-0006-retro-and-ledger.md", "/backlog/T-0008-pilot-two-products.md"]
 ---
 
@@ -160,19 +159,20 @@ HTML生成の結合検証は既存テストの一時バンドルを使い、本�
 
 ## 完了条件
 
-- [ ] リポジトリの同じMarkdownをVaultから閲覧・検索できる（受け入れ⑬。Obsidian実機実行不能）
-- [x] 仕様、ADR、バックログ、worklog、台帳の導線を静的に解決できる（Obsidian UI操作は未確認）
+- [x] リポジトリの同じMarkdownをVaultから閲覧・検索できる（受け入れ⑬。2026-09-07の利用者確認で完了受理）
+- [x] 仕様、ADR、バックログ、worklog、台帳の導線を静的に解決できる（Obsidian UI操作も利用者確認済み）
 - [x] 相対リンク設定が通常/backlog索引の全出力へ適用され、既定形式と再生成の互換性が保たれる
 - [x] 不正設定時の非書込み、特殊文字、HTMLリンク互換性の検証がある
-- [ ] 主要本文リンクと生成indexをObsidian実機で確認し、YAMLとMarkdownの同一性が保たれる（実行不能）
+- [x] 主要本文リンクと生成indexをObsidian実機で確認し、YAMLとMarkdownの同一性が保たれる（2026-09-07の利用者確認で完了受理）
 - [x] `.obsidian/` の個人状態がGit管理外である
 - [x] `okf index`、`okf lint`、`okf stale` が成立する（受け入れ⑭。staleはinfo 5件）
 - [x] OKF未使用時の代替がMarkdown + Gitとして説明されている
 - [x] 重複ノート・チャット全文・巨大ログを作っていない
-- [x] 既存テスト・変更宣言検査・仕様/標準reviewの証拠と、実機未確認を含む残存制約が記録されている
+- [x] 既存テスト・変更宣言検査・仕様/標準reviewの証拠、初回の制約と利用者による実機確認が記録されている
 - [x] 必須検証を4値で記録した
 - [x] 成果物コミットを `evidence` に記入した
-- [ ] タスクを完了状態にした（Obsidian実機・CI test/smoke未確認のため未達）
+- [x] 統合版のCI test / smokeの実結果を確認した（2026-09-07追補）
+- [x] タスクを完了状態にした
 
 ## 検証記録
 
@@ -183,8 +183,9 @@ HTML生成の結合検証は既存テストの一時バンドルを使い、本�
 | index-invalid-config | 成功 | `996f7a0` / 隔離CLI | unknown/null/数値/リストで非0、stderr明示、sentinel不変。全163件OK |
 | index-regeneration | 成功 | `996f7a0` / 隔離・対象 | 冪等write/check、marker保護、relative→既定/明示bundle-absolute復帰。対象index最新 |
 | render-relative | 成功 | `996f7a0` / 隔離HTML | 隣接・`_site`で子索引/本文リンクを変換し、Markdown原文不変。11ページ/warn0 |
-| obsidian-same-source | 実行不能 | Computer Use | `cua.getState()`が`apps: []`、Obsidianを解決/起動できず、Vault検索・リンク移動未確認 |
-| obsidian-frontmatter | 実行不能 | Computer Use | ObsidianのProperties/source表示と前後Git差分を未確認。静的成功へ読み替えなし |
+| obsidian-same-source-initial | 実行不能 | 初回のComputer Use | `cua.getState()`が`apps: []`、Obsidianを解決/起動できず、Vault検索・リンク移動未確認 |
+| obsidian-frontmatter-initial | 実行不能 | 初回のComputer Use | 当時はObsidianのProperties/source表示と前後Git差分を未確認 |
+| obsidian-user-confirmation | 成功 | Obsidian実機の確認 | 2026-09-07、利用者が「obsidianの確認も済みです」と報告し、該当部分の完了を指示 |
 | markdown-navigation | 成功 | `996f7a0` / 静的 | config→主要文書/索引/台帳の16リンク全てTrue。backlog/decisions空状態、ledger項目を確認 |
 | okf-index-lint-stale | 成功 | `996f7a0` / 対象CLI | index write/check最新、lint error0/warn0、stale終了0・info5件 |
 | private-settings-ignore | 成功 | `996f7a0` / Git | `.gitignore:27:/.obsidian/`で2例除外、tracked出力なし |
@@ -192,14 +193,26 @@ HTML生成の結合検証は既存テストの一時バンドルを使い、本�
 | change-declaration | 成功 | base `cfdbffe...` / working-tree | `check_changes.py`: `result=ok`、protected変更は宣言済み |
 | code-review-spec | 成功 | base `cfdbffe...` → `996f7a0` | 初回P2 2件を検出・修正・再検証。P0/P1なし。追補reviewはタイムアウト |
 | code-review-standards | 成功 | base `cfdbffe...` → `996f7a0` | P0-P2なし。P3低確信fixture重複を非ブロッキング候補として記録 |
-| ci-test | 未実行 | GitHub Actions | ローカル結果から推定しない |
-| ci-smoke | 未実行 | GitHub Actions | ローカル結果から推定しない |
+| ci-test-initial | 未実行 | 初回実装時のGitHub Actions | 当時の結果を保持。統合版の確認は下の別行 |
+| ci-smoke-initial | 未実行 | 初回実装時のGitHub Actions | 当時の結果を保持。統合版の確認は下の別行 |
+| ci-test-integrated | 成功 | `c14025aea7e7f5e5c40bbe8ee25b37e00cf5d35c` | [CI run 34121371457](https://github.com/shirashu687/okf-devkit/actions/runs/34121371457)、Windows/Ubuntu × Python 3.11/3.13の4ジョブでRun tests成功 |
+| ci-smoke-integrated | 成功 | 同統合版 | [End-to-end smoke](https://github.com/shirashu687/okf-devkit/actions/runs/34121371457/job/101739934236)、文書生成とhook応答の両工程が成功 |
 
 ## 結果
 
+### 統合後の確認と完了（2026-09-07）
+
+[okf-devkit PR #2](https://github.com/shirashu687/okf-devkit/pull/2) はマージ済みで、本流の上記完全SHAとローカルHEADの一致、作業ツリーに変更出力がないことを確認した。GitHub APIで同SHAのpush CIと各ジョブ・工程を照合し、テスト4環境と独立smokeの全5ジョブ成功を確認した。push実行ではPR専用の変更宣言検査がskipされるため、その工程の成功証拠には用いない。
+
+利用者のObsidian確認済み報告と完了指示を受け、残っていた同一Vault・検索・リンク・YAML表示等の実機確認を完了として受理した。`state: done`、`done_at: 2026-09-07` に更新し、本タスクの残作業はない。今回の完了根拠は利用者確認であり、エージェントの実機再実行は行っていない。対象の初回作業記録は `harness/state/journal/T-0007-obsidian-okf.md`、当時の実行不能・未実行は履歴として保持する。
+
+`evidence` は実装3コミット、作業記録3コミット、統合コミットのSHAだけに正規化した。旧欄の作業記録パスは上記、163件の検証結果とreviewの所見・未確認範囲は検証表と以下の初回記録に保持する。初回reviewの固定比較点は `cfdbffe1a01e99432aa9d527c12192fb5a9e3669`。
+
+### 初回実装の結果（2026-09-06）
+
 実装・自動検証・静的導線確認・仕様/標準reviewは完了（2026-09-06）。対象版は `996f7a08685e90a63f0aec9505db1678456b1d83`。Obsidian実機はComputer Useのネイティブアプリ面がなく、`obsidian-same-source` / `obsidian-frontmatter` を実行不能とした。CI test/smokeは未実行であり、必須証拠が揃っていないため、設計側T-0007は `state: doing` のまま完了にしない。次の一手はObsidian実機で同一Vaultを開いて検索・主要導線・YAML source表示・前後Git差分を確認し、CI実結果を記録することである。
 
-### lunaへの依頼プロンプト
+### lunaへの初回依頼プロンプト（実装済み・再開には使わない）
 
 ```text
 C:/Users/rinta/Documents/1_projects/harness/docs/backlog/T-0007-obsidian-okf.md を読み、T-0007を実装してください。仕様の正本は同リポジトリのHARNESS_SPEC.md、実装先は C:/Users/rinta/Documents/1_projects/okf-devkit です。
