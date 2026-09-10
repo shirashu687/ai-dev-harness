@@ -7,8 +7,8 @@ status: stable
 layer: shared
 generated:
   by: codex/gpt-6
-  at: "2026-09-09T12:54:51Z"
-code_globs: ["README.md", "LICENSE", "distribution/**", "tests/test_distribution.py"]
+  at: "2026-09-10T14:19:00Z"
+code_globs: ["README.md", "LICENSE", "distribution/**", "tests/test_distribution.py", "scripts/distribution.cjs", "tests/test_distribution.cjs"]
 related: ["/project/harness-usage.md", "/backlog/T-0013-extract-distributable-core.md", "/backlog/T-0014-ai-distribution-entry.md"]
 ---
 
@@ -19,6 +19,8 @@ related: ["/project/harness-usage.md", "/backlog/T-0013-extract-distributable-co
 配布はmanifestの11ファイルだけ。coreの6本を継続管理し、seedは初回作成後project所有、manualは既存入口へ反映する断片である。上流は対象側から直接導入する。Gitリポジトリ全体のcloneを対象へコピーしない。
 
 初めて使う人は [READMEの導入手順](../../README.md#getting-started) で準備と導入後の確認点を読んでから本書へ進む。導入後は [最初の作業と日常の使い方](harness-usage.md) を使う。本書のコードは、各節の前提と照合を伴う操作例であり、コードブロックだけをまとめて貼り付ける一括インストーラーではない。
+
+**Pythonがない場合は [Node.js版の操作例](/project/harness-distribution-node.md) を使う。** 本書§0の版解決とライセンス通知を確認してから、Node.js版へ進む。以下のPython例と同じ配布形式を使い、導入・更新・巻戻し・撤去・復旧を実行できる。
 
 ## 0. AIへの依頼と版の解決
 
