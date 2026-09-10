@@ -1,7 +1,10 @@
 # 変更履歴 — shared
 
+## 2026-09-10
+- **Creation** feat: support Python-free distribution maintenance with Node.js。 (`151bd5c`)
+
 ## 2026-09-09
-- **Update** T-0017: 利用者の指定に従い、LICENSEとREADMEの著作権者表記をGitHubアカウント名へ変更した。MIT本文と第三者通知は保持した。
+- **Update** T-0017: 利用者の指定に従い、LICENSEとREADMEの著作権者表記をGitHubアカウント名へ変更した。MIT本文と第三者通知は保持した（`aa9194e`）。
 - **Update** T-0016: READMEに用途・制約・導入準備・確認点・最初の小作業を追加し、日常利用の手順へ接続した。独自部分のMIT LICENSEと導入先への通知保持を整備し、配布11件・文書・参照検査を完了した（`2a10f8d`）。
 
 ## 2026-09-08

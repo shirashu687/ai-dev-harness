@@ -8,18 +8,18 @@ layer: shared
 generated:
   by: "codex/gpt-6"
   at: "2026-09-10T14:19:00Z"
-state: doing
+state: done
 priority: medium
 effort: M
 feasibility: A
 ai: full
 cost: false
 created: "2026-09-10"
-done_at: null
+done_at: "2026-09-10"
 accepts: []
 spec: ["§9.1.3", "§9.1.4", "§9.2.1"]
 target: harness
-evidence: []
+evidence: ["151bd5c2df9d3bff9a276593d413b8d3ff0f71f1"]
 related: ["/project/harness-distribution-node.md", "/project/harness-distribution.md"]
 ---
 
@@ -51,8 +51,8 @@ Node.js標準ライブラリで読取り専用の照合器を実装し、独立�
 - [x] 既存のmanifest・ハッシュ・導入記録と互換性がある
 - [x] 同版確認、更新、巻戻し、撤去、再導入、途中失敗、競合停止を一時Gitで確認した
 - [x] 必須検証を実行し、下の検証記録を4値で埋めた
-- [ ] `evidence` に成果物側のコミット SHA を記入した
-- [ ] 本ファイルの `state` を `done` にし `done_at` を記入した
+- [x] `evidence` に成果物側のコミット SHA を記入した
+- [x] 本ファイルの `state` を `done` にし `done_at` を記入した
 
 ## 検証記録
 
@@ -67,4 +67,4 @@ Node.js標準ライブラリで読取り専用の照合器を実装し、独立�
 
 ## 結果
 
-実装と手順を追加し、検証を実施した。配布利用側にPythonは不要。配布元のOKF文書管理には従来のCLIを使い、この環境では同梱Pythonと既存okf-devkitソースを明示して実行した。成果物SHAと最終文書検査は確定後に記録する。
+実装と手順を追加し、成果物 `151bd5c2df9d3bff9a276593d413b8d3ff0f71f1` を記録して完了した。配布利用側にPythonは不要。配布元のOKF文書管理には従来のCLIを使い、この環境では同梱Pythonと既存okf-devkitソースを明示して実行した。ログ生成の初回はT-0017の既存エントリにSHAがなく停止したため、既存の検証記録にある成果物SHAを補って再実行した。GitHubへのpush・推奨配布版の更新・他OS実機検証は行っていない。
