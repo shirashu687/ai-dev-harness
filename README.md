@@ -25,7 +25,7 @@
 
 以下は提供していません。
 
-- **一括インストーラー、専用CLI、公開プラグイン。** 現在はAIまたは人が明示手順を実行します。`tests/test_distribution.py` は照合器と一時環境のテストです。
+- **一括インストーラー、専用CLI、公開プラグイン。** 現在はAIまたは人が明示手順を実行します。`scripts/distribution.cjs` はNode.jsの読取り専用照合器です。Python版の照合器とテストも残しています。
 - **常駐実行、自動更新、定時の振り返り。** AIに作業を依頼した際に手順を読み、実行する運用です。
 - **全プロジェクト共通のCI・権限ガード・テスト。** 既存の仕組みへ接続します。文書だけでは禁止操作の阻止や報告の正しさを保証しません。
 - **上流スキルの一括同梱。** ガイドにあるスキル名は候補です。採用するスキルは別に導入し、未導入のものを利用可能とは扱いません。
@@ -41,7 +41,7 @@
 
 - **導入先のGitリポジトリ**と、変更を確認・取り消せる作業ブランチまたは作業用コピー。
 - **リポジトリのファイルを読み書きし、コマンドを実行できるAI開発環境。** 実証範囲は[後述](#validation)を参照してください。
-- **Git、Python 3、配布元GitHubへのアクセス。** 配布テストはPython標準ライブラリを使います。掲載の手動操作例はPowerShell形式です。
+- **Git、Node.js 22以上またはPython 3、配布元GitHubへのアクセス。** [Node.jsの導入・保守手順](docs/project/harness-distribution-node.md)ならPythonもnpmパッケージの追加も不要です。シェル操作例はPowerShell形式です。
 - **対象アプリの依存関係とテスト実行環境。** テスト・lint等のコマンドが分かればAIへ伝え、不明なら既存設定から調べてもらいます。
 
 上流スキルを採用する場合は、その導入手段の依存関係も別途必要です。OKF・Obsidianは任意であり、非OKFのプロジェクトにも接続できます。
@@ -53,6 +53,8 @@ https://github.com/shirashu687/ai-dev-harness のREADMEを入口に、このリ�
 ```
 
 AIは[版の解決手順](docs/project/harness-distribution.md#resolve-versions)に従い、既存差分の確認、固定版の取得、退避、設定と入口の接続、検証、導入記録の照合を行います。実装コードを先に読む必要はありません。人が操作する場合も[導入・保守手順](docs/project/harness-distribution.md)を使えます。
+
+Pythonがない場合は依頼文に「Pythonなし、Node.jsで実施してください」と添え、[Node.js手順](docs/project/harness-distribution-node.md)へ進みます。現在の推奨配布SHAにはNode.js照合器が含まれないため、同手順に従って照合器の固定SHAと互換検証も記録します。
 
 既存の指示・ファイルとの競合、利用できない実行環境、出所を確認できない版は、解決が必要な点として報告されます。コピーできただけの状態を導入成功とは扱いません。
 
@@ -132,12 +134,18 @@ AIには[更新の依頼文](docs/project/harness-distribution.md#ai-update)を�
 
 ## このリポジトリを開発する人へ
 
-配布物のテストはリポジトリルートで実行します（Python 3.12での検証記録があります）。GitもPATHに必要です。
+配布物のテストはリポジトリルートで実行します。Node.js 22以上とGitをPATHに用意してください。npm installは不要です。
+
+```shell
+node --test tests/test_distribution.cjs
+```
+
+Python版も利用できます（Python 3.12での検証記録があります）。
 
 ```shell
 python -B -m unittest discover -s tests -p test_distribution.py
 ```
 
-このコマンドは一時Gitリポジトリを作って検査します。プロジェクトへの導入コマンドではありません。文書編集の規約とOKFによる検査は [AGENTS.md](AGENTS.md) と [docs/AGENTS.md](docs/AGENTS.md) を参照してください。配布物を利用するだけならOKF CLIの導入は不要です。
+これらのコマンドは一時Gitリポジトリを作って検査します。プロジェクトへの導入コマンドではありません。Node.jsだけの通常テストではPythonとの相互照合1件をskipします。開発時にその検証も実行するには、環境変数 `HARNESS_TEST_PYTHON` にPython実行ファイルの絶対パスを設定します。文書編集の規約とOKFによる検査は [AGENTS.md](AGENTS.md) と [docs/AGENTS.md](docs/AGENTS.md) を参照してください。配布物を利用するだけならOKF CLIの導入は不要です。
 
 仕様の正本は [HARNESS_SPEC.md](HARNESS_SPEC.md)、実装・実証の進捗は [バックログ](docs/backlog/index.md) にあります。

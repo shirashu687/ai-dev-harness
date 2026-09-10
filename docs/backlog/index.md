@@ -25,7 +25,7 @@ T-0001〜T-0007・T-0009・T-0011・T-0013〜T-0015は完了済み。段階1の�
 |---|---|
 | doing | 1 |
 | todo | 2 |
-| done | 14 |
+| done | 15 |
 | dropped | 0 |
 
 ## doing
@@ -36,6 +36,7 @@ T-0001〜T-0007・T-0009・T-0011・T-0013〜T-0015は完了済み。段階1の�
 * [自前ハーネスをプラグイン化して導入を統合する](/backlog/T-0010-plugin-and-bootstrap.md) - `low` `XL` - 導入先3件以上と実測された手作業負担を条件に、自前ハーネスだけをプラグイン化し上流公式導入を呼ぶ一括コマンドを検討する。
 
 ## done
+* [Python不要のNode.js配布照合と保守手順](/backlog/T-0018-python-node-js.md) - 2026-09-10 完了 - Node.js版の配布照合器と操作例を追加し、Pythonなしで導入・更新・巻戻し・撤去できるようにする。
 * [初めての利用者向けにREADME・使用手順・ライセンスを整備する](/backlog/T-0016-getting-started-and-license.md) - 2026-09-09 完了 - 実装未読の利用者が導入と最初の作業を試せる文書とMITライセンスを整える。
 * [ライセンスの著作権者をGitHubアカウント名へ変更する](/backlog/T-0017-license-copyright-holder.md) - 2026-09-09 完了 - LICENSEとREADMEの著作権者表記をGitHubアカウント名へ揃える。
 * [ScheLiveAppへ独立した二依存として導入する](/backlog/T-0009-second-repository-rollout.md) - 2026-09-08 完了 - ScheLiveAppへ上流スキルと自前ハーネスを別々の依存として導入し、更新・巻戻し・撤去で固有領域が保たれるか確認する。
