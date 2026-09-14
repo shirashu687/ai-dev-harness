@@ -6,16 +6,14 @@ tags: [harness, distribution, research]
 status: draft
 layer: shared
 generated:
-  by: codex/gpt-6
-  at: "2026-09-07T13:22:14Z"
+  by: "devin/swe-2-max"
+  at: "2026-09-15"
 code_globs:
   - distribution/manifest.json
   - distribution/core/**
   - distribution/templates/**
   - tests/test_distribution.py
 related:
-  - /backlog/T-0011-distribution-strategy.md
-  - /backlog/T-0010-plugin-and-bootstrap.md
   - /project/harness-distribution.md
 sources:
   - resource: https://docs.npmjs.com/cli/v11/commands/npm-install/
@@ -42,7 +40,7 @@ sources:
 
 # 配布方式の一次資料比較メモ
 
-確認日: **2026-09-07**。対象は [T-0011](/backlog/T-0011-distribution-strategy.md) の方式比較用の事実であり、利用者条件・採用判断・保守枠は同タスクに置く。共通規定は `HARNESS_SPEC.md` を参照する。本書で方式を採用せず、インストール・実装・公開も行っていない。
+確認日: **2026-09-07**。対象は [T-0011](https://github.com/shirashu687/ai-dev-harness/issues/17) の方式比較用の事実であり、利用者条件・採用判断・保守枠は同タスクに置く。共通規定は `HARNESS_SPEC.md` を参照する。本書で方式を採用せず、インストール・実装・公開も行っていない。
 
 外部資料は公式ページを実際に開いて確認した。npmはv11資料、pip/pipxと製品資料は確認日の公開文書に基づく。対象環境の導入済み版で同じ機能が使えることを実証した記録ではない。Codexはローカルの同梱プラグインmanifestと作成支援資料を限定的に確認した後、不足する配布仕様をOpenAI公式資料で補った。
 
@@ -93,4 +91,4 @@ sources:
 - npm/Python/プラグインでこのharnessを包んだ実物は作っておらず、導入時間・更新工数・撤去成功率は未測定。
 - 両製品のプラグインで同じmanifestをそのまま使えることや、同じスキルの動作が一致することは未検証。
 - Codexの公開資料とこの環境のローカル作成支援資料には更新・再読込み案内の差がある。候補に残った場合に、実際の製品版と取得経路を固定して確認する。
-- 自分の複数repoへの利用を、公開サービスの保守義務を引き受けたことへ読み替えない。利用者条件と判断は [T-0011](/backlog/T-0011-distribution-strategy.md) を参照する。
+- 自分の複数repoへの利用を、公開サービスの保守義務を引き受けたことへ読み替えない。利用者条件と判断は [T-0011](https://github.com/shirashu687/ai-dev-harness/issues/17) を参照する。

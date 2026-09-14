@@ -1,6 +1,6 @@
 # 共通ハーネス構築 — エージェント向け入口
 
-このリポジトリは**共通ハーネスの設計・仕様・バックログを置く場所**であり、ハーネスの適用対象ではない。
+このリポジトリは**共通ハーネスの設計・仕様を置く場所**であり、ハーネスの適用対象ではない。タスク管理は GitHub Issues で行う。
 実際にハーネスを導入する対象プロジェクトは `okf-devkit`（段階1）→ `ScheLiveApp`（段階3）。
 したがって仕様書の R8（入口は1枚）・第11節（作らないもの）は、このリポジトリには適用しない。
 
@@ -12,11 +12,11 @@
 | `docs/_archive/v0.2/` | 第0.2版までの設計・審査資料 | **凍結。内容を編集しない**。過去の根拠を確認するときに読む（一覧は `HARNESS_SPEC.md` §1.1） |
 | `HARNESS_SKILLS_OVERVIEW.html` | 現行方針の人間向け図解 | 説明資料。判断が食い違う場合は `HARNESS_SPEC.md` を正とする |
 
-## バックログ
+## タスク管理
 
-- 作業単位は `docs/backlog/T-NNNN-<kebab>.md`（1タスク1ファイル）。書式の正は `docs/CONVENTIONS.md`
+- 作業単位は GitHub Issue（1タスク1 Issue）。起票・参照は `gh issue` を使う。運用の正は `docs/agents/issue-tracker.md`
 - `docs/` で作業する前に `docs/AGENTS.md` を読む
-- CLI は `python -m okf_devkit.cli <command>` で呼ぶ（`okf.exe` は PATH に無い）
+- ドキュメント用 CLI は `python -m okf_devkit.cli <command>` で呼ぶ（`okf.exe` は PATH に無い）
 - 進め方: 薄く起こし、**着手直前の1本だけ**詳細を詰める
 
 ## 決定を書く場所（同じ文を二箇所に書かない）
@@ -24,18 +24,18 @@
 | 決めたこと | 行き先 |
 | --- | --- |
 | 他のタスクでも将来のプロジェクトでも成り立つ規定 | `HARNESS_SPEC.md`。タスクからは `→ SPEC §x.y` で参照する |
-| そのタスクを終わらせるためだけの情報 | タスクファイルの「決定と根拠」 |
+| そのタスクを終わらせるためだけの情報 | 該当 Issue の本文またはコメント |
 | 根拠が1件しかない観測 | 改善台帳（対象プロジェクト側の `harness/ledger.md`） |
 
 ## エージェント向け詳細ルール
 
 ### 作業項目
 
-作業項目は `docs/backlog/T-NNNN-<kebab>.md` で管理し、作成には `python -m okf_devkit.cli` を使う。詳細は `docs/agents/issue-tracker.md` を読む。
+作業項目は GitHub Issues で管理する。詳細は `docs/agents/issue-tracker.md` を読む。
 
 ### Triageラベル
 
-`tags:` にカテゴリ1つと状態ラベル1つを記録する。詳細は `docs/agents/triage-labels.md` を読む。
+Issue にカテゴリ1つと状態ラベル1つを付ける。詳細は `docs/agents/triage-labels.md` を読む。
 
 ### ドメイン文書
 

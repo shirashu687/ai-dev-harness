@@ -6,10 +6,10 @@ tags: [harness, distribution, nodejs]
 status: stable
 layer: shared
 generated:
-  by: codex/gpt-6
-  at: "2026-09-10T14:19:00Z"
+  by: "devin/swe-2-max"
+  at: "2026-09-15"
 code_globs: ["scripts/distribution.cjs", "tests/test_distribution.cjs", "distribution/**"]
-related: ["/project/harness-distribution.md", "/backlog/T-0018-python-node-js.md"]
+related: ["/project/harness-distribution.md"]
 ---
 
 # Pythonなしで共通ハーネスを導入・保守する

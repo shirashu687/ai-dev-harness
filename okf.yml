@@ -1,7 +1,7 @@
 # okf-devkit の設定ファイル。`okf init` が生成した。
 #
 # ここに書くのは**このリポジトリ固有の設定だけ**でよい。
-# types / statuses / kind_rules / backlog の語彙、index のマーカーといった
+# types / statuses / kind_rules / index のマーカーといった
 # 普遍的な設定はパッケージ同梱の defaults.yml から自動的に継承される。
 # 上書きしたいキーだけをここに書き足すこと。
 #
@@ -26,6 +26,17 @@ layers:
 layer_dirs:
   shared: project
 
+# type 語彙。タスク管理は GitHub Issues へ移行したため、既定の
+# `Backlog Item` を除いたリストを明示する（defaults.yml はリスト丸ごと置換）。
+types:
+  - Project Overview
+  - Architecture
+  - Reference
+  - How-To
+  - Decision Record
+  - Glossary
+  - Convention
+
 # 変更パス → 層の判定。上から順に評価し、最初にマッチしたものを採用する。
 # layer: skip はどの log.md にも記録しないことを意味する。
 # **このマッピングが `okf log` と `okf affected` の精度を決める。**
@@ -48,8 +59,3 @@ log:
   # 既存リポジトリに後から導入し、log.md に手書きの既存エントリがある場合は、
   # 移行済みの最後のコミット SHA をここに入れる（二重追記の防止）。
   baseline: ""
-
-# backlog の設定。dict なので、書いたキーだけが既定を上書きする。
-# ID は T-0001 形式（Harness Task の T）。
-backlog:
-  prefix: T

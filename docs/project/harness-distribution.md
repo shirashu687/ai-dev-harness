@@ -6,10 +6,10 @@ tags: [harness, distribution]
 status: stable
 layer: shared
 generated:
-  by: codex/gpt-6
-  at: "2026-09-10T14:19:00Z"
+  by: "devin/swe-2-max"
+  at: "2026-09-15"
 code_globs: ["README.md", "LICENSE", "distribution/**", "tests/test_distribution.py", "scripts/distribution.cjs", "tests/test_distribution.cjs"]
-related: ["/project/harness-usage.md", "/backlog/T-0013-extract-distributable-core.md", "/backlog/T-0014-ai-distribution-entry.md"]
+related: ["/project/harness-usage.md"]
 ---
 
 # 共通ハーネス配布物の導入と保守
@@ -189,7 +189,7 @@ for row in desired.manifest['files']:
 
 ## 4. 記録なしpilotの明示移行
 
-以下はT-0013で実施したokf-devkitの記録なしpilot移行手順である。結果は [T-0013](/backlog/T-0013-extract-distributable-core.md) を参照する。新規導入の停止を無効化せず、独立した変更として扱う。
+以下はT-0013で実施したokf-devkitの記録なしpilot移行手順である。結果は [T-0013](https://github.com/shirashu687/ai-dev-harness/issues/19) を参照する。新規導入の停止を無効化せず、独立した変更として扱う。
 
 1. 移行開始SHA・現物・全対象一覧を保存する。抽出元policyの制約表と「強制点の適用範囲」を既存configへ移す差分を列挙する。保護一覧、宣言形式、終了値、CIのPR/push差、GitHub権限と限界を欠落させない。
 2. guideの25スキル採用索引・製品配置・確認状態は既存profile側で保持する。共通カタログへの置換差分を列挙する。コアchecker、テスト、CI、上流両コピー、lock、通知、製品設定、既存journal・ledgerは保持する。
@@ -264,6 +264,6 @@ for n in applied:
 
 標準ライブラリunittestは実配布物を一時Gitへ入れ、11ファイル境界、6本の記録、改行、パス・記録破損、pilot fixture、追加変更削除のv1/v2/v1、復旧・再試行・競合・撤去・再導入を検査する。テスト用v2は正式配布版にしない。
 
-テストとは別に、§1〜§9の手順を一時Gitで実行し、終了後のファイル一覧・ハッシュ・固有データと入口参照を独立確認する。新規fixtureのconfigには実在する小さな検証コマンドを設定し、pilot fixtureは移設差分を明示する。演習した版、5操作、初回失敗と再実行結果をT-0013へ残す。fixtureの成功をokf-devkit移行・CI・Claude Code実機の成功へ読み替えない。
+テストとは別に、§1〜§9の手順を一時Gitで実行し、終了後のファイル一覧・ハッシュ・固有データと入口参照を独立確認する。新規fixtureのconfigには実在する小さな検証コマンドを設定し、pilot fixtureは移設差分を明示する。演習した版、5操作、初回失敗と再実行結果を[T-0013](https://github.com/shirashu687/ai-dev-harness/issues/19)へ残す。fixtureの成功をokf-devkit移行・CI・Claude Code実機の成功へ読み替えない。
 
-§0からの入口確認は [T-0014](/backlog/T-0014-ai-distribution-entry.md)、ScheLiveAppでのURL付き依頼による実導入体験は [T-0009](/backlog/T-0009-second-repository-rollout.md) に記録する。実導入では依頼文、製品・環境、対象開始SHA、現在版・目的版、参照したREADMEのコミット、人の追加回答回数・概算作業時間・再試行をworklogへ残す。未測定値は未測定と書く。T-0009の導入が先行した場合は既存の導入結果と後日の入口確認を別の記録にする。
+§0からの入口確認は [T-0014](https://github.com/shirashu687/ai-dev-harness/issues/20)、ScheLiveAppでのURL付き依頼による実導入体験は [T-0009](https://github.com/shirashu687/ai-dev-harness/issues/15) に記録する。実導入では依頼文、製品・環境、対象開始SHA、現在版・目的版、参照したREADMEのコミット、人の追加回答回数・概算作業時間・再試行をworklogへ残す。未測定値は未測定と書く。T-0009の導入が先行した場合は既存の導入結果と後日の入口確認を別の記録にする。
