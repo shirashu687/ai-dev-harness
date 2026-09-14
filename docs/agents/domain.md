@@ -6,8 +6,8 @@ tags: [agents, domain]
 status: stable
 layer: shared
 generated:
-  by: "codex/setup-matt-pocock-skills"
-  at: "2026-09-04"
+  by: "devin/swe-2-max"
+  at: "2026-09-15"
 related:
   - /CONVENTIONS.md
   - /AGENTS.md
@@ -28,6 +28,6 @@ related:
 
 ## このリポジトリ固有の注意
 
-`harness` は共通ハーネスの設計・仕様・バックログ置き場であり、ハーネスの適用対象プロジェクトではない。`HARNESS_SPEC.md` が仕様の正本であり、凍結文書は編集しない。
+`harness` は共通ハーネスの設計・仕様の置き場であり、ハーネスの適用対象プロジェクトではない。タスク管理は GitHub Issues で行う。`HARNESS_SPEC.md` が仕様の正本であり、凍結文書は編集しない。
 
 ドメイン用語や設計判断を新たに確定した場合は、既存の文書配置規約に従って `CONTEXT.md` または `docs/project/decisions/` を更新する。

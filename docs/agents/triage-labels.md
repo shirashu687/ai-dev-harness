@@ -1,13 +1,13 @@
 ---
 type: Convention
 title: Triage labels
-description: docs/backlog で使う triage カテゴリと状態ラベルの対応表。
+description: GitHub Issues で使う triage カテゴリと状態ラベルの対応表。
 tags: [agents, triage]
 status: stable
 layer: shared
 generated:
-  by: "codex/setup-matt-pocock-skills"
-  at: "2026-09-04"
+  by: "devin/swe-2-max"
+  at: "2026-09-15"
 related:
   - /agents/issue-tracker.md
   - /CONVENTIONS.md
@@ -32,10 +32,10 @@ related:
 | `ready-for-human` | `ready-for-human` | 人間の判断・作業が必要 |
 | `wontfix` | `wontfix` | 対応しない |
 
-triage 済みの backlog item には、カテゴリを1つ、状態を1つだけ `tags:` に記録する。`state:` は backlog の進捗であり、これらのラベルとは別に扱う。
+triage 済みの Issue には、カテゴリを1つ、状態を1つだけ GitHub ラベルとして付ける。進捗（open / `doing` ラベル / closed）は Issue の状態で表し、これらのラベルとは別に扱う。
 
 例:
 
-```yaml
-tags: [shared, enhancement, needs-triage]
+```shell
+gh issue edit <N> --add-label enhancement --add-label needs-triage
 ```

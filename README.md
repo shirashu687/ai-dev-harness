@@ -95,8 +95,8 @@ Pythonがない場合は依頼文に「Pythonなし、Node.jsで実施してく�
 | --- | --- |
 | 提供状態 | 提供中（2026-09-07確認） |
 | 推奨する完全GitコミットSHA | `898d514f0594ff09f6c19292ef4df56f6cc4ac50` |
-| 検証根拠 | [T-0013の確定記録](https://github.com/shirashu687/ai-dev-harness/blob/e04e3dae2ab6f797def69a3a6c541ca0b5a643c6/docs/backlog/T-0013-extract-distributable-core.md): 正式GitHubからの独立取得、11ファイルの配布境界、5操作と復旧の演習、okf-devkitへの移行・保持検証 |
-| 今回の再確認 | [T-0014の検証記録](docs/backlog/T-0014-ai-distribution-entry.md): 固定版の取得・内容・手順参照と文書入口の確認 |
+| 検証根拠 | [T-0013の確定記録](https://github.com/shirashu687/ai-dev-harness/issues/19): 正式GitHubからの独立取得、11ファイルの配布境界、5操作と復旧の演習、okf-devkitへの移行・保持検証 |
+| 今回の再確認 | [T-0014の検証記録](https://github.com/shirashu687/ai-dev-harness/issues/20): 固定版の取得・内容・手順参照と文書入口の確認 |
 | 推奨を取り下げた版・問題 | 記録なし（2026-09-07時点） |
 
 これは導入・更新先の推奨です。導入済みの現在版は対象リポジトリの `harness/install.json` から確認します。取得方法と同版時の扱いは[版の解決手順](docs/project/harness-distribution.md#resolve-versions)を参照してください。
@@ -111,10 +111,10 @@ Pythonがない場合は依頼文に「Pythonなし、Node.jsで実施してく�
 
 | 確認対象 | 記録されている結果 |
 | --- | --- |
-| 固定版の取得と配布操作 | 正式GitHubからの取得、11ファイルの境界、5操作と復旧の一時環境演習。[T-0013](docs/backlog/T-0013-extract-distributable-core.md) |
-| okf-devkit | 共通コアへの移行と固有データ保持を確認。製品利用の記録は [T-0008](docs/backlog/T-0008-pilot-two-products.md)、配布移行は [T-0013](docs/backlog/T-0013-extract-distributable-core.md) |
-| ScheLiveApp | コア・上流を分けた導入、隔離演習、Codex実利用、ローカル必須検証を確認。Claude Code実利用やホスト上の最終CIは今回の確認外。[T-0009](docs/backlog/T-0009-second-repository-rollout.md) |
-| URL付き依頼の入口 | 固定版・参照・同版照合を確認。[T-0014](docs/backlog/T-0014-ai-distribution-entry.md)。README公開後のURL入口を通した実導入体験と負担軽減は未確認 |
+| 固定版の取得と配布操作 | 正式GitHubからの取得、11ファイルの境界、5操作と復旧の一時環境演習。[T-0013](https://github.com/shirashu687/ai-dev-harness/issues/19) |
+| okf-devkit | 共通コアへの移行と固有データ保持を確認。製品利用の記録は [T-0008](https://github.com/shirashu687/ai-dev-harness/issues/14)、配布移行は [T-0013](https://github.com/shirashu687/ai-dev-harness/issues/19) |
+| ScheLiveApp | コア・上流を分けた導入、隔離演習、Codex実利用、ローカル必須検証を確認。Claude Code実利用やホスト上の最終CIは今回の確認外。[T-0009](https://github.com/shirashu687/ai-dev-harness/issues/15) |
+| URL付き依頼の入口 | 固定版・参照・同版照合を確認。[T-0014](https://github.com/shirashu687/ai-dev-harness/issues/20)。README公開後のURL入口を通した実導入体験と負担軽減は未確認 |
 
 一時環境での成功を、あなたのプロジェクトでの導入成功とは読み替えません。開発速度や手戻りの改善効果も未認定です。
 
@@ -148,4 +148,4 @@ python -B -m unittest discover -s tests -p test_distribution.py
 
 これらのコマンドは一時Gitリポジトリを作って検査します。プロジェクトへの導入コマンドではありません。Node.jsだけの通常テストではPythonとの相互照合1件をskipします。開発時にその検証も実行するには、環境変数 `HARNESS_TEST_PYTHON` にPython実行ファイルの絶対パスを設定します。文書編集の規約とOKFによる検査は [AGENTS.md](AGENTS.md) と [docs/AGENTS.md](docs/AGENTS.md) を参照してください。配布物を利用するだけならOKF CLIの導入は不要です。
 
-仕様の正本は [HARNESS_SPEC.md](HARNESS_SPEC.md)、実装・実証の進捗は [バックログ](docs/backlog/index.md) にあります。
+仕様の正本は [HARNESS_SPEC.md](HARNESS_SPEC.md)、実装・実証の進捗は [GitHub Issues](https://github.com/shirashu687/ai-dev-harness/issues) にあります。

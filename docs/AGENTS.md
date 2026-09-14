@@ -6,8 +6,8 @@ tags: [docs, okf, guide]
 status: stable
 layer: shared
 generated:
-  by: process:okf-devkit
-  at: 2026-08-31T15:12:28Z
+  by: "devin/swe-2-max"
+  at: "2026-09-15"
 related:
   - /CONVENTIONS.md
 ---
@@ -35,7 +35,6 @@ related:
 | `AGENTS.md` | 本ファイル | 手書き |
 | `project/` | 層をまたぐ知識（概要・用語集・ADR） | 手書き / LLM |
 | — | 層ごとの仕様・手順書 | 手書き / LLM |
-| `backlog/` | やること1件1ファイル | `okf new backlog` |
 | `_templates/` | テンプレート集。**バンドル対象外**（index にも lint にも出ない） | 手書き |
 | `_assets/` / `*.html` | `okf render` の閲覧用生成物。**バンドル対象外・Git管理外** | 手で編集しない |
 
@@ -54,7 +53,6 @@ related:
 | 一覧・仕様（API / コンポーネント / テーブル） | `Reference` | `_templates/reference.md` |
 | 手順書・使い方 | `How-To` | `_templates/how-to.md` |
 | 設計判断の記録（なぜそうしたか） | `Decision Record` | `_templates/decision-record.md` |
-| やりたいこと | `Backlog Item` | `_templates/backlog-item.md` |
 | 用語集 | `Glossary` | `_templates/glossary.md` |
 | プロジェクト全体像 | `Project Overview` | — |
 | 執筆規約 | `Convention` | — |
@@ -78,10 +76,10 @@ okf sync
 ### C. ユーザーが「やりたいこと」を言ったとき
 
 ```bash
-okf new backlog --title "<やりたいこと>" --layer <layer>
+gh issue create --repo shirashu687/ai-dev-harness --title "<やりたいこと>" --body "<本文>"
 ```
 
-ID 採番と frontmatter はスクリプトが埋める。LLM は `## 背景・現状` `## 進め方` `## 完了条件` を調査して記入する。
+作業項目の正は GitHub Issues（[issue-tracker.md](/agents/issue-tracker.md)）。LLM は `## 背景・現状` `## 進め方` `## 完了条件` を調査して本文に記入する。
 
 ### D. 作業が完了したとき — 完了の定義
 
@@ -89,13 +87,12 @@ ID 採番と frontmatter はスクリプトが埋める。LLM は `## 背景・�
 
 1. 影響ドキュメントの本文更新（対象は `okf affected` が出力するもの）
 2. 該当層 `docs/<layer>/log.md` への追記（`okf log --write` で生成）
-3. 対応する `docs/backlog/*.md` の `state:` 更新（完了なら `state: done` + `done_at`）
+3. 対応する Issue のクローズ（`gh issue close <N>`。完了時は `done_at` 相当の日付と `evidence` を本文のメタデータ表に記録してから閉じる）
 
 ## 4. やってはいけないこと
 
 - ❌ `index.md` を手で書く（自動生成物。`<!-- okf:auto:start -->` 〜 `<!-- okf:auto:end -->` の中身は上書きされる）
 - ❌ `type` を [CONVENTIONS.md](/CONVENTIONS.md) の語彙表にない値で書く（lint が error にする）
-- ❌ `status`（ドキュメントの状態）と `state`（backlog の進捗）を混同する。**別物**
 - ❌ 巨大な1ファイルに追記し続ける。分割して `related` で繋ぐ
 - ❌ `docs/` の外に恒久ドキュメントを置く
 
@@ -107,8 +104,6 @@ okf log --write              # git 履歴から log.md に追記
 okf lint                     # OKF 適合 + 語彙検証
 okf stale                    # 陳腐化レポート
 okf affected --base main     # 更新すべきドキュメントを列挙
-okf new backlog --title "..." --layer shared
-okf status                   # backlog 集計
 okf render                   # Markdown の隣に閲覧用 HTML を生成
 okf render --output _site    # 公開用の独立サイトを生成
 okf sync                     # index → log → lint → stale を一括

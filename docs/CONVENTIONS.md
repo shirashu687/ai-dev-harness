@@ -6,8 +6,8 @@ tags: [docs, okf, convention]
 status: stable
 layer: shared
 generated:
-  by: process:okf-devkit
-  at: 2026-08-31T15:12:28Z
+  by: "devin/swe-2-max"
+  at: "2026-09-15"
 related:
   - /AGENTS.md
 ---
@@ -20,7 +20,7 @@ related:
 OKF は「器」の仕様であり、**`type` に何を書くかなどの語彙は規定していない**。本ファイルがその語彙を定義し、`okf lint` が機械的に強制する。
 
 > このファイルは `okf init` が生成した雛形である。**プロジェクトに合わせて自由に書き換えてよい。**
-> ただし語彙表（§2 / §5 / §1-1 の `layer`）を変えたら、`okf.yml` の対応するキーも必ず合わせること。
+> ただし語彙表（§2 / §1-1 の `layer`）を変えたら、`okf.yml` の対応するキーも必ず合わせること。
 > 食い違うと lint の判定と本ファイルの記述が矛盾する。
 
 ---
@@ -44,9 +44,8 @@ OKF は「器」の仕様であり、**`type` に何を書くかなどの語彙�
 | `code_globs` | 独自拡張 | **コード由来の文書は必須** | 根拠となるコードのパス/glob のリスト。§3 参照 |
 | `layer` | 独自拡張 | **必須** | （層なし） / `shared` |
 | `related` | 独自拡張 | 任意 | 関連ドキュメントのバンドル相対パスのリスト |
-| `state` 他 | 独自拡張 | backlog のみ | §5 参照 |
 
-> OKF v0.2 §5 は「プロデューサーは任意のキーを追加してよい」と明示している。`layer` / `related` / `code_globs` / backlog 系はその拡張。
+> OKF v0.2 §5 は「プロデューサーは任意のキーを追加してよい」と明示している。`layer` / `related` / `code_globs` はその拡張。
 
 ### 1-2. 記述例
 
@@ -89,15 +88,6 @@ related:
 | `human:` 以外のみ | *machine-confirmed* | 機械的な確認のみ |
 | `human:` を含む | *human-reviewed* | 人がレビュー済み |
 
-### 1-4. `status` と `state` は別物
-
-混同が起きやすいので明記する。
-
-| キー | 対象 | 値 |
-|---|---|---|
-| `status` | **ドキュメント自体**のライフサイクル（OKF 予約） | `draft` / `stable` / `deprecated` |
-| `state` | **backlog アイテムの進捗**（独自拡張） | `todo` / `doing` / `done` / `dropped` |
-
 ---
 
 ## 2. `type` 語彙表
@@ -112,7 +102,6 @@ related:
 | `How-To` | 手順書・使用ドキュメント | 各層 `guides/` | `_templates/how-to.md` |
 | `Decision Record` | 設計判断の記録（ADR） | `project/decisions/` | `_templates/decision-record.md` |
 | `Glossary` | 用語集 | `project/` | `_templates/glossary.md` |
-| `Backlog Item` | やること1件 | `backlog/` | `_templates/backlog-item.md` |
 | `Convention` | 執筆規約 | ルート | — |
 
 `index.md` のセクション順もこの表の順で固定される（差分を安定させるため）。
@@ -131,7 +120,7 @@ code_globs:
 
 - 値は**文字列のフラットなリスト**。リポジトリルートからの相対パス、または glob
 - **OKF 標準の `sources` と混同しないこと。** `sources` は出典（provenance）用で、`resource` には「実体を一意に指す URI」を書く仕様であり、glob パターンは書けない。監視用途を標準フィールドに載せると汎用 OKF ツールがリンクを解決できないため、独自キーに分離している（OKF v0.2 §5 は独自キーの追加を明示的に許可しており、consumer は未知キーを保持する）
-- **必須となる type**: `Project Overview` / `Architecture` / `Reference` / `How-To`。`Convention` / `Glossary` / `Decision Record` / `Backlog Item` は任意。`status: deprecated` の文書は必須要件から除外される
+- **必須となる type**: `Project Overview` / `Architecture` / `Reference` / `How-To`。`Convention` / `Glossary` / `Decision Record` は任意。`status: deprecated` の文書は必須要件から除外される
 
 これにより:
 
@@ -158,30 +147,7 @@ OKF v0.2 §6 に従い、**バンドルルート起点の絶対パス**を推奨
 
 ---
 
-## 5. Backlog Item 専用フィールド
-
-| フィールド | 値 | 意味 |
-|---|---|---|
-| `state` | `todo` / `doing` / `done` / `dropped` | 進捗 |
-| `priority` | `high` / `medium` / `low` | 優先度 |
-| `effort` | `S`(数時間) / `M`(1〜3日) / `L`(1週間〜) / `XL`(数週間〜) | 工数 |
-| `feasibility` | `A`(◎すぐできる) / `B`(○やればできる) / `C`(△要調査) / `D`(×現状困難) | 実現可能性 |
-| `ai` | `full`(🤖) / `assisted`(🤖△) / `manual`(👤) | AI 活用度 |
-| `cost` | `true` / `false` | 💰 コスト発生の有無 |
-| `created` | `YYYY-MM-DD` | 起票日 |
-| `done_at` | `YYYY-MM-DD` / `null` | 完了日。`state: done` なら必須 |
-| `accepts` | 丸数字のリスト / `[]` | このタスクが動かす受け入れ条件（`HARNESS_SPEC.md` 第3節の①〜⑳） |
-| `spec` | 節番号のリスト / `[]` | 根拠となる `HARNESS_SPEC.md` の節 |
-| `target` | リポジトリ名 / `null` | 成果物が入るリポジトリ（例: `okf-devkit`） |
-| `evidence` | コミット SHA のリスト | 成果物側のコミット。`state: done` なら必須 |
-
-**ユーザーが書くのは本文の `## やりたいこと` の1〜3行だけ**。ID 採番・frontmatter はスクリプトが、背景・進め方・完了条件は LLM が埋める。
-
-`accepts` / `spec` / `target` / `evidence` はこのリポジトリ固有の拡張である（OKF v0.2 §5 が許可する独自キー）。`accepts` と `spec` がバックログと仕様のトレースになり、`evidence` が「こちらでは done なのに成果物側に何も入っていない」状態を防ぐ。
-
----
-
-## 6. `index.md` の書式（自動生成）
+## 5. `index.md` の書式（自動生成）
 
 OKF v0.2 §8 に従う。**手で編集しない。**
 
@@ -202,7 +168,7 @@ OKF v0.2 §8 に従う。**手で編集しない。**
 
 ---
 
-## 7. `log.md` の書式（OKF 標準の粒度）
+## 6. `log.md` の書式（OKF 標準の粒度）
 
 OKF v0.2 §9 に**そのまま従う**。独自の拡張はしない。
 
@@ -245,20 +211,19 @@ OKF v0.2 §9 に**そのまま従う**。独自の拡張はしない。
 
 ---
 
-## 8. ファイル命名
+## 7. ファイル命名
 
 | 対象 | 規則 | 例 |
 |---|---|---|
 | 通常ドキュメント | kebab-case | `deployment-flow.md` |
 | ADR | `NNNN-<kebab>.md`（4桁連番） | `0001-use-postgres.md` |
-| Backlog | `T-NNNN-<kebab>.md`（4桁連番） | `T-0001-spec-revision.md` |
 | 予約ファイル | `index.md` / `log.md` のみ | — |
 
 `_` で始まるディレクトリ（`_templates/`）は**バンドル対象外**として扱われ、index にも lint にも現れない。
 
 ---
 
-## 9. 記述スタイル
+## 8. 記述スタイル
 
 - 表・Mermaid 図・コードブロックを積極的に使う
 - **推測で書かず、コードから読み取れる事実のみ**書く
@@ -267,7 +232,7 @@ OKF v0.2 §9 に**そのまま従う**。独自の拡張はしない。
 
 ---
 
-## 10. lint ルール
+## 9. lint ルール
 
 `okf lint` が検証する内容。
 
@@ -286,13 +251,12 @@ OKF v0.2 §9 に**そのまま従う**。独自の拡張はしない。
 | L10 | コード由来 type（§3）に `code_globs` がある | warn | 本規約 |
 | L10 | `code_globs` の glob が1件以上マッチする | warn | 本規約 |
 | L11 | `related` のリンク先が存在し、バンドル内に解決される | warn | OKF §11（壊れたリンクで拒否しない） |
-| L12 | `Backlog Item` の `state` が語彙内 / `done` なら妥当な `done_at` がある | error | 本規約 |
 | L13 | `index.md` が最新（`index --check` 相当）/ マーカーが破損していない | error | 本規約 |
 | L14 | `sources` は、ある場合のみリスト型・各要素マップ型・非空 `resource` | warn | OKF §5.1 |
 
 ---
 
-## 11. 閲覧用 HTML
+## 10. 閲覧用 HTML
 
 - OKF Bundle の正本は常に `.md`。生成された `.html` を手で編集しない
 - `okf render` は、除外対象を除く全 `.md` を同じ階層の `.html` に変換する
